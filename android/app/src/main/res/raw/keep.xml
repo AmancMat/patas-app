@@ -1,0 +1,3 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools"
+    tools:keep="@raw/cat_meow00,@raw/cat_meow01,@raw/cat_purring,@raw/dog_bark01,@raw/dog_bark02,@raw/dog_howl01" />

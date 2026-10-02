@@ -1,0 +1,32 @@
+<svg version="1.1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+  <!-- Escudo Heráldico Oficial Patas -->
+  <path fill="currentColor" d="M485.48,125.59c-0.35-14.06-7.59-23.23-21.04-28.85c-63.5-26.54-126.9-53.34-190-80.8
+    c-13.34-5.81-24.97-5.2-37.81,0.35C173.88,43.42,111.09,70.5,48,96.84c-14.27,5.96-20.83,15.53-21.02,30.04
+    c-0.2,15.27-1.25,33.91-0.06,49.14c0.73,9.32,1.01,11.97,3.13,19.7c11.73,42.73,17.23,86.42,35.84,127
+    c34.86,76.01,89.16,132.77,164.3,169.67c13.79,6.77,27.05,11.34,42.5,4.08c41.22-19.37,79.61-43.18,109.76-77.43
+    C456.13,335.3,488.21,236.37,485.48,125.59z M352.58,406.83c-25.05,25.92-55.73,44.36-88.13,60.01
+    c-6.55,3.16-11.42,2.47-17.72-0.54C143.61,417.16,88.68,331.97,64.76,223.72c-6.24-28.26-9.09-57.01-9.12-86.04
+    c-0.01-8.83,3.12-13.65,11.59-17.16c60.46-24.97,120.74-50.37,180.94-75.94c5.59-2.37,10.21-2.6,15.63-0.3
+    c60.97,25.87,121.91,51.8,183.03,77.3c12.98,5.42,7.63,16.25,9.42,24.02C452.04,245.52,422.57,334.42,352.58,406.83z"/>
+  <!-- Tartaruga: Cabeça oval superior -->
+  <path fill="currentColor" d="
+    M236,175 C236,150 245,140 256,140 C267,140 276,150 276,175 Z"/>
+  <!-- Tartaruga: Casco/Carapaça central -->
+  <path fill="none" stroke="currentColor" stroke-width="16" stroke-linecap="round" stroke-linejoin="round" d="
+    M190,215 C190,175 220,165 256,165 C292,165 322,175 322,215 C322,268 295,305 256,305 C217,305 190,268 190,215 Z"/>
+  <!-- Placas geométricas no casco -->
+  <polygon points="256,188 284,204 284,236 256,252 228,236 228,204" fill="none" stroke="currentColor" stroke-width="12" stroke-linejoin="round"/>
+  <line x1="256" y1="252" x2="256" y2="305" stroke="currentColor" stroke-width="12"/>
+  <line x1="228" y1="204" x2="190" y2="195" stroke="currentColor" stroke-width="12"/>
+  <line x1="284" y1="204" x2="322" y2="195" stroke="currentColor" stroke-width="12"/>
+  <!-- Patinhas dianteiras -->
+  <path fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" d="
+    M192,205 C175,198 162,205 160,220"/>
+  <path fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" d="
+    M320,205 C337,198 350,205 352,220"/>
+  <!-- Patinhas traseiras -->
+  <path fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" d="
+    M200,285 C185,295 180,310 188,322"/>
+  <path fill="none" stroke="currentColor" stroke-width="14" stroke-linecap="round" d="
+    M312,285 C327,295 332,310 324,322"/>
+</svg>

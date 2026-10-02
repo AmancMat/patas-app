@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "223312335303",
+    "project_id": "patas-71b28",
+    "storage_bucket": "patas-71b28.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:223312335303:android:729b7bee75cc011b3749e2",
+        "android_client_info": {
+          "package_name": "com.origemstudio.patasapp"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD8Ua5R-a5uPwZtualsZ4V70dQkzTpJdBM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

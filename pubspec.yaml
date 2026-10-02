@@ -1,0 +1,103 @@
+name: patas_web_app
+description: "A new Flutter project."
+publish_to: 'none'
+
+version: 1.2.52+85
+
+environment:
+  sdk: ^3.9.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  flutter_localizations:
+    sdk: flutter
+
+  cupertino_icons: ^1.0.8
+  responsive_framework: ^1.5.0
+  animated_notch_bottom_bar: ^0.0.6
+  flutter_secure_storage: ^9.2.2
+  font_awesome_flutter: ^10.4.0
+  supabase_flutter: ^2.12.2
+  flutter_dotenv: ^5.2.1
+  shared_preferences: ^2.0.18
+  auto_size_text: ^3.0.0
+  reactive_forms: ^17.0.1
+  hawk_fab_menu: ^1.2.0
+  image_picker: ^1.2.1
+  image_cropper: ^8.0.2
+  flutter_image_compress: ^2.4.0
+  url_launcher: ^6.1.10
+  camera_camera: ^3.0.0-dev
+  youtube_player_flutter: ^9.0.3
+  provider: ^6.0.5
+  flutter_svg: ^2.0.4
+  shimmer: ^3.0.0
+  skeletonizer: ^2.1.2
+  get_it: ^7.2.0
+  intl: ^0.20.2
+  intl_translation: ^0.20.0
+  flutter_staggered_grid_view: ^0.7.0
+  photo_view: ^0.15.0
+  flutter_screenutil: ^5.6.1
+  cached_network_image: ^3.4.1
+  share_plus: ^12.0.1
+  http: ^1.6.0
+  path: ^1.9.0
+  path_provider: ^2.1.5
+  flutter_local_notifications: ^17.2.2
+  timezone: ^0.9.4
+  connectivity_plus: ^6.1.5
+  
+  
+  visibility_detector: ^0.4.0+2
+  video_player: ^2.8.2
+  camera: ^0.10.5+5
+  permission_handler: ^11.2.0
+  mobile_scanner: ^5.1.1
+  firebase_core: ^4.4.0
+  firebase_messaging: ^16.1.1
+  package_info_plus: ^9.0.0
+  google_sign_in: 6.2.1
+  geolocator: ^14.0.2
+  qr_flutter: ^4.1.0
+  archive: ^3.6.1
+  flutter_map: ^7.0.2
+  latlong2: ^0.9.0
+  flutter_map_cancellable_tile_provider: ^3.0.2
+  pdf: ^3.11.1
+  printing: ^5.13.2
+  video_compress: ^3.1.4
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^5.0.0
+
+flutter:
+  uses-material-design: true
+  assets:
+    - .env
+    - assets/
+    - assets/icons/
+    - assets/my_pets/
+    - assets/test_photo/
+    - assets/supporters/
+    - assets/patas_essencial/
+    - assets/dogs_images/
+    - assets/cats_images/
+    - assets/anime/
+    - assets/backgrounds/
+
+  fonts:
+    - family: Fredoka
+      fonts:
+        - asset: fonts/FredokaOne-Regular.ttf
+    - family: Roboto_flex
+      fonts:
+        - asset: fonts/RobotoFlex-Regular.ttf
+        - asset: fonts/RobotoFlex-VariableFont_GRAD,XTRA,YOPQ,YTAS,YTDE,YTFI,YTLC,YTUC,opsz,slnt,wdth,wght.ttf
+
+dependency_overrides:
+  storage_client: 2.5.1
+  video_thumbnail: any

@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+
+    This is a placeholder for base href that will be replaced by the value of
+    the `--base-href` argument provided to `flutter build`.
+  -->
+  <base href="$FLUTTER_BASE_HREF">
+
+  <meta charset="UTF-8">
+  <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+  <meta name="description" content="Patas - O app essencial para quem ama animais. Gerencie a saúde, vacinas e a vida social do seu pet.">
+
+  <!-- iOS meta tags & icons -->
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black">
+  <meta name="apple-mobile-web-app-title" content="Patas">
+  <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+  <!-- Favicon -->
+  <link rel="icon" type="image/x-icon" href="favicon.ico"/>
+  <link rel="icon" type="image/png" href="favicon.png"/>
+
+  <!-- Google Sign-In Client ID -->
+  <meta name="google-signin-client_id" content="564550627928-relnsrar45d9djkiqg9h4ocra1gtcbgk.apps.googleusercontent.com">
+
+  <title>Patas - Tudo o que seu pet precisa em um só lugar</title>
+
+  <!-- Open Graph / Facebook / WhatsApp -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://patas.online/">
+  <meta property="og:title" content="Patas - Tudo o que seu pet precisa">
+  <meta property="og:description" content="A maior rede social para animais e gestão de saúde do seu pet. Crie o perfil, gerencie vacinas e conecte-se com a comunidade!">
+  <meta property="og:image" content="https://patas.online/preview.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:site_name" content="Patas App">
+
+  <!-- Twitter / X -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://patas.online/">
+  <meta name="twitter:title" content="Patas - Tudo o que seu pet precisa">
+  <meta name="twitter:description" content="A maior rede social para animais e gestão de saúde do seu pet.">
+  <meta name="twitter:image" content="https://patas.online/preview.png">
+
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Image Cropper Dependencies (Web) -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/cropperjs/1.5.13/cropper.js"></script>
+</head>
+<body>
+  <script>
+    // Correção para Chrome Mobile + TalkBack:
+    // Garante que o navegador exponha e propague gestos de toque no DOM,
+    // acordando o pipeline de toque para os elementos do Canvas/Shadow DOM do Flutter.
+    document.addEventListener('touchstart', function() {}, { passive: true });
+  </script>
+  <script src="flutter_bootstrap.js" async></script>
+</body>
+</html>

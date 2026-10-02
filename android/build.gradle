@@ -1,0 +1,43 @@
+buildscript {
+    ext.kotlin_version = '2.1.0'
+    repositories {
+        google()
+        mavenCentral()
+    }
+
+    dependencies {
+        classpath 'com.android.tools.build:gradle:8.1.0'
+        classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.4.0'
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
+}
+
+rootProject.buildDir = '../build'
+subprojects {
+    project.buildDir = "${rootProject.buildDir}/${project.name}"
+}
+subprojects {
+    project.evaluationDependsOn(':app')
+    
+    // Desativa a criação de variantes de teste (UnitTest e AndroidTest) nos subprojetos (plugins)
+    // para evitar o erro de partições cruzadas no Windows (D: do projeto vs C: da cache do Pub)
+    plugins.withId("com.android.library") {
+        androidComponents {
+            beforeVariants(selector().all()) { variantBuilder ->
+                variantBuilder.enableUnitTest = false
+                variantBuilder.enableAndroidTest = false
+            }
+        }
+    }
+}
+
+tasks.register("clean", Delete) {
+    delete rootProject.buildDir
+}
