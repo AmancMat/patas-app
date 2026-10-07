@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import '../../pets/models/pet_model.dart';
@@ -54,6 +55,18 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
   String _mintStep = 'Preparando metadados...';
 
   void _startMint() async {
+    final currentUserId = Supabase.instance.client.auth.currentUser?.id;
+    if (widget.pet.userId != currentUserId) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Apenas o tutor dono do pet pode emitir o passaporte cNFT.'),
+          backgroundColor: Colors.redAccent,
+        ),
+      );
+      Navigator.of(context).pop();
+      return;
+    }
+
     setState(() {
       _isMinting = true;
       _mintStep = 'Consultando nó Solana Devnet...';

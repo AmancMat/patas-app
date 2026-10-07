@@ -188,4 +188,53 @@ class SolanaPayService {
     }
     return 'https://explorer.solana.com/address/${address ?? defaultTreasuryWallet}?cluster=devnet';
   }
+
+  // ==========================================
+  // CLOAK PROTOCOL • PRIVACIDADE ON-CHAIN (ZK)
+  // ==========================================
+
+  /// URL canônica da documentação da Cloak
+  static const String cloakDocsUrl = 'https://docs.cloak.ag';
+
+  /// Gera a URL do Cloak Payment Link para doação anônima / privada
+  static String generateCloakPaymentUrl({
+    required String recipientWallet,
+    required double amount,
+    String currency = 'SOL',
+    String? memo,
+    String? campaignTitle,
+  }) {
+    final recipient = recipientWallet.trim().isNotEmpty
+        ? recipientWallet.trim()
+        : defaultTreasuryWallet;
+    final label = 'Patas Acolhe • ${campaignTitle ?? "Resgate Animal"}';
+    final noteMemo = memo ?? 'Doação Anônima Shielded via Cloak';
+
+    return 'https://pay.cloak.ag/?to=${Uri.encodeComponent(recipient)}&amount=$amount&currency=$currency&label=${Uri.encodeComponent(label)}&memo=${Uri.encodeComponent(noteMemo)}';
+  }
+
+  /// Abre a interface protegida da Cloak para conclusão da doação anônima
+  static Future<bool> openCloakPayment({
+    required String recipientWallet,
+    required double amount,
+    String currency = 'SOL',
+    String? memo,
+    String? campaignTitle,
+  }) async {
+    try {
+      final url = generateCloakPaymentUrl(
+        recipientWallet: recipientWallet,
+        amount: amount,
+        currency: currency,
+        memo: memo,
+        campaignTitle: campaignTitle,
+      );
+      final uri = Uri.parse(url);
+      return await launchUrl(uri, mode: LaunchMode.externalApplication);
+    } catch (e) {
+      debugPrint('[SolanaPayService] Erro ao abrir Cloak: $e');
+      return false;
+    }
+  }
 }
+

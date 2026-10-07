@@ -46,6 +46,9 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
   bool _isCheckingRpc = false;
   double? _creditedAmountBrl;
 
+  // Estado do Modo Privado Cloak (Zcash on Solana)
+  bool _isCloakPrivacyEnabled = false;
+
   final List<double> _usdcPresets = [0.0, 1.0, 5.0, 15.0, 50.0];
   final List<double> _solPresets = [0.0, 0.01, 0.05, 0.1, 0.5];
 
@@ -367,14 +370,317 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
     _onTransactionConfirmed('simulated_tx_${DateTime.now().millisecondsSinceEpoch}');
   }
 
+  void _handleCloakDonation() async {
+    final launched = await SolanaPayService.openCloakPayment(
+      recipientWallet: _currentDonation.recipientWallet,
+      amount: _selectedAmount > 0 ? _selectedAmount : 0.01,
+      currency: _selectedToken,
+      campaignTitle: widget.campaignTitle,
+    );
+
+    if (!launched && mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text(
+            'Não foi possível abrir o link da Cloak automaticamente.',
+            style: TextStyle(fontFamily: 'Fredoka'),
+          ),
+          backgroundColor: Colors.red.shade700,
+        ),
+      );
+    }
+  }
+
+  void _copyCloakLink(BuildContext context) {
+    final url = SolanaPayService.generateCloakPaymentUrl(
+      recipientWallet: _currentDonation.recipientWallet,
+      amount: _selectedAmount > 0 ? _selectedAmount : 0.01,
+      currency: _selectedToken,
+      campaignTitle: widget.campaignTitle,
+    );
+    Clipboard.setData(ClipboardData(text: url));
+    ScaffoldMessenger.of(context).showSnackBar(
+      SnackBar(
+        content: const Row(
+          children: [
+            Icon(Icons.shield_rounded, color: Colors.white, size: 20),
+            SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Link da Doação Privada Cloak copiado com sucesso!',
+                style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
+              ),
+            ),
+          ],
+        ),
+        backgroundColor: const Color(0xFF10B981),
+        behavior: SnackBarBehavior.floating,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        duration: const Duration(seconds: 3),
+      ),
+    );
+  }
+
+  void _showCloakExplanationDialog(BuildContext context, bool isDark) {
+    showDialog(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isDark ? const Color(0xFF0F172A) : Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            Container(
+              padding: const EdgeInsets.all(8),
+              decoration: BoxDecoration(
+                color: const Color(0xFF14F195).withValues(alpha: 0.15),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: const Icon(Icons.shield_rounded, color: Color(0xFF14F195), size: 22),
+            ),
+            const SizedBox(width: 10),
+            Expanded(
+              child: Text(
+                'Privacidade com Cloak',
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 16,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : AppColors.darkBG,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Text(
+              'Como funciona a Doação Privada no Patas:',
+              style: TextStyle(
+                fontFamily: 'Fredoka',
+                fontSize: 13,
+                fontWeight: FontWeight.bold,
+                color: isDark ? Colors.white : AppColors.darkBG,
+              ),
+            ),
+            const SizedBox(height: 8),
+            Text(
+              '1. A Cloak utiliza Provas Zero-Knowledge (modelo Zcash na Solana).\n'
+              '2. Os fundos entram em um Shielded Pool (piscina protegida).\n'
+              '3. O abrigo recebe a doação diretamente, mas a ponte que liga a sua carteira ao destino fica 100% invisível no explorador da Solana.\n'
+              '4. Seu patrimônio e seu saldo pessoal continuam em sigilo absoluto.',
+              style: TextStyle(
+                fontSize: 12.5,
+                height: 1.45,
+                color: isDark ? Colors.white70 : Colors.black87,
+              ),
+            ),
+            const SizedBox(height: 12),
+            Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: const Color(0xFF14F195).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFF14F195).withValues(alpha: 0.3)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.verified_user_rounded, color: Color(0xFF14F195), size: 18),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Protocolo oficial auditado na Solana Mainnet.',
+                      style: TextStyle(
+                        fontFamily: 'Fredoka',
+                        fontSize: 11,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF14F195),
+                      ),
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ],
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx),
+            child: const Text('Entendi', style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
+          ),
+          ElevatedButton.icon(
+            onPressed: () => SolanaPayService.openExplorer(address: 'https://docs.cloak.ag'),
+            icon: const Icon(Icons.open_in_new_rounded, size: 14),
+            label: const Text('Docs Cloak', style: TextStyle(fontFamily: 'Fredoka', fontSize: 12)),
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF14F195),
+              foregroundColor: Colors.black,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     final isDark = widget.isDark;
     final solanaUri = _currentDonation.toSolanaPayUri(isDevnet: true);
+    final cloakPaymentUrl = SolanaPayService.generateCloakPaymentUrl(
+      recipientWallet: _currentDonation.recipientWallet,
+      amount: _selectedAmount > 0 ? _selectedAmount : 0.01,
+      currency: _selectedToken,
+      campaignTitle: widget.campaignTitle,
+    );
+    final effectiveQrUri = _isCloakPrivacyEnabled
+        ? cloakPaymentUrl
+        : solanaUri;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
+        // Seletor de Modo de Privacidade (Cloak Shielded)
+        Container(
+          margin: const EdgeInsets.only(bottom: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+          decoration: BoxDecoration(
+            color: _isCloakPrivacyEnabled
+                ? (isDark ? const Color(0xFF0F172A) : const Color(0xFFF0FDF4))
+                : (isDark ? const Color(0xFF0F172A) : const Color(0xFFF1F5F9)),
+            borderRadius: BorderRadius.circular(16),
+            border: Border.all(
+              color: _isCloakPrivacyEnabled
+                  ? const Color(0xFF14F195)
+                  : (isDark ? const Color(0xFF334155) : const Color(0xFFE2E8F0)),
+              width: _isCloakPrivacyEnabled ? 1.5 : 1,
+            ),
+            boxShadow: _isCloakPrivacyEnabled
+                ? [
+                    BoxShadow(
+                      color: const Color(0xFF14F195).withValues(alpha: 0.18),
+                      blurRadius: 12,
+                      offset: const Offset(0, 4),
+                    ),
+                  ]
+                : null,
+          ),
+          child: Row(
+            children: [
+              Container(
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: _isCloakPrivacyEnabled
+                      ? const Color(0xFF14F195).withValues(alpha: 0.2)
+                      : (isDark ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+                  borderRadius: BorderRadius.circular(10),
+                ),
+                child: Icon(
+                  _isCloakPrivacyEnabled ? Icons.shield_rounded : Icons.shield_outlined,
+                  color: _isCloakPrivacyEnabled ? const Color(0xFF14F195) : (isDark ? Colors.white60 : Colors.black54),
+                  size: 20,
+                ),
+              ),
+              const SizedBox(width: 12),
+              Expanded(
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        Text(
+                          'Doação Anônima (Cloak)',
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 13,
+                            fontWeight: FontWeight.bold,
+                            color: _isCloakPrivacyEnabled
+                                ? const Color(0xFF10B981)
+                                : (isDark ? Colors.white : AppColors.darkBG),
+                          ),
+                        ),
+                        const SizedBox(width: 6),
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 1.5),
+                          decoration: BoxDecoration(
+                            color: const Color(0xFF14F195).withValues(alpha: 0.15),
+                            borderRadius: BorderRadius.circular(6),
+                          ),
+                          child: const Text(
+                            'ZK SHIELD',
+                            style: TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 8.5,
+                              fontWeight: FontWeight.bold,
+                              color: Color(0xFF10B981),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 2),
+                    Text(
+                      _isCloakPrivacyEnabled
+                          ? 'Sua carteira pessoal e saldo ficam 100% invisíveis na chain.'
+                          : 'Oculta sua carteira pessoal via Zero-Knowledge.',
+                      style: TextStyle(
+                        fontSize: 11,
+                        color: _isCloakPrivacyEnabled ? (isDark ? Colors.white70 : Colors.black87) : (isDark ? Colors.white60 : Colors.black54),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              Switch.adaptive(
+                value: _isCloakPrivacyEnabled,
+                activeThumbColor: const Color(0xFF10B981),
+                activeTrackColor: const Color(0xFF14F195).withValues(alpha: 0.4),
+                onChanged: (val) {
+                  setState(() {
+                    _isCloakPrivacyEnabled = val;
+                  });
+                },
+              ),
+            ],
+          ),
+        ),
+
+        // Link explicativo sobre o protocolo Cloak
+        if (_isCloakPrivacyEnabled) ...[
+          GestureDetector(
+            onTap: () => _showCloakExplanationDialog(context, isDark),
+            child: Container(
+              margin: const EdgeInsets.only(bottom: 14),
+              padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 7),
+              decoration: BoxDecoration(
+                color: const Color(0xFF14F195).withValues(alpha: 0.1),
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: const Color(0xFF14F195).withValues(alpha: 0.25)),
+              ),
+              child: const Row(
+                children: [
+                  Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF10B981)),
+                  SizedBox(width: 8),
+                  Expanded(
+                    child: Text(
+                      'Zcash on Solana: Como a prova ZK protege você?',
+                      style: TextStyle(
+                        fontFamily: 'Fredoka',
+                        fontSize: 11.5,
+                        fontWeight: FontWeight.bold,
+                        color: Color(0xFF10B981),
+                        decoration: TextDecoration.underline,
+                      ),
+                    ),
+                  ),
+                  Icon(Icons.chevron_right_rounded, size: 16, color: Color(0xFF10B981)),
+                ],
+              ),
+            ),
+          ),
+        ],
+
         // Seletor de Moeda (USDC vs SOL)
         Container(
           padding: const EdgeInsets.all(4),
@@ -477,12 +783,16 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               color: Colors.white,
               borderRadius: BorderRadius.circular(20),
               border: Border.all(
-                color: _isPaymentConfirmed ? const Color(0xFF14F195) : const Color(0xFF9945FF),
+                color: _isPaymentConfirmed
+                    ? const Color(0xFF14F195)
+                    : (_isCloakPrivacyEnabled ? const Color(0xFF10B981) : const Color(0xFF9945FF)),
                 width: 2.5,
               ),
               boxShadow: [
                 BoxShadow(
-                  color: (_isPaymentConfirmed ? const Color(0xFF14F195) : const Color(0xFF9945FF))
+                  color: (_isPaymentConfirmed
+                          ? const Color(0xFF14F195)
+                          : (_isCloakPrivacyEnabled ? const Color(0xFF14F195) : const Color(0xFF9945FF)))
                       .withValues(alpha: 0.18),
                   blurRadius: 18,
                   offset: const Offset(0, 6),
@@ -493,7 +803,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               alignment: Alignment.center,
               children: [
                 QrImageView(
-                  data: solanaUri,
+                  data: effectiveQrUri,
                   version: QrVersions.auto,
                   size: 190.0,
                   eyeStyle: const QrEyeStyle(
@@ -611,7 +921,9 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                   Text(
                     _isPaymentConfirmed
                         ? 'Transação Confirmada On-Chain'
-                        : 'Aguardando pagamento na Devnet...',
+                        : (_isCloakPrivacyEnabled
+                            ? 'Modo Cloak Ativo • Zero-Knowledge Shield'
+                            : 'Aguardando pagamento na Devnet...'),
                     style: const TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 11,
@@ -749,50 +1061,97 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
 
         const SizedBox(height: 14),
 
-        // Botão Abrir Carteira Mobile / Copiar
-        Row(
-          children: [
-            Expanded(
-              child: OutlinedButton.icon(
-                onPressed: () => _copyWallet(context),
-                icon: const Icon(Icons.copy_rounded, size: 16),
-                label: const Text(
-                  'Copiar Wallet',
-                  style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
-                ),
-                style: OutlinedButton.styleFrom(
-                  foregroundColor: isDark ? Colors.white : AppColors.darkBG,
-                  side: BorderSide(
-                    color: isDark ? Colors.white24 : Colors.grey.shade400,
+        // Botões de Ação Dinâmicos (Padrão vs Modo Cloak)
+        if (_isCloakPrivacyEnabled) ...[
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => _copyCloakLink(context),
+                  icon: const Icon(Icons.copy_rounded, size: 16),
+                  label: const Text(
+                    'Copiar Link ZK',
+                    style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
                   ),
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: isDark ? Colors.white : AppColors.darkBG,
+                    side: BorderSide(
+                      color: isDark ? const Color(0xFF14F195).withValues(alpha: 0.5) : const Color(0xFF10B981),
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
                 ),
               ),
-            ),
-            const SizedBox(width: 10),
-            Expanded(
-              child: ElevatedButton.icon(
-                onPressed: () => _handleOpenWallet(solanaUri),
-                icon: const Icon(Icons.account_balance_wallet_rounded, size: 16),
-                label: const Text(
-                  'Abrir Carteira',
-                  style: TextStyle(fontFamily: 'Fredoka', fontSize: 13, fontWeight: FontWeight.bold),
-                ),
-                style: ElevatedButton.styleFrom(
-                  backgroundColor: const Color(0xFF9945FF),
-                  foregroundColor: Colors.white,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: _handleCloakDonation,
+                  icon: const Icon(Icons.shield_rounded, size: 18),
+                  label: const Text(
+                    'Doar com Cloak',
+                    style: TextStyle(fontFamily: 'Fredoka', fontSize: 13, fontWeight: FontWeight.bold),
                   ),
-                  padding: const EdgeInsets.symmetric(vertical: 12),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF10B981),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                    elevation: 3,
+                  ),
                 ),
               ),
-            ),
-          ],
-        ),
+            ],
+          ),
+        ] else ...[
+          Row(
+            children: [
+              Expanded(
+                child: OutlinedButton.icon(
+                  onPressed: () => _copyWallet(context),
+                  icon: const Icon(Icons.copy_rounded, size: 16),
+                  label: const Text(
+                    'Copiar Wallet',
+                    style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
+                  ),
+                  style: OutlinedButton.styleFrom(
+                    foregroundColor: isDark ? Colors.white : AppColors.darkBG,
+                    side: BorderSide(
+                      color: isDark ? Colors.white24 : Colors.grey.shade400,
+                    ),
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+              const SizedBox(width: 10),
+              Expanded(
+                child: ElevatedButton.icon(
+                  onPressed: () => _handleOpenWallet(solanaUri),
+                  icon: const Icon(Icons.account_balance_wallet_rounded, size: 16),
+                  label: const Text(
+                    'Abrir Carteira',
+                    style: TextStyle(fontFamily: 'Fredoka', fontSize: 13, fontWeight: FontWeight.bold),
+                  ),
+                  style: ElevatedButton.styleFrom(
+                    backgroundColor: const Color(0xFF9945FF),
+                    foregroundColor: Colors.white,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    padding: const EdgeInsets.symmetric(vertical: 12),
+                  ),
+                ),
+              ),
+            ],
+          ),
+        ],
 
         const SizedBox(height: 10),
 

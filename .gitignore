@@ -53,3 +53,13 @@ app.*.map.json
 /android/app/debug
 /android/app/profile
 /android/app/release
+
+# Node modules
+**/node_modules/
+node_modules/
+
+# Internal Documentation & Vault
+Patas Vault/
+Stacks/
+*.canvas
+

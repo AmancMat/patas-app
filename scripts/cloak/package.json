@@ -1,0 +1,20 @@
+{
+  "name": "patas-cloak-privacy",
+  "version": "1.0.0",
+  "description": "Integração oficial da Cloak com o Patas para doações privadas e anônimas a ONGs de resgate animal",
+  "main": "send-private-donation.ts",
+  "type": "module",
+  "scripts": {
+    "send-sol-private": "tsx send-private-donation.ts"
+  },
+  "dependencies": {
+    "@cloak.dev/sdk": "^0.2.0",
+    "@solana/web3.js": "^1.95.8",
+    "dotenv": "^16.4.5"
+  },
+  "devDependencies": {
+    "@types/node": "^22.0.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.2"
+  }
+}

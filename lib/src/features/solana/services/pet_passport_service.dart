@@ -9,6 +9,14 @@ import 'solana_pay_service.dart';
 class PetPassportService {
   static const String _passportKeyPrefix = 'solana_cnft_v2_passport_';
 
+  /// Notificador reativo global para emissões e queimas de passaporte em tempo real
+  static final ValueNotifier<int> passportChangeNotifier = ValueNotifier<int>(0);
+
+  /// Dispara a notificação de mudança de passaporte para os ouvintes
+  static void notifyPassportChanged() {
+    passportChangeNotifier.value++;
+  }
+
   /// Verifica se o pet já possui um Passaporte emitido na blockchain
   static Future<PetPassport?> getExistingPassport(String petId) async {
     try {
@@ -170,6 +178,7 @@ class PetPassportService {
         'isPhysicalMicrochip': passport.isPhysicalMicrochip,
       };
       await prefs.setString('$_passportKeyPrefix${passport.petId}', jsonEncode(data));
+      notifyPassportChanged();
     } catch (e) {
       debugPrint('[PetPassportService] Erro ao salvar passaporte: $e');
     }
@@ -181,6 +190,7 @@ class PetPassportService {
       final prefs = await SharedPreferences.getInstance();
       await prefs.remove('$_passportKeyPrefix$petId');
       await prefs.remove('solana_cnft_passport_$petId');
+      notifyPassportChanged();
     } catch (e) {
       debugPrint('[PetPassportService] Erro ao remover passaporte: $e');
     }

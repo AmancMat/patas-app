@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -13,13 +14,15 @@ import '../services/solana_pay_service.dart';
 
 class PetPassportDetailSheet extends StatefulWidget {
   final PetPassport passport;
+  final bool isOwner;
 
   const PetPassportDetailSheet({
     super.key,
     required this.passport,
+    this.isOwner = true,
   });
 
-  static Future<void> show(BuildContext context, {required PetPassport passport}) {
+  static Future<void> show(BuildContext context, {required PetPassport passport, bool isOwner = true}) {
     final isDesktop = MediaQuery.of(context).size.width >= 1024;
 
     if (isDesktop) {
@@ -32,7 +35,7 @@ class PetPassportDetailSheet extends StatefulWidget {
             constraints: const BoxConstraints(maxWidth: 560),
             child: ClipRRect(
               borderRadius: BorderRadius.circular(28),
-              child: PetPassportDetailSheet(passport: passport),
+              child: PetPassportDetailSheet(passport: passport, isOwner: isOwner),
             ),
           ),
         ),
@@ -44,7 +47,7 @@ class PetPassportDetailSheet extends StatefulWidget {
         useRootNavigator: true,
         backgroundColor: Colors.transparent,
         enableDrag: true,
-        builder: (context) => PetPassportDetailSheet(passport: passport),
+        builder: (context) => PetPassportDetailSheet(passport: passport, isOwner: isOwner),
       );
     }
   }
@@ -55,6 +58,8 @@ class PetPassportDetailSheet extends StatefulWidget {
 
 class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
   bool _isClosing = false;
+  String? _copiedLabel;
+  Timer? _copiedTimer;
   late Future<List<PetVaccine>> _vaccinesFuture;
   final HealthService _healthService = HealthService();
 
@@ -62,6 +67,12 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
   void initState() {
     super.initState();
     _vaccinesFuture = _healthService.getVaccines(widget.passport.petId);
+  }
+
+  @override
+  void dispose() {
+    _copiedTimer?.cancel();
+    super.dispose();
   }
 
   void _dismiss() {
@@ -72,26 +83,17 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
 
   void _copyToClipboard(BuildContext context, String text, String label) {
     Clipboard.setData(ClipboardData(text: text));
-    ScaffoldMessenger.of(context).showSnackBar(
-      SnackBar(
-        content: Row(
-          children: [
-            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-            const SizedBox(width: 10),
-            Expanded(
-              child: Text(
-                '$label copiado para a área de transferência!',
-                style: const TextStyle(fontFamily: 'Fredoka', fontSize: 13),
-              ),
-            ),
-          ],
-        ),
-        backgroundColor: const Color(0xFF10B981),
-        behavior: SnackBarBehavior.floating,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-        duration: const Duration(seconds: 3),
-      ),
-    );
+    _copiedTimer?.cancel();
+    setState(() {
+      _copiedLabel = label;
+    });
+    _copiedTimer = Timer(const Duration(milliseconds: 2500), () {
+      if (mounted) {
+        setState(() {
+          _copiedLabel = null;
+        });
+      }
+    });
   }
 
   @override
@@ -317,6 +319,51 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                   ],
                 ),
               ),
+            ),
+
+            // Banner Animado de Confirmação de Cópia (Visível em toda a tela)
+            AnimatedContainer(
+              duration: const Duration(milliseconds: 200),
+              curve: Curves.easeInOut,
+              height: _copiedLabel != null ? 36 : 0,
+              margin: EdgeInsets.only(
+                left: 20,
+                right: 20,
+                top: _copiedLabel != null ? 4 : 0,
+                bottom: _copiedLabel != null ? 4 : 0,
+              ),
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color: const Color(0xFF10B981),
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: const Color(0xFF10B981).withValues(alpha: 0.35),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  ),
+                ],
+              ),
+              child: _copiedLabel != null
+                  ? Row(
+                      children: [
+                        const Icon(Icons.check_circle_rounded, color: Colors.white, size: 16),
+                        const SizedBox(width: 8),
+                        Expanded(
+                          child: Text(
+                            '$_copiedLabel copiado para a área de transferência!',
+                            style: const TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                            overflow: TextOverflow.ellipsis,
+                          ),
+                        ),
+                      ],
+                    )
+                  : const SizedBox.shrink(),
             ),
 
             // Conteúdo Rolável das 3 Abas
@@ -590,11 +637,15 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     ),
                     IconButton(
                       icon: Icon(
-                        Icons.copy_rounded,
+                        _copiedLabel == 'Microchip'
+                            ? Icons.check_circle_rounded
+                            : Icons.copy_rounded,
                         size: 18,
-                        color: passport.isPhysicalMicrochip
+                        color: _copiedLabel == 'Microchip'
                             ? const Color(0xFF14F195)
-                            : const Color(0xFFF59E0B),
+                            : (passport.isPhysicalMicrochip
+                                ? const Color(0xFF14F195)
+                                : const Color(0xFFF59E0B)),
                       ),
                       tooltip: 'Copiar Microchip',
                       onPressed: () => _copyToClipboard(context, passport.microchipNumber, 'Microchip'),
@@ -1243,11 +1294,12 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
             ),
           ),
 
-          const SizedBox(height: 12),
+          if (widget.isOwner) ...[
+            const SizedBox(height: 12),
 
-          // Botão Secundário: Revogar / Queimar Passaporte (Burn cNFT / Controle Soberano)
-          Center(
-            child: TextButton.icon(
+            // Botão Secundário: Revogar / Queimar Passaporte (Burn cNFT / Controle Soberano - Apenas Tutor Dono)
+            Center(
+              child: TextButton.icon(
               onPressed: () async {
                 final confirm = await showDialog<bool>(
                   context: context,
@@ -1328,6 +1380,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
               ),
             ),
           ),
+        ],
           const SizedBox(height: 16),
         ],
       ),
@@ -1372,7 +1425,13 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
           ),
         ),
         IconButton(
-          icon: const Icon(Icons.copy_rounded, size: 16, color: Color(0xFF14F195)),
+          icon: Icon(
+            _copiedLabel == label
+                ? Icons.check_circle_rounded
+                : Icons.copy_rounded,
+            size: 16,
+            color: const Color(0xFF14F195),
+          ),
           tooltip: 'Copiar $label',
           onPressed: () => _copyToClipboard(context, value, label),
         ),
