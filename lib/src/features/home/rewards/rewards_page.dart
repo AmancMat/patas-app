@@ -11,6 +11,7 @@ import 'package:patas_web_app/src/features/home/rewards/leaderboard_page.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import '../../../../app.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class RewardsPage extends StatefulWidget {
   const RewardsPage({super.key});
@@ -88,7 +89,7 @@ class _RewardsPageState extends State<RewardsPage> {
           Positioned.fill(
             child: Semantics(
               button: true,
-              label: 'Fechar tela de recompensas',
+              label: context.tr('rewards.close_tooltip'),
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: BackdropFilter(
@@ -131,9 +132,9 @@ class _RewardsPageState extends State<RewardsPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: const PatasEssencialAppBar(
-        title: 'Patas Rewards',
-        subtitle: 'Missões diárias, conquistas e prêmios',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('rewards.title'),
+        subtitle: context.tr('rewards.subtitle'),
         leadingIcon: Icon(
           Icons.emoji_events_rounded,
           color: Colors.amber,
@@ -178,7 +179,7 @@ class _RewardsPageState extends State<RewardsPage> {
                           ),
                         const SizedBox(height: 8),
                         Text(
-                          activePet?.name ?? 'Meu Pet',
+                          activePet?.name ?? context.tr('rewards.my_pet'),
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w600,
@@ -208,7 +209,7 @@ class _RewardsPageState extends State<RewardsPage> {
                                 },
                               ),
                         Text(
-                          'Pontos na Temporada',
+                          context.tr('rewards.season_points'),
                           style: TextStyle(
                             fontSize: 14,
                             color: Colors.grey.shade500,
@@ -222,7 +223,7 @@ class _RewardsPageState extends State<RewardsPage> {
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
-                            _isLoadingStats ? 'Posição no Ranking: ...' : (_rank > 0 ? 'Posição no Ranking: $_rankº' : 'Não ranqueado'),
+                            _isLoadingStats ? context.tr('rewards.ranking_loading') : (_rank > 0 ? context.tr('rewards.ranking_position', {'rank': '$_rank'}) : context.tr('rewards.not_ranked')),
                             style: const TextStyle(
                               color: AppColors.patasColor,
                               fontWeight: FontWeight.bold,
@@ -289,7 +290,7 @@ class _RewardsPageState extends State<RewardsPage> {
                                   crossAxisAlignment: CrossAxisAlignment.start,
                                   children: [
                                     Text(
-                                      'Placar Global da Temporada',
+                                      context.tr('rewards.leaderboard_card_title'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
@@ -345,8 +346,8 @@ class _RewardsPageState extends State<RewardsPage> {
                             },
                             itemBuilder: (context, index) {
                               final sponsor = _sponsors[index];
-                              final sponsorName = sponsor['name'] ?? 'Patrocinador';
-                              final prizeTitle = sponsor['prize_title'] ?? 'Grande Prêmio';
+                              final sponsorName = sponsor['name'] ?? context.tr('rewards.sponsor_fallback');
+                              final prizeTitle = sponsor['prize_title'] ?? context.tr('rewards.prize_fallback');
                               
                               return Container(
                                 margin: const EdgeInsets.symmetric(horizontal: 4.0),
@@ -390,7 +391,7 @@ class _RewardsPageState extends State<RewardsPage> {
                                         else
                                           const Icon(Icons.stars_rounded, color: Colors.white70, size: 20),
                                         Text(
-                                          'PARCERIA: ${sponsorName.toUpperCase()}',
+                                          context.tr('rewards.partnership_prefix', {'name': sponsorName.toUpperCase()}),
                                           style: const TextStyle(
                                             color: Colors.white70,
                                             fontSize: 11,
@@ -423,7 +424,7 @@ class _RewardsPageState extends State<RewardsPage> {
                                           borderRadius: BorderRadius.circular(12),
                                         ),
                                       ),
-                                      child: const Text('Ver Detalhes do Prêmio', style: TextStyle(fontWeight: FontWeight.bold)),
+                                      child: Text(context.tr('rewards.view_prize_details'), style: const TextStyle(fontWeight: FontWeight.bold)),
                                     ),
                                   ],
                                 ),
@@ -467,7 +468,7 @@ class _RewardsPageState extends State<RewardsPage> {
                     child: Column(
                       children: [
                         Text(
-                          'Seu Código de Convite',
+                          context.tr('rewards.referral_title'),
                           style: TextStyle(
                             fontSize: 14,
                             fontWeight: FontWeight.bold,
@@ -498,12 +499,12 @@ class _RewardsPageState extends State<RewardsPage> {
                             ),
                             const SizedBox(width: 12),
                             IconButton(
-                              tooltip: 'Copiar código de convite',
+                              tooltip: context.tr('rewards.copy_code_tooltip'),
                               onPressed: () {
                                 Clipboard.setData(ClipboardData(text: referralCode));
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
-                                    content: Text('Código copiado com sucesso! 🎉'),
+                                  SnackBar(
+                                    content: Text(context.tr('rewards.copy_code_success')),
                                     backgroundColor: Colors.green,
                                     behavior: SnackBarBehavior.floating,
                                   ),
@@ -520,8 +521,8 @@ class _RewardsPageState extends State<RewardsPage> {
                           ],
                         ),
                         const SizedBox(height: 12),
-                        const Text(
-                          'Compartilhe este código com seus amigos! Quando eles criarem uma conta, você ganhará +500 pontos na hora.',
+                        Text(
+                          context.tr('rewards.referral_hint'),
                           textAlign: TextAlign.center,
                           style: TextStyle(fontSize: 12, color: AppColors.patasColor),
                         ),
@@ -533,7 +534,7 @@ class _RewardsPageState extends State<RewardsPage> {
 
                   // 4. Bloco de Missões
                   Text(
-                    'Missões da Temporada',
+                    context.tr('rewards.missions_title'),
                     style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
@@ -544,30 +545,30 @@ class _RewardsPageState extends State<RewardsPage> {
                   
                   _buildMissionCard(
                     icon: Icons.person_add_rounded,
-                    title: 'Convide amigos para o Patas',
-                    subtitle: 'Ganhe pontos por cada cadastro (Sem limite!)',
+                    title: context.tr('rewards.mission_invite_title'),
+                    subtitle: context.tr('rewards.mission_invite_sub'),
                     points: '+500 pts',
-                    buttonText: 'Copiar Link',
+                    buttonText: context.tr('rewards.mission_invite_btn'),
                     cardColor: cardColor,
                     textColor: textColor,
                   ),
                   const SizedBox(height: 12),
                   _buildMissionCard(
                     icon: Icons.assignment_turned_in_rounded,
-                    title: 'Perfil 100% Completo',
-                    subtitle: 'Complete as informações de saúde do seu Pet',
+                    title: context.tr('rewards.mission_profile_title'),
+                    subtitle: context.tr('rewards.mission_profile_sub'),
                     points: '+100 pts',
-                    buttonText: 'Completar',
+                    buttonText: context.tr('rewards.mission_profile_btn'),
                     cardColor: cardColor,
                     textColor: textColor,
                   ),
                   const SizedBox(height: 12),
                   _buildMissionCard(
                     icon: Icons.favorite_rounded,
-                    title: 'Distribua amor no feed',
-                    subtitle: 'Curta posts de outros pets (0/5 hoje)',
+                    title: context.tr('rewards.mission_feed_title'),
+                    subtitle: context.tr('rewards.mission_feed_sub'),
                     points: '+5 pts',
-                    buttonText: 'Ir para Timeline',
+                    buttonText: context.tr('rewards.mission_feed_btn'),
                     cardColor: cardColor,
                     textColor: textColor,
                   ),                  const SizedBox(height: 20),
@@ -690,7 +691,7 @@ class _RewardsPageState extends State<RewardsPage> {
             ),
             const SizedBox(height: 24),
             Text(
-              'Regulamento Oficial',
+              context.tr('rewards.regulation_title'),
               style: TextStyle(
                 fontSize: 24,
                 fontFamily: 'Fredoka',
@@ -703,20 +704,19 @@ class _RewardsPageState extends State<RewardsPage> {
             Expanded(
               child: SingleChildScrollView(
                 child: Text(
-                  '''1. Sobre o Concurso Cultural
-O Patas Rewards é uma competição de engajamento baseada em mérito. O prêmio é concedido à conta de tutor que atingir a maior pontuação acumulada na plataforma durante a temporada vigente.
+                  '''${context.tr('rewards.regulation_rule1_title')}
+${context.tr('rewards.regulation_rule1_desc')}
 
-2. Pontuação Unificada (Tutor e Pets)
-Para maior justiça e flexibilidade de tutores com múltiplos pets cadastrados:
-  • Saldo Único: Todas as ações de engajamento (curtidas, comentários, indicações) realizadas por qualquer um dos perfis de pets vinculados somam pontos de forma unificada na mesma conta do tutor.
-  • Limite de Missões Diárias: O limite diário de ganho de pontos para missões (ex: limite de curtidas no feed) é computado por conta (Família), garantindo que a competição seja justa e equilibrada para todos os competidores.
-  • Representação Dinâmica: O pódio e a lista do ranking global exibirão o nome e a foto do pet definido como "Ativo" no aplicativo naquele momento. Ao alterar o pet ativo, o placar global se atualizará dinamicamente.
+${context.tr('rewards.regulation_rule2_title')}
+${context.tr('rewards.regulation_rule2_bullet1')}
+${context.tr('rewards.regulation_rule2_bullet2')}
+${context.tr('rewards.regulation_rule2_bullet3')}
 
-3. A Hierarquia de Desempate (Transparência Absoluta)
-Havendo empate na pontuação final da temporada, a seguinte ordem de critérios será rigorosamente aplicada:
-  • Critério 1: Quantidade de Convites (Referral). Vence a conta com o maior número de novos usuários validados trazidos para a plataforma.
-  • Critério 2: Completude de Perfil do Pet Ativo. Vence a conta cujo Pet Ativo possuir o cadastro de saúde e perfil mais completo.
-  • Critério 3: Fator Tempo. Se o empate persistir, vence a conta que atingiu a pontuação final PRIMEIRO na linha do tempo, conforme o registro imutável do banco de dados (timestamp).''',
+${context.tr('rewards.regulation_rule3_title')}
+${context.tr('rewards.regulation_rule3_intro')}
+${context.tr('rewards.regulation_rule3_crit1')}
+${context.tr('rewards.regulation_rule3_crit2')}
+${context.tr('rewards.regulation_rule3_crit3')}''',
                   style: TextStyle(
                     fontSize: 14,
                     color: textColor.withValues(alpha: 0.8),
@@ -735,7 +735,7 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                   borderRadius: BorderRadius.circular(12),
                 ),
               ),
-              child: const Text('Entendido', style: TextStyle(fontWeight: FontWeight.bold)),
+              child: Text(context.tr('rewards.understood_btn'), style: const TextStyle(fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -744,11 +744,11 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
   }
 
   void _showSponsorDetailsModal(BuildContext context, Map<String, dynamic> sponsor, Color cardColor, Color textColor) {
-    final String sponsorName = sponsor['name'] ?? 'Parceiro';
+    final String sponsorName = sponsor['name'] ?? context.tr('rewards.sponsor_fallback');
     final String? logoUrl = sponsor['logo_url'];
-    final String prizeTitle = sponsor['prize_title'] ?? 'Grande Prêmio';
-    final String prizeDescription = sponsor['prize_description'] ?? 'Sem descrição disponível no momento.';
-    final String prizeRules = sponsor['prize_rules'] ?? 'Sem regras adicionais informadas.';
+    final String prizeTitle = sponsor['prize_title'] ?? context.tr('rewards.prize_fallback');
+    final String prizeDescription = sponsor['prize_description'] ?? context.tr('rewards.no_desc');
+    final String prizeRules = sponsor['prize_rules'] ?? context.tr('rewards.no_rules');
     final String? targetLink = sponsor['target_link'];
 
     showModalBottomSheet(
@@ -801,8 +801,8 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                           color: AppColors.patasColor.withValues(alpha: 0.15),
                           borderRadius: BorderRadius.circular(8),
                         ),
-                        child: const Text(
-                          'PARCEIRO CONFIRMADO',
+                        child: Text(
+                          context.tr('rewards.confirmed_partner'),
                           style: TextStyle(
                             color: AppColors.patasColor,
                             fontSize: 10,
@@ -844,7 +844,7 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'SOBRE O PRÊMIO',
+                      context.tr('rewards.about_prize'),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -863,7 +863,7 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                     ),
                     const SizedBox(height: 24),
                     Text(
-                      'COMO RESGATAR / REGRAS',
+                      context.tr('rewards.how_to_claim'),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -907,7 +907,7 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                       ),
                     ),
                     child: Text(
-                      'Voltar',
+                      context.tr('rewards.back_btn'),
                       style: TextStyle(color: textColor, fontWeight: FontWeight.bold),
                     ),
                   ),
@@ -924,8 +924,8 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                           } else {
                             if (context.mounted) {
                               ScaffoldMessenger.of(context).showSnackBar(
-                                const SnackBar(
-                                  content: Text('Não foi possível abrir o link.'),
+                                SnackBar(
+                                  content: Text(context.tr('rewards.cant_open_link')),
                                   backgroundColor: Colors.red,
                                 ),
                               );
@@ -943,8 +943,8 @@ Havendo empate na pontuação final da temporada, a seguinte ordem de critérios
                           borderRadius: BorderRadius.circular(12),
                         ),
                       ),
-                      child: const Text(
-                        'Visitar Site',
+                      child: Text(
+                        context.tr('rewards.visit_site_btn'),
                         style: TextStyle(fontWeight: FontWeight.bold),
                       ),
                     ),
@@ -1055,8 +1055,8 @@ class _PulseRegulationButtonState extends State<_PulseRegulationButton>
                         color: Colors.white,
                       ),
                       const SizedBox(width: 8),
-                      const Text(
-                        'REGULAMENTO E DESEMPATE',
+                      Text(
+                        context.tr('rewards.regulation_btn'),
                         style: TextStyle(
                           fontSize: 13,
                           fontWeight: FontWeight.bold,

@@ -11,6 +11,7 @@ import 'package:patas_web_app/src/features/ongs_corp/services/corp_service.dart'
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
 import 'package:patas_web_app/src/providers/profile_view_provider.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class ProfileSwitcherBottomSheet extends StatefulWidget {
   final bool isDialog;
@@ -51,7 +52,7 @@ class _ProfileSwitcherBottomSheetState
           .maybeSingle();
       allAccounts.add(ActiveAccount(
         id: user.id,
-        name: userData?['name'] ?? 'Meu Perfil',
+        name: userData?['name'] ?? (mounted ? context.tr('nav.my_profile') : 'Meu Perfil'),
         photoUrl: userData?['photo_url'],
         type: AccountType.user,
       ));
@@ -147,7 +148,7 @@ class _ProfileSwitcherBottomSheetState
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Trocar Perfil',
+                context.tr('nav.switch_profile_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: widget.isDialog ? 20 : 18.sp,
@@ -170,10 +171,10 @@ class _ProfileSwitcherBottomSheetState
               ),
             )
           else if (_accounts.isEmpty)
-            const Center(
+            Center(
               child: Padding(
-                padding: EdgeInsets.symmetric(vertical: 24),
-                child: Text('Nenhuma conta encontrada.'),
+                padding: const EdgeInsets.symmetric(vertical: 24),
+                child: Text(context.tr('nav.no_accounts_found')),
               ),
             )
           else
@@ -225,7 +226,7 @@ class _ProfileSwitcherBottomSheetState
                       ),
                     ),
                     subtitle: Text(
-                      _getTypeLabel(account.type),
+                      _getTypeLabel(context, account.type),
                       style: TextStyle(
                         fontSize: widget.isDialog ? 13 : 11.sp,
                         color: Colors.grey,
@@ -254,16 +255,16 @@ class _ProfileSwitcherBottomSheetState
     );
   }
 
-  String _getTypeLabel(AccountType type) {
+  String _getTypeLabel(BuildContext context, AccountType type) {
     switch (type) {
       case AccountType.user:
-        return 'Perfil Pessoal';
+        return context.tr('nav.type_user');
       case AccountType.pet:
-        return 'Pet';
+        return context.tr('nav.type_pet');
       case AccountType.ong:
-        return 'ONG / Instituição';
+        return context.tr('nav.type_ong');
       case AccountType.company:
-        return 'Empresa';
+        return context.tr('nav.type_company');
     }
   }
 

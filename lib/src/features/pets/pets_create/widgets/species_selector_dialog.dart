@@ -2,15 +2,18 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class SpeciesSelectorDialog extends StatefulWidget {
   final String title;
   final List<String> popularSpecies;
+  final IconData itemIcon;
 
   const SpeciesSelectorDialog({
     super.key,
     required this.title,
     required this.popularSpecies,
+    this.itemIcon = Icons.pets,
   });
 
   @override
@@ -91,7 +94,7 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
                 controller: _searchController,
                 style: TextStyle(color: textColor),
                 decoration: InputDecoration(
-                  hintText: 'Pesquisar espécie...',
+                  hintText: context.tr('pet_create.search_species_hint'),
                   hintStyle: TextStyle(
                       color: isDark ? Colors.white60 : Colors.black54),
                   prefixIcon: const Icon(Icons.search, color: AppColors.patasColor),
@@ -133,13 +136,13 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
                                 color: AppColors.patasColor.withValues(alpha: 0.3),
                               ),
                             ),
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.edit, color: AppColors.patasColor),
-                                SizedBox(width: 12),
+                                const Icon(Icons.edit, color: AppColors.patasColor),
+                                const SizedBox(width: 12),
                                 Text(
-                                  'Outra espécie (Digitar manual...)',
-                                  style: TextStyle(
+                                  context.tr('pet_create.custom_species_btn'),
+                                  style: const TextStyle(
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.patasColor,
                                     fontSize: 15,
@@ -167,7 +170,7 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
                           ),
                           child: Row(
                             children: [
-                              const Icon(Icons.pets,
+                              Icon(widget.itemIcon,
                                   size: 16, color: AppColors.patasColor),
                               const SizedBox(width: 12),
                               Text(
@@ -189,7 +192,7 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
             ] else ...[
               // Input para digitar espécie manualmente
               Text(
-                'Digite a espécie ou raça do pet:',
+                context.tr('pet_create.type_species_name'),
                 style: TextStyle(
                   color: textColor.withValues(alpha: 0.8),
                   fontSize: 14,
@@ -225,7 +228,7 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
                       });
                     },
                     child: Text(
-                      'Voltar para lista',
+                      context.tr('common.back'),
                       style: TextStyle(color: textColor.withValues(alpha: 0.6)),
                     ),
                   ),
@@ -245,9 +248,9 @@ class _SpeciesSelectorDialogState extends State<SpeciesSelectorDialog> {
                       padding: const EdgeInsets.symmetric(
                           horizontal: 20, vertical: 12),
                     ),
-                    child: const Text(
-                      'Confirmar',
-                      style: TextStyle(
+                    child: Text(
+                      context.tr('pet_create.confirm_species'),
+                      style: const TextStyle(
                         color: Colors.white,
                         fontWeight: FontWeight.bold,
                       ),

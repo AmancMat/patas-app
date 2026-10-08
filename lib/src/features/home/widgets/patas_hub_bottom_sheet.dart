@@ -9,6 +9,7 @@ import '../rewards/services/gamification_service.dart';
 import '../../love/services/patas_love_service.dart';
 import '../../love/screens/patas_love_main_screen.dart';
 import '../../../utils/responsive_layout.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class PatasHubBottomSheet extends StatefulWidget {
   final bool isRewardsActive;
@@ -153,7 +154,7 @@ class _PatasHubBottomSheetState extends State<PatasHubBottomSheet> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Central Patas 🐾',
+                          context.tr('hub.central_title'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 20,
@@ -162,7 +163,7 @@ class _PatasHubBottomSheetState extends State<PatasHubBottomSheet> {
                           ),
                         ),
                         Text(
-                          'Acesse seus recursos de acasalamento e recompensas',
+                          context.tr('hub.central_subtitle'),
                           style: TextStyle(
                             fontSize: 12,
                             color: subtitleColor,
@@ -192,13 +193,15 @@ class _PatasHubBottomSheetState extends State<PatasHubBottomSheet> {
                   color: Colors.pinkAccent,
                   size: 28,
                 ),
-                title: 'Patas Love 💕',
+                title: context.tr('hub.love_title'),
                 subtitle: _chatCount > 0
-                    ? '$_chatCount ${_chatCount == 1 ? 'conversa ativa' : 'conversas ativas'}'
-                    : 'Encontre o par ideal para ${activePet?.name ?? 'seu pet'}',
-                badgeText: 'Chat & Match',
+                    ? (_chatCount == 1
+                        ? context.tr('hub.active_chat_single')
+                        : context.tr('hub.active_chats', {'count': '$_chatCount'}))
+                    : context.tr('hub.find_match_for', {'name': activePet?.name ?? context.tr('common.your_pet')}),
+                badgeText: context.tr('hub.chat_and_match'),
                 badgeColor: Colors.pinkAccent,
-                buttonText: 'Abrir Encontros & Mensagens',
+                buttonText: context.tr('hub.open_love_chats'),
                 onPressed: () {
                   Navigator.pop(context);
                   if (context.isDesktop && desktopContentNavigatorKey.currentState != null) {
@@ -230,13 +233,13 @@ class _PatasHubBottomSheetState extends State<PatasHubBottomSheet> {
                     color: Colors.amber,
                     size: 28,
                   ),
-                  title: 'Patas Rewards 🎁',
+                  title: context.tr('hub.rewards_title'),
                   subtitle: _isLoadingStats
-                      ? 'Carregando saldo de pontos...'
-                      : '$_userPoints Pontos Acumulados${_userRank > 0 ? ' • #$_userRankº no Ranking' : ''}',
-                  badgeText: 'Gamificação',
+                      ? context.tr('hub.loading_points')
+                      : '${context.tr('hub.accumulated_points', {'points': '$_userPoints'})}${_userRank > 0 ? context.tr('hub.rank_position', {'rank': '$_userRank'}) : ''}',
+                  badgeText: context.tr('hub.gamification_badge'),
                   badgeColor: Colors.amber.shade800,
-                  buttonText: 'Ver Ranking & Prêmios',
+                  buttonText: context.tr('hub.view_ranking_rewards'),
                   onPressed: () {
                     Navigator.pop(context);
                     if (context.isDesktop && desktopContentNavigatorKey.currentState != null) {

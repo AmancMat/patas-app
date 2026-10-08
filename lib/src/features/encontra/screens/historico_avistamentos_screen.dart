@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/features/encontra/services/encontra_service.dart';
 import 'package:flutter_map/flutter_map.dart';
@@ -123,8 +124,8 @@ class _HistoricoAvistamentosScreenState
     Widget mainContent = Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Histórico de Alertas',
-        subtitle: 'Registros de leitura e avistamentos do pet',
+        title: context.tr('encontra.history_title'),
+        subtitle: context.tr('encontra.history_subtitle'),
         showBackButton: true,
         leadingIcon: const Icon(
           Icons.history_rounded,
@@ -226,7 +227,7 @@ class _HistoricoAvistamentosScreenState
           const Icon(Icons.location_off_rounded, size: 52, color: Colors.grey),
           const SizedBox(height: 16),
           Text(
-            'Nenhum avistamento registrado',
+            context.tr('encontra.no_sightings_registered'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 16,
@@ -235,7 +236,7 @@ class _HistoricoAvistamentosScreenState
           ),
           const SizedBox(height: 8),
           Text(
-            'Ative o Modo Perdido no painel para começar a receber avistamentos.',
+            context.tr('encontra.activate_lost_mode_to_receive'),
             style: TextStyle(
               fontSize: 12,
               color: isDark ? Colors.white38 : Colors.black38,
@@ -250,7 +251,7 @@ class _HistoricoAvistamentosScreenState
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Linha do Tempo de Avistamentos',
+          context.tr('encontra.timeline_title'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 18,
@@ -281,11 +282,11 @@ class _HistoricoAvistamentosScreenState
                 if (seen != null) {
                   final diff = DateTime.now().difference(seen);
                   if (diff.inMinutes < 60) {
-                    timeAgo = 'Há ${diff.inMinutes}min';
+                    timeAgo = context.tr('encontra.time_min', {'min': '${diff.inMinutes}'});
                   } else if (diff.inHours < 24) {
-                    timeAgo = 'Há ${diff.inHours}h';
+                    timeAgo = context.tr('encontra.time_hour', {'hour': '${diff.inHours}'});
                   } else {
-                    timeAgo = 'Há ${diff.inDays}d';
+                    timeAgo = context.tr('encontra.time_day', {'day': '${diff.inDays}'});
                   }
 
                   final hour = seen.hour.toString().padLeft(2, '0');
@@ -301,7 +302,7 @@ class _HistoricoAvistamentosScreenState
                   ? address
                   : (lat != null && lng != null
                       ? 'Lat: ${lat.toStringAsFixed(4)}, Lng: ${lng.toStringAsFixed(4)}'
-                      : 'Localização não disponível');
+                      : context.tr('encontra.location_not_available'));
 
               return GestureDetector(
                 onTap: () {
@@ -390,7 +391,7 @@ class _HistoricoAvistamentosScreenState
                               Text(
                                 message != null && message.isNotEmpty
                                     ? '"$message"'
-                                    : '"Sem comentário do avistador"',
+                                    : context.tr('encontra.no_comment'),
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontStyle: FontStyle.italic,
@@ -410,7 +411,7 @@ class _HistoricoAvistamentosScreenState
                                   ),
                                   const SizedBox(width: 4),
                                   Text(
-                                    '${finderName != null && finderName.isNotEmpty ? finderName : "Avistador desconhecido"} · $timeStr ($timeAgo)',
+                                    '${finderName != null && finderName.isNotEmpty ? finderName : context.tr('encontra.unknown_finder')} · $timeStr ($timeAgo)',
                                     style: TextStyle(
                                       fontSize: 11,
                                       color: isDark
@@ -627,7 +628,7 @@ class _HistoricoAvistamentosScreenState
                       ),
                       const SizedBox(width: 6),
                       Text(
-                        _isSatelliteView ? 'Mapa' : 'Satélite',
+                        _isSatelliteView ? context.tr('encontra.map_toggle') : context.tr('encontra.satellite_toggle'),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -690,7 +691,7 @@ class _HistoricoAvistamentosScreenState
             ],
           ),
           child: Text(
-            'Avistamento $index',
+            context.tr('encontra.sighting_pin', {'index': '$index'}),
             style: const TextStyle(
               color: Colors.white,
               fontSize: 9,

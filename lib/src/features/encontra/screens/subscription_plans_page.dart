@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/features/encontra/screens/pix_payment_page.dart';
 import 'package:patas_web_app/src/features/encontra/screens/credit_card_checkout_page.dart';
@@ -68,8 +69,8 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
       context: context,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
-        title: const Text(
-          'Confirmar Pagamento',
+        title: Text(
+          context.tr('encontra.confirm_payment_dialog_title'),
           style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
         ),
         content: Form(
@@ -78,8 +79,8 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'Para gerar o PIX, precisamos do seu CPF. Ele é exigido pelo gateway de pagamento.',
+              Text(
+                context.tr('encontra.pix_cpf_prompt'),
                 style: TextStyle(fontFamily: 'Roboto_flex', fontSize: 13, height: 1.5),
               ),
               const SizedBox(height: 16),
@@ -107,7 +108,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.of(ctx).pop(false),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+            child: Text(context.tr('common_cancel'), style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -120,7 +121,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                 Navigator.of(ctx).pop(true);
               }
             },
-            child: const Text('Gerar PIX', style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
+            child: Text(context.tr('encontra.generate_pix_btn'), style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -138,7 +139,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
       final user = _client.auth.currentUser;
       if (user == null) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Você precisa estar autenticado.')),
+          SnackBar(content: Text(context.tr('encontra.auth_required_err'))),
         );
         return;
       }
@@ -178,7 +179,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
       debugPrint('Erro ao criar assinatura: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao iniciar assinatura: $e')),
+          SnackBar(content: Text(context.tr('encontra.sub_error', {'error': '$e'}))),
         );
       }
     } finally {
@@ -199,7 +200,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
       crossAxisAlignment: isDesktop ? CrossAxisAlignment.start : CrossAxisAlignment.stretch,
       children: [
         Text(
-          'Mantenha seu pet seguro',
+          context.tr('encontra.keep_pet_safe_title'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: isDesktop ? 28 : 24,
@@ -210,7 +211,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
         ),
         const SizedBox(height: 8),
         Text(
-          'Ao assinar, você ativa o monitoramento por localização das tags inteligentes. Cancele quando quiser.',
+          context.tr('encontra.keep_pet_safe_desc'),
           style: TextStyle(
             fontFamily: 'Roboto_flex',
             fontSize: 14,
@@ -235,22 +236,22 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
               children: [
                 _buildBenefitItem(
                   icon: Icons.location_on_outlined,
-                  title: 'Localização do último avistamento',
-                  subtitle: 'GPS comunitário atualiza o mapa quando a tag é lida.',
+                  title: context.tr('encontra.benefit1_title'),
+                  subtitle: context.tr('encontra.benefit1_desc'),
                   isDark: isDark,
                 ),
                 const Divider(height: 24),
                 _buildBenefitItem(
                   icon: Icons.notifications_active_outlined,
-                  title: 'Notificações críticas de emergência',
-                  subtitle: 'Alertas no seu celular e canais oficiais do tutor.',
+                  title: context.tr('encontra.benefit2_title'),
+                  subtitle: context.tr('encontra.benefit2_desc'),
                   isDark: isDark,
                 ),
                 const Divider(height: 24),
                 _buildBenefitItem(
                   icon: Icons.qr_code_scanner,
-                  title: 'Sem necessidade de app para quem encontra',
-                  subtitle: 'Página web rápida patas.online sem atritos.',
+                  title: context.tr('encontra.benefit3_title'),
+                  subtitle: context.tr('encontra.benefit3_desc'),
                   isDark: isDark,
                 ),
               ],
@@ -266,7 +267,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
       children: [
         if (isDesktop) ...[
           Text(
-            'Escolha o plano ideal',
+            context.tr('encontra.choose_plan_title'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 20,
@@ -311,7 +312,9 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                           Row(
                             children: [
                               Text(
-                                plan['name'],
+                                plan['id'] == 'plan-mensal-patas-encontra'
+                                    ? context.tr('encontra.monthly_plan')
+                                    : context.tr('encontra.annual_plan'),
                                 style: TextStyle(
                                   fontFamily: 'Fredoka',
                                   fontSize: 18,
@@ -331,7 +334,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                                     borderRadius: BorderRadius.circular(8),
                                   ),
                                   child: Text(
-                                    plan['discount'],
+                                    context.tr('encontra.save_discount'),
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: 10,
@@ -345,7 +348,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                           ),
                           const SizedBox(height: 4),
                           Text(
-                            plan['billing'],
+                            plan['id'] == 'plan-mensal-patas-encontra' ? context.tr('encontra.billed_monthly') : context.tr('encontra.billed_annually'),
                             style: TextStyle(
                               fontFamily: 'Roboto_flex',
                               fontSize: 12,
@@ -368,7 +371,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                           ),
                         ),
                         Text(
-                          '/período',
+                          context.tr('encontra.per_period'),
                           style: TextStyle(
                             fontFamily: 'Roboto_flex',
                             fontSize: 10,
@@ -385,7 +388,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
         }),
         const SizedBox(height: 24),
         Text(
-          'Forma de pagamento',
+          context.tr('encontra.payment_method_title'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 16,
@@ -478,7 +481,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Cartão',
+                        context.tr('encontra.card_option'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 14,
@@ -522,7 +525,7 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
                   ),
                 )
               : Text(
-                  _selectedPaymentMethod == 'PIX' ? 'Assinar com PIX' : 'Avançar para o Cartão',
+                  _selectedPaymentMethod == 'PIX' ? context.tr('encontra.subscribe_pix_btn') : context.tr('encontra.advance_card_btn'),
                   style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 18,
@@ -533,8 +536,8 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
         const SizedBox(height: 16),
         Text(
           _selectedPaymentMethod == 'PIX'
-              ? 'O pagamento do PIX é processado na hora pelo banco. Sua assinatura ficará ativa imediatamente.'
-              : 'O pagamento por cartão é processado de forma segura e instantânea. A proteção do seu pet será ativada na hora.',
+              ? context.tr('encontra.pix_info_desc')
+              : context.tr('encontra.card_info_desc'),
           style: TextStyle(
             fontFamily: 'Roboto_flex',
             fontSize: 11,
@@ -548,9 +551,9 @@ class _SubscriptionPlansPageState extends State<SubscriptionPlansPage> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Planos de Proteção',
-        subtitle: 'Escolha a assinatura para o seu pet',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('encontra.plans_title'),
+        subtitle: context.tr('encontra.plans_subtitle'),
         showBackButton: true,
         leadingIcon: Icon(
           Icons.workspace_premium_rounded,

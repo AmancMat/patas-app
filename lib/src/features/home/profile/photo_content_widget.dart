@@ -9,6 +9,8 @@ import 'package:patas_web_app/src/localization/locator.dart';
 import '../../../../app.dart';
 import '../../../constants/app_colors.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 class PhotoFolder {
   final String title;
   final Future<List<String>> imagesFuture;
@@ -25,41 +27,49 @@ class PhotoContentWidget extends StatefulWidget {
 }
 
 class _PhotoContentWidgetState extends State<PhotoContentWidget> {
-  late List<PhotoFolder> folders;
+  Future<List<String>>? _profileImagesFuture;
+  Future<List<String>>? _postImagesFuture;
+  Future<List<String>>? _storyImagesFuture;
 
   @override
   void initState() {
     super.initState();
-    _initializeFolders();
+    _loadFutures();
   }
 
   @override
   void didUpdateWidget(covariant PhotoContentWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
     if (oldWidget.pet?.id != widget.pet?.id) {
-      _initializeFolders();
+      _loadFutures();
     }
   }
 
-  void _initializeFolders() {
+  void _loadFutures() {
     final petId = widget.pet?.id;
-    if (petId == null) {
-      folders = [];
-      return;
+    if (petId != null) {
+      _profileImagesFuture = _getProfileImages();
+      _postImagesFuture = _getPostImages(petId);
+      _storyImagesFuture = _getStoryImages(petId);
     }
+  }
 
-    folders = [
+  List<PhotoFolder> _getFolders(BuildContext context) {
+    final petId = widget.pet?.id;
+    if (petId == null) return [];
+
+    return [
       PhotoFolder(
-        title: 'Perfil',
-        imagesFuture: _getProfileImages(),
+        title: context.tr('profile.folder_profile'),
+        imagesFuture: _profileImagesFuture ?? Future.value([]),
       ),
       PhotoFolder(
-        title: 'Postagens',
-        imagesFuture: _getPostImages(petId),
+        title: context.tr('profile.folder_posts'),
+        imagesFuture: _postImagesFuture ?? Future.value([]),
       ),
       PhotoFolder(
-        title: 'Stories',
-        imagesFuture: _getStoryImages(petId),
+        title: context.tr('profile.folder_stories'),
+        imagesFuture: _storyImagesFuture ?? Future.value([]),
       ),
     ];
   }
@@ -87,9 +97,10 @@ class _PhotoContentWidgetState extends State<PhotoContentWidget> {
   @override
   Widget build(BuildContext context) {
     if (widget.pet == null) {
-      return const Center(child: Text('Nenhum pet selecionado'));
+      return Center(child: Text(context.tr('profile.no_pet_selected')));
     }
 
+    final folders = _getFolders(context);
     final thmode = Provider.of<DarkMode>(context);
     return GridView.builder(
         shrinkWrap: true,

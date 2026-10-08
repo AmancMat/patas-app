@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import '../models/trainer_profile_model.dart';
@@ -94,8 +95,8 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
       backgroundColor:
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Adestradores & Treino',
-        subtitle: 'Especialistas em comportamento canino e felino',
+        title: context.tr('trainers.title'),
+        subtitle: context.tr('trainers.subtitle'),
         leadingIcon: const Icon(
           Icons.sports_score_rounded,
           color: AppColors.patasColor,
@@ -108,7 +109,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
               color: AppColors.patasColor,
               size: 22,
             ),
-            tooltip: 'Cadastrar como Especialista',
+            tooltip: context.tr('trainers.register_tooltip'),
             onPressed: _openCreateTrainerScreen,
           ),
         ],
@@ -154,7 +155,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
                               controller: _searchController,
                               onChanged: (_) => _loadTrainers(),
                               decoration: InputDecoration(
-                                hintText: 'Buscar adestrador por nome ou especialidade...',
+                                hintText: context.tr('trainers.search_hint'),
                                 hintStyle: TextStyle(
                                   fontSize: 13,
                                   color: isDark ? Colors.white54 : Colors.black45,
@@ -340,7 +341,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
               ),
               const SizedBox(height: 18),
               Text(
-                'Nenhum adestrador encontrado',
+                context.tr('trainers.empty_filter_title'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Fredoka',
@@ -351,7 +352,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Não encontramos especialistas com os filtros selecionados. Tente buscar por outro termo ou limpe os filtros.',
+                context.tr('trainers.empty_filter_desc'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -367,8 +368,8 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
                   _loadTrainers();
                 },
                 icon: const Icon(Icons.clear_all_rounded, size: 18),
-                label: const Text(
-                  'Limpar Filtros',
+                label: Text(
+                  context.tr('trainers.clear_filters'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.bold,
@@ -417,7 +418,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
             ),
             const SizedBox(height: 20),
             Text(
-              'Ainda não há adestradores cadastrados por aqui',
+              context.tr('trainers.empty_state_title'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontFamily: 'Fredoka',
@@ -430,7 +431,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
             ConstrainedBox(
               constraints: const BoxConstraints(maxWidth: 420),
               child: Text(
-                'Estamos expandindo nossa rede de adestradores e especialistas em comportamento pet. Assim que novos profissionais se credenciarem na sua região, eles estarão disponíveis aqui!',
+                context.tr('trainers.empty_state_desc'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -483,7 +484,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
                               Text(
-                                'Você é adestrador ou comportamentalista?',
+                                context.tr('trainers.cta_trainer_title'),
                                 style: TextStyle(
                                   fontFamily: 'Fredoka',
                                   fontSize: 14,
@@ -493,7 +494,7 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'Cadastre seu perfil profissional e comece a receber alunos da sua região!',
+                                context.tr('trainers.cta_trainer_desc'),
                                 style: TextStyle(
                                   fontSize: 11,
                                   color: isDark ? Colors.white60 : Colors.black54,
@@ -511,8 +512,8 @@ class _AdestradoresCatalogScreenState extends State<AdestradoresCatalogScreen> {
                       child: ElevatedButton.icon(
                         onPressed: _openCreateTrainerScreen,
                         icon: const Icon(Icons.person_add_alt_1_rounded, size: 18),
-                        label: const Text(
-                          'Cadastrar meu Perfil Profissional',
+                        label: Text(
+                          context.tr('trainers.cta_trainer_full_btn'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 14,
@@ -762,7 +763,7 @@ class _TrainerCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'A domicílio',
+                        context.tr('trainers.at_home'),
                         style: TextStyle(
                           fontSize: 11,
                           color: isDark ? Colors.white60 : Colors.black54,
@@ -778,7 +779,7 @@ class _TrainerCard extends StatelessWidget {
                       ),
                       const SizedBox(width: 4),
                       Text(
-                        'Online',
+                        context.tr('trainers.online'),
                         style: TextStyle(
                           fontSize: 11,
                           color: isDark ? Colors.white60 : Colors.black54,
@@ -795,19 +796,19 @@ class _TrainerCard extends StatelessWidget {
                         color: AppColors.patasColor,
                         borderRadius: BorderRadius.circular(12),
                       ),
-                      child: const Row(
+                      child: Row(
                         children: [
                           Text(
-                            'Ver Perfil',
-                            style: TextStyle(
+                            context.tr('trainers.view_profile'),
+                            style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 12,
                               fontWeight: FontWeight.bold,
                               color: Colors.white,
                             ),
                           ),
-                          SizedBox(width: 4),
-                          Icon(
+                          const SizedBox(width: 4),
+                          const Icon(
                             Icons.arrow_forward_ios_rounded,
                             size: 10,
                             color: Colors.white,

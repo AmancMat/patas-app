@@ -4,6 +4,7 @@ import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/constants/routes.dart';
 import 'package:patas_web_app/src/features/interests/interests_service.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class InterestsQuestionnairePage extends StatefulWidget {
   const InterestsQuestionnairePage({super.key});
@@ -162,7 +163,7 @@ class _InterestsQuestionnairePageState
                 children: [
                   if (_currentPage > 0) ...[
                     Semantics(
-                      label: 'Voltar para pergunta anterior',
+                      label: context.tr('interests.back_semantic'),
                       button: true,
                       child: IconButton(
                         icon: const Icon(Icons.arrow_back_ios_new_rounded, color: AppColors.patasColor, size: 20),
@@ -174,7 +175,7 @@ class _InterestsQuestionnairePageState
                     const SizedBox(width: 8),
                   ],
                   Text(
-                    'Seus Interesses 🐾',
+                    context.tr('interests.title'),
                     style: const TextStyle(
                       fontSize: 22,
                       fontWeight: FontWeight.bold,
@@ -187,7 +188,7 @@ class _InterestsQuestionnairePageState
               TextButton(
                 onPressed: _skipAll,
                 child: Text(
-                  'Pular tudo',
+                  context.tr('interests.skip'),
                   style: TextStyle(
                     color: subtitleColor,
                     fontSize: 14,
@@ -212,7 +213,7 @@ class _InterestsQuestionnairePageState
           ),
           const SizedBox(height: 6),
           Text(
-            'Pergunta ${_currentPage + 1} de 4',
+            context.tr('interests.step', {'current': '${_currentPage + 1}', 'total': '4'}),
             style: TextStyle(
               color: subtitleColor,
               fontSize: 13,
@@ -247,7 +248,7 @@ class _InterestsQuestionnairePageState
                   elevation: 0,
                 ),
                 child: Text(
-                  isLast ? 'Começar minha jornada! 🚀' : 'Próximo',
+                  isLast ? context.tr('interests.btn_start') : context.tr('interests.btn_next'),
                   style: const TextStyle(
                     fontSize: 16,
                     fontWeight: FontWeight.bold,
@@ -265,20 +266,20 @@ class _InterestsQuestionnairePageState
   // ──────────────────────────────────────────
   Widget _buildPage1(Color textColor, Color subtitleColor, bool isDark) {
     final options = [
-      {'label': 'Cachorros 🐶', 'value': 'canino'},
-      {'label': 'Gatos 🐱', 'value': 'felino'},
-      {'label': 'Aves e Pássaros 🦜', 'value': 'ave'},
-      {'label': 'Pequenos Roedores 🐹', 'value': 'roedor'},
-      {'label': 'Exóticos e Répteis 🦎', 'value': 'exotico'},
-      {'label': 'Quero ver todos! 🐾', 'value': 'todos'},
+      {'label': context.tr('interests.opt_dogs'), 'value': 'canino'},
+      {'label': context.tr('interests.opt_cats'), 'value': 'felino'},
+      {'label': context.tr('interests.opt_birds'), 'value': 'ave'},
+      {'label': context.tr('interests.opt_rodents'), 'value': 'roedor'},
+      {'label': context.tr('interests.opt_exotics'), 'value': 'exotico'},
+      {'label': context.tr('interests.opt_all'), 'value': 'todos'},
     ];
 
     return _buildQuestionScroll(
       textColor: textColor,
       subtitleColor: subtitleColor,
       isDark: isDark,
-      question: 'Que espécies você quer\nver no seu feed?',
-      hint: 'Selecione uma ou mais opções',
+      question: context.tr('interests.q1_title'),
+      hint: context.tr('interests.q1_hint'),
       child: _buildChipGrid(
         options: options,
         selected: _selectedSpecies,
@@ -313,19 +314,19 @@ class _InterestsQuestionnairePageState
   // ──────────────────────────────────────────
   Widget _buildPage2(Color textColor, Color subtitleColor, bool isDark) {
     final options = [
-      {'label': 'Fotos e momentos fofos 📸', 'value': 'fotos'},
-      {'label': 'Saúde e bem-estar animal 🏥', 'value': 'saude'},
-      {'label': 'Locais pet friendly 🌳', 'value': 'locais'},
-      {'label': 'Mimos e novidades 🛍️', 'value': 'produtos'},
-      {'label': 'ONGs e pets perdidos 🆘', 'value': 'ongs'},
+      {'label': context.tr('interests.opt_photos'), 'value': 'fotos'},
+      {'label': context.tr('interests.opt_health'), 'value': 'saude'},
+      {'label': context.tr('interests.opt_places'), 'value': 'locais'},
+      {'label': context.tr('interests.opt_products'), 'value': 'produtos'},
+      {'label': context.tr('interests.opt_rescues'), 'value': 'ongs'},
     ];
 
     return _buildQuestionScroll(
       textColor: textColor,
       subtitleColor: subtitleColor,
       isDark: isDark,
-      question: 'Que tipo de conteúdo\nte interessa mais?',
-      hint: 'Pode escolher vários!',
+      question: context.tr('interests.q2_title'),
+      hint: context.tr('interests.q2_hint'),
       child: _buildChipGrid(
         options: options,
         selected: _selectedContentTypes,
@@ -348,18 +349,18 @@ class _InterestsQuestionnairePageState
   // ──────────────────────────────────────────
   Widget _buildPage3(Color textColor, Color subtitleColor, bool isDark) {
     final options = [
-      {'label': 'Filhotes cheios de energia 🍼', 'value': 'filhote'},
-      {'label': 'Pets calmos de apartamento 🛋️', 'value': 'calmo'},
-      {'label': 'Aventureiros e de grande porte 🏃', 'value': 'aventureiro'},
-      {'label': 'Pets idosos com histórias 👴', 'value': 'idoso'},
+      {'label': context.tr('interests.opt_puppies'), 'value': 'filhote'},
+      {'label': context.tr('interests.opt_calm'), 'value': 'calmo'},
+      {'label': context.tr('interests.opt_adventurous'), 'value': 'aventureiro'},
+      {'label': context.tr('interests.opt_seniors'), 'value': 'idoso'},
     ];
 
     return _buildQuestionScroll(
       textColor: textColor,
       subtitleColor: subtitleColor,
       isDark: isDark,
-      question: 'Qual perfil de pet\nvocê prefere acompanhar?',
-      hint: 'Selecione os que mais combinam com você',
+      question: context.tr('interests.q3_title'),
+      hint: context.tr('interests.q3_hint'),
       child: _buildChipGrid(
         options: options,
         selected: _selectedPetProfiles,
@@ -385,14 +386,14 @@ class _InterestsQuestionnairePageState
       textColor: textColor,
       subtitleColor: subtitleColor,
       isDark: isDark,
-      question: 'Gostaria de ver o que\nestá acontecendo perto de você?',
-      hint: 'Isso ajuda a priorizar conteúdo da sua região',
+      question: context.tr('interests.q4_title'),
+      hint: context.tr('interests.q4_hint'),
       child: Column(
         children: [
           const SizedBox(height: 8),
           _buildLocalOptionCard(
-            title: 'Sim, priorizar minha região 📍',
-            subtitle: 'Veja pets e eventos perto de você',
+            title: context.tr('interests.opt_region_yes'),
+            subtitle: context.tr('interests.opt_region_yes_sub'),
             value: true,
             isDark: isDark,
             textColor: textColor,
@@ -400,8 +401,8 @@ class _InterestsQuestionnairePageState
           ),
           const SizedBox(height: 16),
           _buildLocalOptionCard(
-            title: 'Não, quero ver o mundo inteiro 🌎',
-            subtitle: 'Descubra pets e histórias de todo lugar',
+            title: context.tr('interests.opt_region_no'),
+            subtitle: context.tr('interests.opt_region_no_sub'),
             value: false,
             isDark: isDark,
             textColor: textColor,

@@ -24,6 +24,7 @@ import 'package:patas_web_app/src/providers/profile_view_provider.dart';
 import 'package:patas_web_app/src/providers/user_role_provider.dart';
 import 'package:patas_web_app/src/features/notifications/widgets/web_notification_prompt_dialog.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class HomePage extends StatefulWidget {
   const HomePage({super.key});
@@ -225,69 +226,77 @@ class _HomePageState extends State<HomePage>
       stream: SupabaseNotificationService().unreadCountStream(),
       builder: (context, snapshot) {
         final count = snapshot.data ?? 0;
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            IconButton(
-              tooltip: 'Notificações',
-              icon: SvgPicture.asset(
-                'assets/icons/notification.svg',
-                width: 22,
-                height: 22,
-                colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
-              ),
-              onPressed: () {
-                if (context.isDesktop) {
-                  showDialog(
-                    context: context,
-                    builder: (context) => const Dialog(
-                      insetPadding: EdgeInsets.zero,
-                      backgroundColor: Colors.transparent,
-                      child: NotificationsPage(isDialog: true),
-                    ),
-                  );
-                } else {
-                  Navigator.push(
-                    context,
-                    MaterialPageRoute(
-                      builder: (context) => const NotificationsPage(),
-                    ),
-                  );
-                }
-              },
-            ),
-            if (count > 0)
-              Positioned(
-                right: 7,
-                top: 7,
-                child: Container(
-                  padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF3B30),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: Provider.of<DarkMode>(context).darkMode
-                          ? const Color(0xff1a1a1a)
-                          : const Color(0xffFAFAFA),
-                      width: 1.5,
-                    ),
-                  ),
-                  constraints: const BoxConstraints(
-                    minWidth: 15,
-                    minHeight: 15,
-                  ),
-                  child: Text(
-                    count > 99 ? '99+' : '$count',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 9,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    textAlign: TextAlign.center,
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                mouseCursor: SystemMouseCursors.click,
+                tooltip: context.tr('nav.notifications'),
+                icon: IgnorePointer(
+                  child: SvgPicture.asset(
+                    'assets/icons/notification.svg',
+                    width: 22,
+                    height: 22,
+                    colorFilter: ColorFilter.mode(iconColor, BlendMode.srcIn),
                   ),
                 ),
+                onPressed: () {
+                  if (context.isDesktop) {
+                    showDialog(
+                      context: context,
+                      builder: (context) => const Dialog(
+                        insetPadding: EdgeInsets.zero,
+                        backgroundColor: Colors.transparent,
+                        child: NotificationsPage(isDialog: true),
+                      ),
+                    );
+                  } else {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => const NotificationsPage(),
+                      ),
+                    );
+                  }
+                },
               ),
-          ],
+              if (count > 0)
+                Positioned(
+                  right: 7,
+                  top: 7,
+                  child: IgnorePointer(
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF3B30),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: Provider.of<DarkMode>(context).darkMode
+                              ? const Color(0xff1a1a1a)
+                              : const Color(0xffFAFAFA),
+                          width: 1.5,
+                        ),
+                      ),
+                      constraints: const BoxConstraints(
+                        minWidth: 15,
+                        minHeight: 15,
+                      ),
+                      child: Text(
+                        count > 99 ? '99+' : '$count',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 9,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
+                  ),
+                ),
+            ],
+          ),
         );
       },
     );
@@ -301,7 +310,7 @@ class _HomePageState extends State<HomePage>
       padding: EdgeInsets.only(bottom: bottomPadding),
       child: FloatingActionButton(
         heroTag: null,
-        tooltip: 'Central Patas',
+        tooltip: context.tr('home.patas_hub_tooltip'),
         elevation: 6,
         highlightElevation: 10,
         backgroundColor: AppColors.patasColor,

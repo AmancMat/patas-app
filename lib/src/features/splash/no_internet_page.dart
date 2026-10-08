@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class NoInternetPage extends StatelessWidget {
   final VoidCallback onRetry;
@@ -22,10 +23,10 @@ class NoInternetPage extends StatelessWidget {
                 color: Color(0xFFF6A5B1), // Usando a cor tema do Patas (Rosa)
               ),
               const SizedBox(height: 40),
-              const Text(
-                'Ops! Sem conexão',
+              Text(
+                context.tr('common.no_internet_title'),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 24,
                   fontWeight: FontWeight.bold,
@@ -33,10 +34,10 @@ class NoInternetPage extends StatelessWidget {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Não conseguimos nos conectar aos nossos servidores. Verifique sua internet para continuar cuidando do seu pet.',
+              Text(
+                context.tr('common.no_internet_desc'),
                 textAlign: TextAlign.center,
-                style: TextStyle(
+                style: const TextStyle(
                   fontFamily: 'Roboto_flex',
                   fontSize: 16,
                   color: Color(0xFF757575),
@@ -56,9 +57,9 @@ class NoInternetPage extends StatelessWidget {
                     ),
                     elevation: 0,
                   ),
-                  child: const Text(
-                    'Tentar Novamente',
-                    style: TextStyle(
+                  child: Text(
+                    context.tr('common.try_again'),
+                    style: const TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 18,
                       fontWeight: FontWeight.w600,

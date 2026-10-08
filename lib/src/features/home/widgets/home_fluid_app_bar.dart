@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/features/home/notifications/notifications_page.dart';
@@ -48,24 +49,13 @@ class HomeFluidHeaderDelegate extends SliverPersistentHeaderDelegate {
         isDark ? const Color(0xff1a1a1a) : const Color(0xffFAFAFA);
 
     final screenWidth = MediaQuery.of(context).size.width;
-    // Cálculo responsivo e homogêneo:
-    // Em telas mobile (340px a 420px), dimensionamos as abas para respirar sem colidir
-    // com o logo à esquerda (~64px) e as ações à direita (notificação + switcher = ~76px).
-    final double tabWidth = screenWidth < 410
-        ? (screenWidth * 0.24).clamp(86.0, 96.0)
-        : ((screenWidth - 160.0).clamp(170.0, 210.0) + 24.0) / 2.0;
-    final double overlapOffset = tabWidth - (screenWidth < 410 ? 22.0 : 24.0);
+    // Cálculo suave, contínuo e responsivo para mobile e tablet:
+    // Mantém as abas estáveis e confortáveis sem colidir com o logo ou as ações da direita.
+    final double tabWidth = screenWidth < 600
+        ? (screenWidth * 0.25).clamp(88.0, 108.0)
+        : 114.0;
+    final double overlapOffset = tabWidth - (screenWidth < 600 ? 20.0 : 24.0);
     final double tabsTotalWidth = overlapOffset + tabWidth;
-
-    // Distribuição balanceada no eixo horizontal:
-    // Garante que as ações da direita tenham pelo menos 80px e o logo da esquerda tenha 66px,
-    // mantendo as abas centralizadas sempre que houver folga geométrica.
-    const double leftReserved = 66.0;
-    const double rightReserved = 80.0;
-    final double idealCenter = (screenWidth - tabsTotalWidth) / 2.0;
-    final double maxLeft =
-        (screenWidth - tabsTotalWidth - rightReserved).clamp(leftReserved, screenWidth);
-    final double tabsLeft = idealCenter.clamp(leftReserved, maxLeft);
 
     final systemUiOverlayStyle = SystemUiOverlayStyle(
       statusBarColor: activeBg, // Cor da aba ativa na status bar do Android
@@ -120,17 +110,22 @@ class HomeFluidHeaderDelegate extends SliverPersistentHeaderDelegate {
                     ),
                   ),
 
-                  // ─── CAMADA 2: AS DUAS ABAS FLUIDAS (CENTRALIZADAS E MAIORES) ──
-                  // Ligeiramente maior que a barra cinza (48px vs 36px), cobrindo o cinza
+                  // ─── CAMADA 2: AS DUAS ABAS FLUIDAS (SEMPRE CENTRALIZADAS E ESTÁVEIS) ──
                   Positioned(
                     top: statusBarHeight - 1.0,
-                    left: tabsLeft,
-                    width: tabsTotalWidth,
+                    left: 0,
+                    right: 0,
                     height: tabsHeight,
-                    child: HomeFluidTabsBar(
-                      tabController: tabController,
-                      tabWidth: tabWidth,
-                      overlapOffset: overlapOffset,
+                    child: Center(
+                      child: SizedBox(
+                        width: tabsTotalWidth,
+                        height: tabsHeight,
+                        child: HomeFluidTabsBar(
+                          tabController: tabController,
+                          tabWidth: tabWidth,
+                          overlapOffset: overlapOffset,
+                        ),
+                      ),
                     ),
                   ),
                 ],
@@ -180,7 +175,7 @@ class HomeFluidTabsBar extends StatelessWidget implements PreferredSizeWidget {
             final petName = (activeAccount?.name != null &&
                     activeAccount!.name.isNotEmpty)
                 ? activeAccount.name
-                : 'Perfil';
+                : context.tr('nav.profile');
             final photoUrl = activeAccount?.photoUrl;
 
             return Container(
@@ -250,6 +245,7 @@ class _HomeFluidTabsStack extends StatelessWidget {
               width: tabWidth,
               height: tabHeight,
               child: _buildFeedTab(
+                context: context,
                 isActive: false,
                 backgroundColor: inactiveBg,
                 width: tabWidth,
@@ -294,6 +290,7 @@ class _HomeFluidTabsStack extends StatelessWidget {
               width: tabWidth,
               height: tabHeight,
               child: _buildFeedTab(
+                context: context,
                 isActive: true,
                 backgroundColor: activeBg,
                 width: tabWidth,
@@ -371,6 +368,7 @@ class _HomeFluidTabsStack extends StatelessWidget {
 
   // ─── Aba 2: Feed Social ────────────────────────────────────────────────────
   Widget _buildFeedTab({
+    required BuildContext context,
     required bool isActive,
     required Color backgroundColor,
     required double width,
@@ -400,7 +398,7 @@ class _HomeFluidTabsStack extends StatelessWidget {
             children: [
               // Título "Feed"
               Text(
-                'Feed',
+                context.tr('nav.feed'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 12.5,
@@ -537,11 +535,11 @@ class HomePublishPillButton extends StatelessWidget {
             ),
             child: Row(
               mainAxisSize: MainAxisSize.min,
-              children: const [
-                Icon(Icons.add_rounded, color: Colors.white, size: 16),
-                SizedBox(width: 3),
+              children: [
+                const Icon(Icons.add_rounded, color: Colors.white, size: 16),
+                const SizedBox(width: 3),
                 Text(
-                  'Postar',
+                  context.tr('nav.post'),
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Fredoka',
@@ -570,62 +568,70 @@ class HomeNotificationButton extends StatelessWidget {
       stream: SupabaseNotificationService().unreadCountStream(),
       builder: (context, snapshot) {
         final count = snapshot.data ?? 0;
-        return Stack(
-          alignment: Alignment.center,
-          children: [
-            IconButton(
-              tooltip: 'Notificações',
-              padding: const EdgeInsets.all(4),
-              constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
-              icon: SvgPicture.asset(
-                'assets/icons/notification.svg',
-                width: 20,
-                height: 20,
-                colorFilter: ColorFilter.mode(
-                  isDark ? Colors.white70 : AppColors.patasColor,
-                  BlendMode.srcIn,
-                ),
-              ),
-              onPressed: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => const NotificationsPage(),
-                  ),
-                );
-              },
-            ),
-            if (count > 0)
-              Positioned(
-                right: 2,
-                top: 2,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
-                  decoration: BoxDecoration(
-                    color: const Color(0xFFFF3B30),
-                    borderRadius: BorderRadius.circular(10),
-                    border: Border.all(
-                      color: isDark
-                          ? const Color(0xff1a1a1a)
-                          : const Color(0xffFAFAFA),
-                      width: 1.2,
+        return MouseRegion(
+          cursor: SystemMouseCursors.click,
+          child: Stack(
+            alignment: Alignment.center,
+            children: [
+              IconButton(
+                mouseCursor: SystemMouseCursors.click,
+                tooltip: context.tr('nav.notifications'),
+                padding: const EdgeInsets.all(4),
+                constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
+                icon: IgnorePointer(
+                  child: SvgPicture.asset(
+                    'assets/icons/notification.svg',
+                    width: 20,
+                    height: 20,
+                    colorFilter: ColorFilter.mode(
+                      isDark ? Colors.white70 : AppColors.patasColor,
+                      BlendMode.srcIn,
                     ),
                   ),
-                  constraints:
-                      const BoxConstraints(minWidth: 14, minHeight: 14),
-                  child: Text(
-                    count > 99 ? '99+' : '$count',
-                    style: const TextStyle(
-                      color: Colors.white,
-                      fontSize: 8,
-                      fontWeight: FontWeight.bold,
+                ),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (context) => const NotificationsPage(),
                     ),
-                    textAlign: TextAlign.center,
+                  );
+                },
+              ),
+              if (count > 0)
+                Positioned(
+                  right: 2,
+                  top: 2,
+                  child: IgnorePointer(
+                    child: Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 4, vertical: 1),
+                      decoration: BoxDecoration(
+                        color: const Color(0xFFFF3B30),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(
+                          color: isDark
+                              ? const Color(0xff1a1a1a)
+                              : const Color(0xffFAFAFA),
+                          width: 1.2,
+                        ),
+                      ),
+                      constraints:
+                          const BoxConstraints(minWidth: 14, minHeight: 14),
+                      child: Text(
+                        count > 99 ? '99+' : '$count',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 8,
+                          fontWeight: FontWeight.bold,
+                        ),
+                        textAlign: TextAlign.center,
+                      ),
+                    ),
                   ),
                 ),
-              ),
-          ],
+            ],
+          ),
         );
       },
     );
@@ -641,7 +647,7 @@ class HomeProfileSwitcherButton extends StatelessWidget {
     return Consumer<ActiveAccountProvider>(
       builder: (context, provider, _) {
         return IconButton(
-          tooltip: 'Trocar perfil ativo',
+          tooltip: context.tr('nav.switch_active_profile'),
           padding: const EdgeInsets.all(2),
           constraints: const BoxConstraints(minWidth: 32, minHeight: 32),
           onPressed: () {

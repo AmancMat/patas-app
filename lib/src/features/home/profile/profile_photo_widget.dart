@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:math';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class ProfilePhotoWidget extends StatefulWidget {
   const ProfilePhotoWidget({super.key});
@@ -46,7 +47,7 @@ class _ProfilePhotoWidgetState extends State<ProfilePhotoWidget> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Foto de Perfil'),
+        title: Text(context.tr('profile.photo_title')),
       ),
       // body: StaggeredGridView.countBuilder(
       //   crossAxisCount: 2,

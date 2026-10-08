@@ -10,6 +10,7 @@ import 'package:patas_web_app/src/features/acolhe/screens/ong_donations_dashboar
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import '../../../../app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class NotificationsPage extends StatefulWidget {
   final bool isDialog;
@@ -38,8 +39,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
     return Scaffold(
       backgroundColor: isDark ? AppColors.darkBG : Colors.white,
       appBar: PatasEssencialAppBar(
-        title: 'Notificações',
-        subtitle: 'Central de avisos e atividades',
+        title: context.tr('notifications.title'),
+        subtitle: context.tr('notifications.subtitle'),
         leadingIcon: const Icon(
           Icons.notifications_active_rounded,
           color: AppColors.patasColor,
@@ -51,7 +52,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
           IconButton(
             icon: const Icon(Icons.done_all_rounded, color: AppColors.patasColor),
             onPressed: () => _markAllAsRead(context),
-            tooltip: 'Marcar todas como lidas',
+            tooltip: context.tr('notifications.mark_all_read'),
           ),
         ],
       ),
@@ -66,9 +67,10 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
   Future<void> _markAllAsRead(BuildContext context) async {
     final messenger = ScaffoldMessenger.of(context);
+    final message = context.tr('notifications.all_marked_read');
     await _notificationService.markAllAsRead();
     messenger.showSnackBar(
-      const SnackBar(content: Text('Todas marcadas como lidas')),
+      SnackBar(content: Text(message)),
     );
   }
 
@@ -86,8 +88,8 @@ class _NotificationsPageState extends State<NotificationsPage> {
             padding: const EdgeInsets.fromLTRB(24, 16, 12, 12),
             child: Row(
               children: [
-                const Text(
-                  'Notificações',
+                Text(
+                  context.tr('notifications.title'),
                   style: TextStyle(
                     color: AppColors.patasColor,
                     fontWeight: FontWeight.bold,
@@ -99,7 +101,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 IconButton(
                   icon: const Icon(Icons.done_all, color: AppColors.patasColor),
                   onPressed: () => _markAllAsRead(context),
-                  tooltip: 'Marcar todas como lidas',
+                  tooltip: context.tr('notifications.mark_all_read'),
                 ),
                 IconButton(
                   icon: const Icon(Icons.close, color: Colors.grey),
@@ -127,7 +129,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
 
         if (snapshot.hasError) {
           return Center(
-            child: Text('Erro ao carregar notificações: ${snapshot.error}'),
+            child: Text(context.tr('notifications.error').replaceFirst('{error}', '${snapshot.error}')),
           );
         }
 
@@ -145,7 +147,7 @@ class _NotificationsPageState extends State<NotificationsPage> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Nenhuma notificação por enquanto.',
+                  context.tr('notifications.empty'),
                   style: TextStyle(
                     color: isDark ? Colors.white54 : Colors.grey,
                     fontSize: 16,

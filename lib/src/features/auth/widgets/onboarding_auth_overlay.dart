@@ -10,6 +10,7 @@ import '../../../constants/app_text_styles.dart';
 import '../../../constants/routes.dart';
 import '../../../utils/responsive_layout.dart';
 import 'onboarding_showcase.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class OnboardingAuthOverlay extends StatelessWidget {
   const OnboardingAuthOverlay({super.key});
@@ -74,16 +75,16 @@ class OnboardingAuthOverlay extends StatelessWidget {
               child: ConstrainedBox(
                 constraints: const BoxConstraints(maxWidth: 480),
                 child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 32),
+                  padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.center,
+                    mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      // Showcase (imagem + frase) em cima
-                      const SizedBox(height: 380, child: OnboardingShowcase()),
-                      const SizedBox(height: 32),
-                      // Card de login abaixo
-                      _buildLoginCard(thmode, isDark, context),
-                      const SizedBox(height: 32),
+                      // Showcase imponente com proporção original fluida
+                      const SizedBox(height: 290, child: OnboardingShowcase()),
+                      const SizedBox(height: 16),
+                      // Card de login com proporções harmoniosas e equilibradas
+                      _buildLoginCard(thmode, isDark, context, isMobile: true),
                     ],
                   ),
                 ),
@@ -180,7 +181,7 @@ class OnboardingAuthOverlay extends StatelessWidget {
   }
 
   // ─── CARD DE LOGIN (compartilhado) ──────────────────────────────────────────
-  Widget _buildLoginCard(DarkMode thmode, bool isDark, BuildContext context) {
+  Widget _buildLoginCard(DarkMode thmode, bool isDark, BuildContext context, {bool isMobile = false}) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 0, vertical: 0),
       decoration: BoxDecoration(
@@ -198,7 +199,10 @@ class OnboardingAuthOverlay extends StatelessWidget {
         child: BackdropFilter(
           filter: ImageFilter.blur(sigmaX: 14.0, sigmaY: 14.0),
           child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 40, vertical: 40),
+            padding: EdgeInsets.symmetric(
+              horizontal: isMobile ? 24 : 40,
+              vertical: isMobile ? 24 : 40,
+            ),
             decoration: BoxDecoration(
               color: isDark
                   ? Colors.white.withValues(alpha: 0.06)
@@ -222,40 +226,41 @@ class OnboardingAuthOverlay extends StatelessWidget {
                     icon: Icon(
                       isDark ? Icons.light_mode : Icons.dark_mode,
                       color: AppColors.patasColor,
+                      size: isMobile ? 22 : 24,
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: isMobile ? 8 : 20),
                 SizedBox(
-                  height: 160,
-                  width: 160,
+                  height: isMobile ? 80 : 160,
+                  width: isMobile ? 80 : 160,
                   child: SvgPicture.asset('assets/icons/patas.svg'),
                 ),
-                const SizedBox(height: 24),
-                const Text(
-                  "Bem vindo ao Patas",
+                SizedBox(height: isMobile ? 14 : 24),
+                Text(
+                  context.tr('onboarding.welcome_title'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white,
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.bold,
-                    fontSize: 28,
+                    fontSize: isMobile ? 24 : 28,
                   ),
                 ),
-                const SizedBox(height: 10),
+                SizedBox(height: isMobile ? 6 : 10),
                 Text(
-                  'Cuide, proteja e ajude seus melhores amigos!',
+                  context.tr('onboarding.welcome_tagline'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     color: Colors.white.withValues(alpha: 0.75),
                     fontFamily: 'Roboto_flex',
                     fontWeight: FontWeight.w500,
-                    fontSize: 15,
+                    fontSize: isMobile ? 14 : 15,
                   ),
                 ),
-                const SizedBox(height: 40),
+                SizedBox(height: isMobile ? 22 : 40),
                 SizedBox(
-                  height: 52,
+                  height: isMobile ? 50 : 52,
                   width: double.infinity,
                   child: TextButton(
                     onPressed: () {
@@ -271,17 +276,18 @@ class OnboardingAuthOverlay extends StatelessWidget {
                         ),
                       ),
                     ),
-                    child: const Text(
-                      'Começar',
+                    child: Text(
+                      context.tr('onboarding.start_action'),
                       style: TextStyle(
                         color: Colors.white,
                         fontFamily: 'Fredoka',
-                        fontSize: 22,
+                        fontSize: isMobile ? 20 : 22,
+                        fontWeight: FontWeight.bold,
                       ),
                     ),
                   ),
                 ),
-                const SizedBox(height: 20),
+                SizedBox(height: isMobile ? 14 : 20),
                 Align(
                   alignment: Alignment.center,
                   child: MultiTextButton(
@@ -289,14 +295,14 @@ class OnboardingAuthOverlay extends StatelessWidget {
                         Navigator.pushNamed(context, NamedRoute.signIn),
                     children: [
                       Text(
-                        'Já tem uma conta? ',
+                        context.tr('auth.already_have_account'),
                         style: AppTextStyles.smallText.copyWith(
                           color: Colors.white.withValues(alpha: 0.7),
                         ),
                       ),
-                      const Text(
-                        'Entrar',
-                        style: TextStyle(
+                      Text(
+                        context.tr('auth.login'),
+                        style: const TextStyle(
                           fontFamily: 'Fredoka',
                           color: AppColors.patasColor,
                           fontWeight: FontWeight.bold,

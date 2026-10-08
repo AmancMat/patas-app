@@ -5,6 +5,8 @@ import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/utils/to_publish_page.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 /// ==============================================================================
 /// WIDGET QUICK POST DO PATAS (ESTILO FACEBOOK) — POSICIONADO ACIMA DOS STORIES
 /// ==============================================================================
@@ -73,7 +75,7 @@ class HomeQuickPostCard extends StatelessWidget {
                       ),
                     ),
                     child: Text(
-                      'No que seu pet está pensando agora?',
+                      context.tr('feed.quick_post_hint'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 13,
@@ -109,12 +111,12 @@ class HomeQuickPostCard extends StatelessWidget {
                     ),
                     child: Row(
                       mainAxisSize: MainAxisSize.min,
-                      children: const [
-                        Icon(Icons.add_rounded, color: Colors.white, size: 16),
-                        SizedBox(width: 4),
+                      children: [
+                        const Icon(Icons.add_rounded, color: Colors.white, size: 16),
+                        const SizedBox(width: 4),
                         Text(
-                          'Postar',
-                          style: TextStyle(
+                          context.tr('feed.quick_post_action'),
+                          style: const TextStyle(
                             color: Colors.white,
                             fontFamily: 'Fredoka',
                             fontWeight: FontWeight.bold,

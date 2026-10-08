@@ -10,24 +10,36 @@ import '../solana/services/pet_passport_service.dart';
 import '../solana/widgets/pet_passport_detail_sheet.dart';
 import '../solana/widgets/pet_passport_onboarding_dialog.dart';
 
-class PetDetail extends StatelessWidget {
-  const PetDetail({super.key});
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
-  String _calculateAge(DateTime birthDate) {
+class PetDetail extends StatelessWidget {
+  final Pet? pet;
+  final bool isOwner;
+
+  const PetDetail({
+    super.key,
+    this.pet,
+    this.isOwner = true,
+  });
+
+  String _calculateAge(BuildContext context, DateTime birthDate) {
     final now = DateTime.now();
     int age = now.year - birthDate.year;
     if (now.month < birthDate.month ||
         (now.month == birthDate.month && now.day < birthDate.day)) {
       age--;
     }
-    return '$age anos';
+    if (age <= 1) {
+      return context.tr('profile.one_year_old');
+    }
+    return context.tr('profile.years_old', {'count': '$age'});
   }
 
   @override
   Widget build(BuildContext context) {
     final thmode = Provider.of<DarkMode>(context);
     final activePetProvider = Provider.of<ActivePetProvider>(context);
-    final Pet? activePet = activePetProvider.activePet;
+    final Pet? activePet = pet ?? activePetProvider.activePet;
 
     if (activePet == null) {
       return Skeletonizer(
@@ -35,17 +47,17 @@ class PetDetail extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
-            _buildSkeletonRow(thmode, 'Idade: '),
+            _buildSkeletonRow(thmode, context.tr('profile.age_label')),
             const SizedBox(height: 5),
-            _buildSkeletonRow(thmode, 'Raça: '),
+            _buildSkeletonRow(thmode, context.tr('profile.breed_label')),
             const SizedBox(height: 5),
-            _buildSkeletonRow(thmode, 'Gênero: '),
+            _buildSkeletonRow(thmode, context.tr('profile.gender_label')),
             const SizedBox(height: 5),
-            _buildSkeletonRow(thmode, 'Porte: '),
+            _buildSkeletonRow(thmode, context.tr('profile.size_label')),
             const SizedBox(height: 5),
-            _buildSkeletonRow(thmode, 'Peso: '),
+            _buildSkeletonRow(thmode, context.tr('profile.weight_label')),
             const SizedBox(height: 5),
-            _buildSkeletonRow(thmode, 'Sangue: '),
+            _buildSkeletonRow(thmode, context.tr('profile.blood_label')),
           ],
         ),
       );
@@ -56,67 +68,118 @@ class PetDetail extends StatelessWidget {
       children: <Widget>[
         _buildDetailRow(
           thmode,
-          'Idade: ',
+          context.tr('profile.age_label'),
           activePet.birthDate != null
-              ? _calculateAge(activePet.birthDate!)
+              ? _calculateAge(context, activePet.birthDate!)
               : 'N/I',
         ),
-        _buildDetailRow(thmode, 'Raça: ', activePet.breed ?? 'N/I'),
-        _buildDetailRow(thmode, 'Gênero: ', activePet.gender ?? 'N/I'),
-        _buildDetailRow(thmode, 'Porte: ', activePet.size ?? 'N/I'),
+        _buildDetailRow(thmode, context.tr('profile.breed_label'), activePet.breed ?? 'N/I'),
+        _buildDetailRow(thmode, context.tr('profile.gender_label'), activePet.gender ?? 'N/I'),
+        _buildDetailRow(thmode, context.tr('profile.size_label'), activePet.size ?? 'N/I'),
         _buildDetailRow(
           thmode,
-          'Peso: ',
+          context.tr('profile.weight_label'),
           activePet.weight != null ? '${activePet.weight}kg' : 'N/I',
         ),
-        _buildDetailRow(thmode, 'Sangue: ', activePet.bloodType ?? 'N/I'),
+        _buildDetailRow(thmode, context.tr('profile.blood_label'), activePet.bloodType ?? 'N/I'),
         const SizedBox(height: 4),
-        FutureBuilder<PetPassport?>(
-          future: PetPassportService.getExistingPassport(activePet.id),
-          builder: (context, snapshot) {
-            final passport = snapshot.data;
-            final isMinted = passport != null;
+        ValueListenableBuilder<int>(
+          valueListenable: PetPassportService.passportChangeNotifier,
+          builder: (context, _, __) {
+            return FutureBuilder<PetPassport?>(
+              future: PetPassportService.getExistingPassport(activePet.id),
+              builder: (context, snapshot) {
+                final passport = snapshot.data;
+                final isMinted = passport != null;
 
-            return InkWell(
-              onTap: () async {
-                if (isMinted) {
-                  PetPassportDetailSheet.show(context, passport: passport);
-                } else {
-                  PetPassportOnboardingDialog.show(context, pet: activePet);
-                }
-              },
-              borderRadius: BorderRadius.circular(6),
-              child: Container(
-                padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: isMinted
-                        ? const [Color(0xFF9945FF), Color(0xFF14F195)]
-                        : const [Color(0xFF6B21A8), Color(0xFF9945FF)],
-                  ),
-                  borderRadius: BorderRadius.circular(6),
-                ),
-                child: Row(
-                  mainAxisSize: MainAxisSize.min,
-                  children: [
-                    Icon(
-                      isMinted ? Icons.verified_rounded : Icons.auto_awesome_rounded,
-                      size: 11,
-                      color: Colors.white,
-                    ),
-                    const SizedBox(width: 4),
-                    Text(
-                      isMinted ? 'cNFT Verificado' : 'Emitir cNFT',
-                      style: const TextStyle(
-                        fontFamily: 'Fredoka',
-                        fontSize: 9.5,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
+                // Se o usuário logado é o DONO do pet:
+                if (isOwner) {
+                  return InkWell(
+                    onTap: () async {
+                      if (isMinted) {
+                        await PetPassportDetailSheet.show(context, passport: passport, isOwner: isOwner);
+                      } else {
+                        await PetPassportOnboardingDialog.show(context, pet: activePet);
+                      }
+                      PetPassportService.notifyPassportChanged();
+                    },
+                    borderRadius: BorderRadius.circular(6),
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: isMinted
+                              ? const [Color(0xFF9945FF), Color(0xFF14F195)]
+                              : const [Color(0xFF6B21A8), Color(0xFF9945FF)],
+                        ),
+                        borderRadius: BorderRadius.circular(6),
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(
+                            isMinted ? Icons.verified_rounded : Icons.auto_awesome_rounded,
+                            size: 11,
+                            color: Colors.white,
+                          ),
+                          const SizedBox(width: 4),
+                          Text(
+                            isMinted ? context.tr('profile.cnft_verified') : context.tr('profile.cnft_issue'),
+                            style: const TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 9.5,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                  ],
-                ),
-              ),
+                  );
+                }
+
+                // Se o usuário NÃO É O DONO do pet (visitante vendo perfil de outro pet):
+                // Não permite ação (somente leitura informativa).
+                return Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+                  decoration: BoxDecoration(
+                    color: isMinted
+                        ? const Color(0xFF9945FF).withValues(alpha: 0.15)
+                        : (thmode.darkMode ? Colors.white10 : Colors.black.withValues(alpha: 0.05)),
+                    border: Border.all(
+                      color: isMinted
+                          ? const Color(0xFF9945FF).withValues(alpha: 0.4)
+                          : (thmode.darkMode ? Colors.white24 : Colors.black12),
+                      width: 0.8,
+                    ),
+                    borderRadius: BorderRadius.circular(6),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        isMinted ? Icons.verified_rounded : Icons.info_outline_rounded,
+                        size: 11,
+                        color: isMinted
+                            ? const Color(0xFF9945FF)
+                            : (thmode.darkMode ? Colors.white54 : Colors.black45),
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        isMinted ? context.tr('profile.cnft_registered') : context.tr('profile.cnft_none'),
+                        style: TextStyle(
+                          fontFamily: 'Fredoka',
+                          fontSize: 9.5,
+                          fontWeight: FontWeight.w600,
+                          color: isMinted
+                              ? (thmode.darkMode ? Colors.white : const Color(0xFF9945FF))
+                              : (thmode.darkMode ? Colors.white54 : Colors.black45),
+                        ),
+                      ),
+                    ],
+                  ),
+                );
+              },
             );
           },
         ),

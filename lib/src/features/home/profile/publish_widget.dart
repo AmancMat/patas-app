@@ -21,6 +21,7 @@ import 'package:patas_web_app/src/utils/date_utils.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/features/video/widgets/feed_video_player.dart';
 import 'package:patas_web_app/src/common_widgets/settings_lines_icon.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class PublishWidget extends StatelessWidget {
   final List<Post> posts;
@@ -60,11 +61,11 @@ class PublishWidget extends StatelessWidget {
           ? Icons.wifi_off_rounded
           : Icons.cloud_off_rounded;
       final String errorTitle = isRealOffline
-          ? 'Sem conexão com a internet'
-          : 'Instabilidade no servidor';
+          ? context.tr('feed.network_error')
+          : context.tr('feed.server_instability');
       final String errorSubtitle = isRealOffline
-          ? 'Verifique seu sinal de internet e tente novamente.'
-          : 'Não foi possível carregar as publicações no momento. Toque para tentar novamente.';
+          ? context.tr('feed.no_internet_desc')
+          : context.tr('feed.server_instability_desc');
 
       return Padding(
         padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 24),
@@ -147,7 +148,7 @@ class PublishWidget extends StatelessWidget {
                         ),
                         const SizedBox(width: 6),
                         Text(
-                          'Toque para tentar novamente',
+                          context.tr('feed.tap_to_retry'),
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w600,
@@ -251,7 +252,7 @@ class PublishWidget extends StatelessWidget {
                         flex: 9,
                         child: Semantics(
                           button: true,
-                          label: 'Abrir perfil de ${getDisplayName()}',
+                          label: context.tr('feed.open_profile_semantic', {'name': getDisplayName()}),
                           child: GestureDetector(
                             onTap: () {
                             if (context.isDesktop) {
@@ -362,7 +363,7 @@ class PublishWidget extends StatelessWidget {
 )
                       ),
                       IconButton(
-                          tooltip: 'Opções da publicação',
+                          tooltip: context.tr('feed.options_tooltip'),
                           icon: SettingsLinesIcon(
                             color: thmode.darkMode
                                 ? Colors.white
@@ -494,7 +495,7 @@ class PublishWidget extends StatelessWidget {
   Widget _shareButton(Post post, BuildContext context, bool isDark) {
     return Semantics(
       button: true,
-      label: 'Compartilhar publicação',
+      label: context.tr('feed.share_semantic'),
       child: SizedBox(
         height: 50,
         width: 60,
@@ -617,7 +618,9 @@ class _LikeButtonState extends State<LikeButton> {
       width: 80, // Largura suficiente
       child: Semantics(
         button: true,
-        label: _isLiked ? 'Descurtir publicação' : 'Curtir publicação',
+        label: _isLiked
+            ? context.tr('feed.unlike_semantic')
+            : context.tr('feed.like_semantic'),
         child: InkWell(
           onTap: _toggleLike,
         borderRadius: BorderRadius.circular(10),
@@ -630,11 +633,15 @@ class _LikeButtonState extends State<LikeButton> {
                 return ScaleTransition(scale: animation, child: child);
               },
               child: _isLiked
-                  ? const Icon(
-                      Icons.favorite,
-                      key: ValueKey('liked'),
-                      color: Colors.red,
-                      size: 26,
+                  ? SvgPicture.asset(
+                      'assets/icons/heart_filled.svg',
+                      key: const ValueKey('liked'),
+                      height: 26,
+                      width: 26,
+                      colorFilter: const ColorFilter.mode(
+                        Colors.red,
+                        BlendMode.srcIn,
+                      ),
                     )
                   : SvgPicture.asset(
                       'assets/icons/heart.svg',
@@ -738,7 +745,7 @@ class _CommentButtonState extends State<CommentButton> {
       width: 80, // Largura ajustada
       child: Semantics(
         button: true,
-        label: 'Ver comentários',
+        label: context.tr('feed.comments_semantic'),
         child: InkWell(
           onTap: _openComments,
         borderRadius: BorderRadius.circular(10),
@@ -842,7 +849,7 @@ class _ExpandablePostContentState extends State<ExpandablePostContent> {
           child: Padding(
             padding: const EdgeInsets.only(top: 5),
             child: Text(
-              _isExpanded ? 'Leia menos' : 'Leia mais',
+              _isExpanded ? context.tr('feed.read_less') : context.tr('feed.read_more'),
               style: const TextStyle(
                 color: AppColors.patasColor,
                 fontSize: 13,

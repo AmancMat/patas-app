@@ -5,6 +5,7 @@ import '../../../../app.dart';
 import '../../../constants/app_colors.dart';
 import '../../../utils/to_publish_page.dart';
 import '../../../utils/responsive_layout.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class StartPublishWidget extends StatefulWidget {
   const StartPublishWidget({super.key});
@@ -41,7 +42,7 @@ class _StartPublishWidgetState extends State<StartPublishWidget> {
                 Expanded(
                   child: Center(
                     child: Text(
-                      'Publicar',
+                      context.tr('feed.publish'),
                       style: TextStyle(
                         fontSize: 18,
                         color:
@@ -75,6 +76,7 @@ class _StartPublishWidgetState extends State<StartPublishWidget> {
                 if (context.isDesktop) {
                   showDialog(
                     context: context,
+                    barrierDismissible: true,
                     barrierColor: Colors.black.withValues(alpha: 0.1),
                     builder: (context) => const Dialog(
                       insetPadding: EdgeInsets.zero,
@@ -101,7 +103,7 @@ class _StartPublishWidgetState extends State<StartPublishWidget> {
                                 : AppColors.darkBG,
                           )))),
               child: Text(
-                'Que tal compartilhar alguma novidade?',
+                context.tr('feed.quick_post_hint'),
                 textAlign: TextAlign.start,
                 style: TextStyle(
                     color: thmode.darkMode ? Colors.white : AppColors.darkBG,

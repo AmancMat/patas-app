@@ -15,6 +15,7 @@ import 'package:patas_web_app/src/features/ongs_corp/services/corp_service.dart'
 import 'package:patas_web_app/src/features/home/widgets/profile_switcher_bottom_sheet.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/create_pet_page.dart';
 import 'package:patas_web_app/src/features/health/utils/health_icon_helper.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 /// Notifier global para persistir o estado de colapso da Sidebar no Desktop
 final ValueNotifier<bool> isSidebarCollapsedNotifier = ValueNotifier<bool>(
@@ -36,20 +37,20 @@ class WebSidebar extends StatelessWidget {
   });
 
   static const List<_SidebarNavItem> _navItems = [
-    _SidebarNavItem(label: 'Buscar', icon: 'assets/icons/search.svg', index: 0),
+    _SidebarNavItem(labelKey: 'nav.search', icon: 'assets/icons/search.svg', index: 0),
     _SidebarNavItem(
-      label: 'Essencial',
+      labelKey: 'nav.essential',
       icon: 'assets/icons/essential.svg',
       index: 1,
     ),
-    _SidebarNavItem(label: 'Início', icon: 'assets/icons/home.svg', index: 2),
+    _SidebarNavItem(labelKey: 'nav.home', icon: 'assets/icons/home.svg', index: 2),
     _SidebarNavItem(
-      label: 'Saúde',
+      labelKey: 'nav.health',
       icon: 'assets/icons/patas_saude_out.svg',
       index: 3,
     ),
     _SidebarNavItem(
-      label: 'Ajustes',
+      labelKey: 'nav.settings',
       icon: 'assets/icons/settings.svg',
       index: 4,
     ),
@@ -222,7 +223,7 @@ class WebSidebar extends StatelessWidget {
                                       return Column(
                                         children: [
                                           _SidebarItem(
-                                            label: 'Perfil',
+                                            label: context.tr('nav.profile'),
                                             icon: _getAccountIcon(
                                               accProvider.activeAccount,
                                               isDark,
@@ -241,7 +242,7 @@ class WebSidebar extends StatelessWidget {
                                             isCollapsed: isCollapsed,
                                           ),
                                           _SidebarItem(
-                                            label: 'Timeline',
+                                            label: context.tr('nav.timeline'),
                                             icon: SvgPicture.asset(
                                               'assets/icons/timeline.svg',
                                               width: 22,
@@ -294,11 +295,11 @@ class WebSidebar extends StatelessWidget {
                                               final String dynamicLabel;
 
                                               if (accType == AccountType.ong) {
-                                                dynamicLabel = 'Acolhe';
+                                                dynamicLabel = context.tr('nav.acolhe');
                                               } else if (accType == AccountType.company) {
-                                                dynamicLabel = 'Negócios';
+                                                dynamicLabel = context.tr('nav.business');
                                               } else {
-                                                dynamicLabel = item.label;
+                                                dynamicLabel = context.tr(item.labelKey);
                                               }
 
                                               return _SidebarItem(
@@ -332,7 +333,7 @@ class WebSidebar extends StatelessWidget {
                                               final accType = accProvider.activeAccount?.type;
                                               if (accType == AccountType.ong) {
                                                 return _SidebarItem(
-                                                  label: 'Acolhidos',
+                                                  label: context.tr('nav.sheltered'),
                                                   icon: Icon(
                                                     Icons.volunteer_activism_rounded,
                                                     size: 22,
@@ -350,7 +351,7 @@ class WebSidebar extends StatelessWidget {
                                                 );
                                               } else if (accType == AccountType.company) {
                                                 return _SidebarItem(
-                                                  label: 'Agenda',
+                                                  label: context.tr('nav.schedule'),
                                                   icon: Icon(
                                                     Icons.calendar_month_rounded,
                                                     size: 22,
@@ -376,7 +377,7 @@ class WebSidebar extends StatelessWidget {
                                                     isActive: isSelected,
                                                   );
                                                   return _SidebarItem(
-                                                    label: item.label,
+                                                    label: context.tr(item.labelKey),
                                                     icon: SvgPicture.asset(
                                                       iconPath,
                                                       width: 22,
@@ -403,7 +404,7 @@ class WebSidebar extends StatelessWidget {
                                         }
 
                                         return _SidebarItem(
-                                          label: item.label,
+                                          label: context.tr(item.labelKey),
                                           icon: SvgPicture.asset(
                                             item.icon,
                                             width: 22,
@@ -509,11 +510,11 @@ class WebSidebar extends StatelessWidget {
 }
 
 class _SidebarNavItem {
-  final String label;
+  final String labelKey;
   final String icon;
   final int index;
   const _SidebarNavItem({
-    required this.label,
+    required this.labelKey,
     required this.icon,
     required this.index,
   });
@@ -712,7 +713,7 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
             .maybeSingle();
         accounts.add(ActiveAccount(
           id: user.id,
-          name: userData?['name'] ?? 'Meu Perfil',
+          name: userData?['name'] ?? (mounted ? context.tr('nav.my_profile') : 'Meu Perfil'),
           photoUrl: userData?['photo_url'],
           type: AccountType.user,
         ));
@@ -850,16 +851,16 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
     }
   }
 
-  String _getTypeLabel(AccountType type) {
+  String _getTypeLabel(BuildContext context, AccountType type) {
     switch (type) {
       case AccountType.user:
-        return 'Perfil Pessoal';
+        return context.tr('nav.personal_profile');
       case AccountType.pet:
-        return 'Pet Ativo';
+        return context.tr('nav.active_pet');
       case AccountType.ong:
-        return 'ONG Ativa';
+        return context.tr('nav.active_ong');
       case AccountType.company:
-        return 'Empresa Ativa';
+        return context.tr('nav.active_business');
     }
   }
 
@@ -888,7 +889,7 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
     }
 
     final typeColor = _getTypeColor(effectiveAccount.type);
-    final typeLabel = _getTypeLabel(effectiveAccount.type);
+    final typeLabel = _getTypeLabel(context, effectiveAccount.type);
     final typeIcon = _getTypeIcon(effectiveAccount.type);
 
     final isActiveOrHovered = _isExpanded || _isHovered;
@@ -1063,7 +1064,7 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
                   padding: const EdgeInsets.symmetric(vertical: 16, horizontal: 12),
                   child: Center(
                     child: Text(
-                      'Nenhum perfil encontrado.',
+                      context.tr('nav.no_profiles'),
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.white60 : Colors.black54,
@@ -1135,7 +1136,7 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
                                           overflow: TextOverflow.ellipsis,
                                         ),
                                         Text(
-                                          _getTypeLabel(account.type),
+                                          _getTypeLabel(context, account.type),
                                           style: TextStyle(
                                             fontSize: 10,
                                             color: isDark ? Colors.white38 : Colors.grey,
@@ -1174,16 +1175,16 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
                             _openProfileDialog(context);
                           },
                           borderRadius: BorderRadius.circular(10),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.manage_accounts_outlined, size: 15, color: AppColors.patasColor),
-                                SizedBox(width: 4),
+                                const Icon(Icons.manage_accounts_outlined, size: 15, color: AppColors.patasColor),
+                                const SizedBox(width: 4),
                                 Text(
-                                  'Ver Todos',
-                                  style: TextStyle(
+                                  context.tr('nav.view_all'),
+                                  style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.patasColor,
@@ -1209,16 +1210,16 @@ class _ActivePetSidebarCardState extends State<_ActivePetSidebarCard> {
                             );
                           },
                           borderRadius: BorderRadius.circular(10),
-                          child: const Padding(
-                            padding: EdgeInsets.symmetric(vertical: 6),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(vertical: 6),
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.add_circle_outline_rounded, size: 15, color: AppColors.patasColor),
-                                SizedBox(width: 4),
+                                const Icon(Icons.add_circle_outline_rounded, size: 15, color: AppColors.patasColor),
+                                const SizedBox(width: 4),
                                 Text(
-                                  'Novo Pet',
-                                  style: TextStyle(
+                                  context.tr('nav.new_pet'),
+                                  style: const TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.bold,
                                     color: AppColors.patasColor,

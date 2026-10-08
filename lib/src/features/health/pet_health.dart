@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
@@ -62,9 +63,9 @@ class _PetHealthPageState extends State<PetHealthPage> {
       backgroundColor: thmode.darkMode
           ? AppColors.bodygray
           : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Patas Saúde',
-        subtitle: 'Consultas, exames, vacinas e mapa de clínicas',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('health.title'),
+        subtitle: context.tr('health.subtitle'),
         showBackButton: false,
       ),
       body: SingleChildScrollView(
@@ -96,7 +97,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
             ],
 
             Text(
-              'Serviços de Saúde',
+              context.tr('health.services_section'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
@@ -130,9 +131,9 @@ class _PetHealthPageState extends State<PetHealthPage> {
       backgroundColor: thmode.darkMode
           ? AppColors.bodygray
           : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Patas Saúde',
-        subtitle: 'Consultas, exames, vacinas e mapa de clínicas',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('health.title'),
+        subtitle: context.tr('health.subtitle'),
         showBackButton: false,
       ),
       body: SingleChildScrollView(
@@ -218,7 +219,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
                 Padding(
                   padding: const EdgeInsets.fromLTRB(40, 40, 40, 20),
                   child: Text(
-                    'Patas Saúde',
+                    context.tr('health.title'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       color: AppColors.patasColor,
@@ -275,7 +276,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
                 Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 40),
                   child: Text(
-                    'Serviços de Saúde',
+                    context.tr('health.services_section'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 20,
@@ -364,7 +365,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Saúde de ${activePet.name}',
+                  context.tr('health.pet_health_title', {'name': activePet.name}),
                   style: TextStyle(
                     fontFamily: isDesktop ? 'Fredoka' : null,
                     fontSize: isDesktop ? 24 : 18,
@@ -376,7 +377,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
                 ),
                 SizedBox(height: isDesktop ? 8 : 4),
                 Text(
-                  'Acompanhe tudo sobre seu pet',
+                  context.tr('health.pet_health_desc'),
                   style: TextStyle(
                     fontSize: isDesktop ? 14 : 12,
                     color: thmode.darkMode ? Colors.white60 : Colors.black54,
@@ -392,7 +393,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
             },
             icon: const Icon(Icons.picture_as_pdf_rounded, size: 18),
             label: Text(
-              isDesktop ? 'Exportar Relatório PDF' : 'PDF',
+              isDesktop ? context.tr('health.export_pdf_btn') : context.tr('health.export_pdf_short'),
               style: const TextStyle(fontFamily: 'Fredoka', fontSize: 13),
             ),
             style: ElevatedButton.styleFrom(
@@ -455,7 +456,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
           ),
           const SizedBox(width: 16),
           Text(
-            'Carregando dados de saúde do pet...',
+            context.tr('health.loading_pet_health'),
             style: TextStyle(
               fontSize: isDesktop ? 15 : 13,
               fontWeight: FontWeight.w500,
@@ -500,7 +501,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Nenhum pet selecionado',
+                  context.tr('health.no_pet_selected'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: isDesktop ? 16 : 14,
@@ -510,7 +511,7 @@ class _PetHealthPageState extends State<PetHealthPage> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Sincronizando perfil e histórico de saúde...',
+                  context.tr('health.syncing_health_profile'),
                   style: TextStyle(
                     fontSize: isDesktop ? 13 : 11,
                     color: isDark ? Colors.white60 : Colors.black54,
@@ -532,8 +533,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
               size: 16,
               color: AppColors.patasColor,
             ),
-            label: const Text(
-              'Atualizar',
+            label: Text(
+              context.tr('health.refresh'),
               style: TextStyle(
                 color: AppColors.patasColor,
                 fontWeight: FontWeight.bold,
@@ -549,8 +550,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
   List<Widget> _buildGridCards(BuildContext context, {bool isDesktop = false}) {
     return [
       _HealthGridCard(
-        title: 'Mapa de Vets',
-        subtitle: 'Clínicas e 24h',
+        title: context.tr('health.card_vets_title'),
+        subtitle: context.tr('health.card_vets_sub'),
         icon: Icons.map_rounded,
         color: const Color(0xFF00897B),
         isDesktop: isDesktop,
@@ -562,8 +563,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
         },
       ),
       _HealthGridCard(
-        title: 'Vacinas',
-        subtitle: 'Doses e reforços',
+        title: context.tr('health.card_vaccines_title'),
+        subtitle: context.tr('health.card_vaccines_sub'),
         icon: Icons.vaccines_rounded,
         color: const Color(0xFFFF6D00),
         isDesktop: isDesktop,
@@ -575,8 +576,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
         },
       ),
       _HealthGridCard(
-        title: 'Agendamentos',
-        subtitle: 'Consultas e retornos',
+        title: context.tr('health.card_appointments_title'),
+        subtitle: context.tr('health.card_appointments_sub'),
         icon: Icons.calendar_month_rounded,
         color: const Color(0xFF1E88E5),
         isDesktop: isDesktop,
@@ -590,8 +591,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
         },
       ),
       _HealthGridCard(
-        title: 'Prontuários & Receitas',
-        subtitle: 'Histórico e remédios',
+        title: context.tr('health.card_records_title'),
+        subtitle: context.tr('health.card_records_sub'),
         icon: Icons.receipt_long_rounded,
         color: const Color(0xFF8E24AA),
         isDesktop: isDesktop,
@@ -606,8 +607,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
         },
       ),
       _HealthGridCard(
-        title: 'Exames & Laudos',
-        subtitle: 'Resultados e laudos',
+        title: context.tr('health.card_exams_title'),
+        subtitle: context.tr('health.card_exams_sub'),
         icon: Icons.biotech_rounded,
         color: const Color(0xFF3949AB),
         isDesktop: isDesktop,
@@ -619,8 +620,8 @@ class _PetHealthPageState extends State<PetHealthPage> {
         },
       ),
       _HealthGridCard(
-        title: 'Dicas de Saúde',
-        subtitle: 'Cuidados e bem-estar',
+        title: context.tr('health.card_tips_title'),
+        subtitle: context.tr('health.card_tips_sub'),
         icon: Icons.lightbulb_rounded,
         color: const Color(0xFFFFB300),
         isDesktop: isDesktop,

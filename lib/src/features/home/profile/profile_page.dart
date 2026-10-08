@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:ui';
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:image_picker/image_picker.dart';
@@ -30,6 +31,7 @@ import '../../pets/services/follow_service.dart';
 import '../../pets/follow_list_page.dart';
 import 'package:patas_web_app/src/features/love/services/patas_love_service.dart';
 import 'package:patas_web_app/src/providers/profile_view_provider.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class ProfilePage extends StatefulWidget {
   final Pet? pet;
@@ -262,7 +264,7 @@ class _ProfilePageState extends State<ProfilePage> {
       try {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-              const SnackBar(content: Text('Enviando imagem de capa...')));
+              SnackBar(content: Text(context.tr('profile.uploading_cover'))));
         }
         final String coverUrl =
             await _petService.uploadPetCover(File(image.path));
@@ -292,7 +294,7 @@ class _ProfilePageState extends State<ProfilePage> {
         debugPrint('Erro ao atualizar capa: $e');
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-              SnackBar(content: Text('Erro ao atualizar capa: $e')));
+              SnackBar(content: Text(context.tr('profile.cover_update_error', {'error': '$e'}))));
         }
       }
     }
@@ -406,7 +408,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 Icon(Icons.block_rounded, size: 64, color: Colors.grey.shade400),
                 const SizedBox(height: 16),
                 Text(
-                  'Perfil Indisponível',
+                  context.tr('profile.unavailable_title'),
                   style: TextStyle(
                     fontSize: 18,
                     fontWeight: FontWeight.bold,
@@ -415,7 +417,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Este perfil não está disponível ou foi bloqueado.',
+                  context.tr('profile.unavailable_desc'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 14,
@@ -437,7 +439,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       Navigator.of(context).pop();
                     }
                   },
-                  child: const Text('Voltar para o Feed', style: TextStyle(color: Colors.white)),
+                  child: Text(context.tr('profile.back_to_feed'), style: const TextStyle(color: Colors.white)),
                 ),
               ],
             ),
@@ -513,7 +515,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 borderRadius: BorderRadius.circular(20),
                               ),
                               child: IconButton(
-                                tooltip: 'Editar foto de capa',
+                                tooltip: context.tr('profile.cover_tooltip'),
                                 icon: const Icon(Icons.edit,
                                     color: Colors.white, size: 18),
                                 onPressed: _pickCoverImage,
@@ -524,7 +526,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         top: 160,
                         left: 10,
                         child: Semantics(
-                          label: 'Foto de perfil de ${activePet?.name ?? (isUserAccount ? activeAccountProvider.activeAccount?.name : 'perfil')}',
+                          label: context.tr('profile.photo_semantic', {'name': activePet?.name ?? (isUserAccount ? activeAccountProvider.activeAccount?.name ?? 'perfil' : 'perfil')}),
                           child: CircleAvatar(
                             radius: 50,
                             backgroundColor: AppColors.patasColor,
@@ -562,8 +564,8 @@ class _ProfilePageState extends State<ProfilePage> {
                               Padding(
                                 padding: const EdgeInsets.only(top: 2),
                                 child: Text(
-                                  'Tutor(a)',
-                                  style: TextStyle(
+                                  context.tr('profile.tutor_role'),
+                                  style: const TextStyle(
                                       fontSize: 12,
                                       color: AppColors.patasColor,
                                       fontWeight: FontWeight.w500),
@@ -587,9 +589,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ? Colors.white70
                                               : Colors.black54),
                                       children: [
-                                        const TextSpan(
-                                            text: 'Nasceu em: ',
-                                            style: TextStyle(
+                                        TextSpan(
+                                            text: context.tr('profile.born_in'),
+                                            style: const TextStyle(
                                                 fontWeight:
                                                     FontWeight.bold)),
                                         TextSpan(text: activePet.birthPlace),
@@ -616,9 +618,9 @@ class _ProfilePageState extends State<ProfilePage> {
                                               ? Colors.white70
                                               : Colors.black54),
                                       children: [
-                                        const TextSpan(
-                                            text: 'Vive em: ',
-                                            style: TextStyle(
+                                        TextSpan(
+                                            text: context.tr('profile.lives_in'),
+                                            style: const TextStyle(
                                                 fontWeight:
                                                     FontWeight.bold)),
                                         TextSpan(
@@ -639,7 +641,13 @@ class _ProfilePageState extends State<ProfilePage> {
                       crossAxisAlignment: CrossAxisAlignment.center,
                       children: [
                         if (!isUserAccount)
-                          const Expanded(flex: 35, child: PetDetail()),
+                          Expanded(
+                            flex: 35,
+                            child: PetDetail(
+                              pet: activePet,
+                              isOwner: isOwner,
+                            ),
+                          ),
                         Expanded(
                           flex: 65,
                           child: Container(
@@ -660,10 +668,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       builder: (context, snapshot) {
                                         final count =
                                             snapshot.data?.length ?? 0;
-                                        return _buildStatItem(
-                                            '$count',
-                                            'Postagens',
-                                            thmode);
+                                        return _buildStatItem('$count', context.tr('profile.posts_stat'), thmode);
                                       },
                                     )),
                                     Expanded(
@@ -672,10 +677,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       builder: (context, snapshot) {
                                         final count =
                                             snapshot.data ?? 0;
-                                        return _buildStatItem(
-                                          '$count',
-                                          'Seguindo',
-                                          thmode,
+                                        return _buildStatItem('$count', context.tr('profile.following_stat'), thmode,
                                           onTap: () =>
                                               Navigator.push(
                                             context,
@@ -697,10 +699,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                       builder: (context, snapshot) {
                                         final count =
                                             snapshot.data ?? 0;
-                                        return _buildStatItem(
-                                          '$count',
-                                          'Seguidores',
-                                          thmode,
+                                        return _buildStatItem('$count', context.tr('profile.followers_stat'), thmode,
                                           onTap: () {
                                             if (activePet != null) {
                                               Navigator.push(
@@ -755,7 +754,7 @@ class _ProfilePageState extends State<ProfilePage> {
                     }
                   },
                   icon: const Icon(Icons.edit, size: 18),
-                  label: const Text('Editar Perfil'),
+                  label: Text(context.tr('profile.edit_profile_btn')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.patasColor,
                     foregroundColor: Colors.white,
@@ -856,7 +855,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               }
                             },
                             icon: const Icon(Icons.edit, size: 18),
-                            label: const Text('Editar Perfil'),
+                            label: Text(context.tr('profile.edit_profile_btn')),
                             style: ElevatedButton.styleFrom(
                               backgroundColor: AppColors.patasColor,
                               foregroundColor: Colors.white,
@@ -882,9 +881,12 @@ class _ProfilePageState extends State<ProfilePage> {
                                   thmode,
                                   cardBg: cardBg,
                                   borderColor: borderColor,
-                                  title: 'Detalhes',
+                                  title: context.tr('profile.details_section'),
                                   icon: Icons.info_outline_rounded,
-                                  child: const PetDetail(),
+                                  child: PetDetail(
+                                    pet: activePet,
+                                    isOwner: isOwner,
+                                  ),
                                 ),
                               if (!isUserAccount) const SizedBox(height: 16),
                               // Card Família
@@ -892,22 +894,18 @@ class _ProfilePageState extends State<ProfilePage> {
                                 thmode,
                                 cardBg: cardBg,
                                 borderColor: borderColor,
-                                title: 'Família',
+                                title: context.tr('profile.family_section'),
                                 icon: Icons.nature_people,
                                 trailing: isOwner
                                     ? IconButton(
-                                        tooltip: 'Adicionar membro da família',
+                                        tooltip: context.tr('profile.add_family_tooltip'),
                                         icon: Icon(Icons.add,
                                             color: thmode.darkMode
                                                 ? Colors.white70
                                                 : Colors.black54,
                                             size: 20),
                                         onPressed: () async {
-                                          final result = await Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      const CreateFamilyMemberPage()));
+                                          final result = await _openCreateFamilyMember(context);
                                           if (result == true) {
                                             _loadFamilyMembers();
                                           }
@@ -922,11 +920,11 @@ class _ProfilePageState extends State<ProfilePage> {
                                 thmode,
                                 cardBg: cardBg,
                                 borderColor: borderColor,
-                                title: 'Meus Pets',
+                                title: context.tr('profile.my_pets_section'),
                                 icon: Icons.pets_rounded,
                                 trailing: isOwner
                                     ? IconButton(
-                                        tooltip: 'Adicionar pet',
+                                        tooltip: context.tr('profile.add_pet_tooltip'),
                                         icon: const Icon(Icons.add_circle,
                                             color: AppColors.patasColor,
                                             size: 22),
@@ -948,7 +946,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                    thmode,
                                    cardBg: cardBg,
                                    borderColor: borderColor,
-                                   title: 'Patas Love',
+                                   title: context.tr('profile.patas_love_title'),
                                    icon: Icons.favorite_rounded,
                                    child: _buildPatasLoveSection(activePet, isOwner, thmode),
                                  ),
@@ -965,7 +963,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 thmode,
                                 cardBg: cardBg,
                                 borderColor: borderColor,
-                                title: 'Fotos',
+                                title: context.tr('profile.photos_section'),
                                 icon: Icons.photo_library_outlined,
                                 child: PhotoContentWidget(pet: activePet),
                               ),
@@ -1061,7 +1059,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.black45,
                         borderRadius: BorderRadius.circular(20)),
                     child: IconButton(
-                      tooltip: 'Editar foto de capa',
+                      tooltip: context.tr('profile.cover_tooltip'),
                       icon: const Icon(Icons.edit, color: Colors.white),
                       onPressed: _pickCoverImage,
                     ),
@@ -1084,7 +1082,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       border: Border.all(color: cardBg, width: 4),
                     ),
                     child: Semantics(
-                      label: 'Foto de perfil de $name',
+                      label: context.tr('profile.photo_semantic', {'name': name}),
                       child: CircleAvatar(
                         radius: 52,
                         backgroundColor:
@@ -1129,7 +1127,7 @@ class _ProfilePageState extends State<ProfilePage> {
                               ),
                             ),
                             if (isUserAccount)
-                              Text('Tutor(a)',
+                              Text(context.tr('profile.tutor_role'),
                                   style: const TextStyle(
                                       fontSize: 13,
                                       color: AppColors.patasColor,
@@ -1140,7 +1138,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const Icon(Icons.cake_rounded,
                                     size: 13, color: AppColors.patasColor),
                                 const SizedBox(width: 4),
-                                Text('Nasceu em: ${activePet.birthPlace}',
+                                Text('${context.tr('profile.born_in')}${activePet.birthPlace}',
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: thmode.darkMode
@@ -1153,7 +1151,7 @@ class _ProfilePageState extends State<ProfilePage> {
                                 const Icon(Icons.location_on_rounded,
                                     size: 13, color: AppColors.patasColor),
                                 const SizedBox(width: 4),
-                                Text('Vive em: ${activePet.currentCity}',
+                                Text('${context.tr('profile.lives_in')}${activePet.currentCity}',
                                     style: TextStyle(
                                         fontSize: 12,
                                         color: thmode.darkMode
@@ -1171,8 +1169,7 @@ class _ProfilePageState extends State<ProfilePage> {
                         children: [
                           FutureBuilder<List<Post>>(
                             future: _postsFuture,
-                            builder: (context, snapshot) => _buildStatItem(
-                                '${snapshot.data?.length ?? 0}', 'Posts', thmode),
+                            builder: (context, snapshot) => _buildStatItem('${snapshot.data?.length ?? 0}', context.tr('profile.posts_stat'), thmode),
                           ),
                           FutureBuilder<int>(
                             future: _followingCountFuture,
@@ -1277,6 +1274,139 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
+  // ─── Modais Desktop / Rotas Mobile ───────────────────────────────────────
+  Future<bool?> _openCreateFamilyMember(BuildContext context) {
+    if (context.isDesktop) {
+      return showDialog<bool>(
+        context: context,
+        barrierColor: Colors.black.withValues(alpha: 0.25),
+        barrierDismissible: true,
+        builder: (ctx) => Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.pop(ctx),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: Colors.transparent),
+                ),
+              ),
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {},
+                child: Dialog(
+                  backgroundColor: Colors.transparent,
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520, maxHeight: 660),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: const CreateFamilyMemberPage(),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (context) => const CreateFamilyMemberPage()),
+    );
+  }
+
+  Future<bool?> _openEditFamilyMember(BuildContext context, FamilyMember member) {
+    if (context.isDesktop) {
+      return showDialog<bool>(
+        context: context,
+        barrierColor: Colors.black.withValues(alpha: 0.25),
+        barrierDismissible: true,
+        builder: (ctx) => Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.pop(ctx),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: Colors.transparent),
+                ),
+              ),
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {},
+                child: Dialog(
+                  backgroundColor: Colors.transparent,
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 520, maxHeight: 660),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: EditFamilyMemberPage(member: member),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (context) => EditFamilyMemberPage(member: member)),
+    );
+  }
+
+  Future<bool?> _openEditPet(BuildContext context, Pet pet) {
+    if (context.isDesktop) {
+      return showDialog<bool>(
+        context: context,
+        barrierColor: Colors.black.withValues(alpha: 0.25),
+        barrierDismissible: true,
+        builder: (ctx) => Stack(
+          children: [
+            Positioned.fill(
+              child: GestureDetector(
+                behavior: HitTestBehavior.opaque,
+                onTap: () => Navigator.pop(ctx),
+                child: BackdropFilter(
+                  filter: ImageFilter.blur(sigmaX: 10, sigmaY: 10),
+                  child: Container(color: Colors.transparent),
+                ),
+              ),
+            ),
+            Center(
+              child: GestureDetector(
+                onTap: () {},
+                child: Dialog(
+                  backgroundColor: Colors.transparent,
+                  insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 32),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(maxWidth: 580, maxHeight: 760),
+                    child: ClipRRect(
+                      borderRadius: BorderRadius.circular(24),
+                      child: EditPetPage(pet: pet),
+                    ),
+                  ),
+                ),
+              ),
+            ),
+          ],
+        ),
+      );
+    }
+    return Navigator.push<bool>(
+      context,
+      MaterialPageRoute(builder: (context) => EditPetPage(pet: pet)),
+    );
+  }
+
   // ─── Lista de família (usada no desktop) ─────────────────────────────────
   Widget _buildFamilyList(DarkMode thmode, bool isOwner) {
     return FutureBuilder<List<FamilyMember>>(
@@ -1292,7 +1422,7 @@ class _ProfilePageState extends State<ProfilePage> {
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Padding(
             padding: const EdgeInsets.symmetric(vertical: 12),
-            child: Text('Nenhum membro cadastrado.',
+            child: Text(context.tr('profile.no_family_members'),
                 style: TextStyle(
                     fontSize: 12,
                     color:
@@ -1324,7 +1454,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       fontSize: 13,
                       color:
                           thmode.darkMode ? Colors.white : AppColors.darkBG)),
-              subtitle: Text(member.relationship,
+              subtitle: Text(FamilyMember.localizedRelationship(context, member.relationship),
                   style: TextStyle(
                       fontSize: 11,
                       color: thmode.darkMode
@@ -1333,20 +1463,15 @@ class _ProfilePageState extends State<ProfilePage> {
               trailing: isOwner
                   ? Row(mainAxisSize: MainAxisSize.min, children: [
                       IconButton(
-                          tooltip: 'Editar membro da família',
+                          tooltip: context.tr('profile.edit_family_tooltip'),
                           icon: const Icon(Icons.edit,
                               size: 16, color: AppColors.patasColor),
                           onPressed: () async {
-                            final result = await Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) =>
-                                        EditFamilyMemberPage(
-                                            member: member)));
+                            final result = await _openEditFamilyMember(context, member);
                             if (result == true) _loadFamilyMembers();
                           }),
                       IconButton(
-                          tooltip: 'Excluir membro da família',
+                          tooltip: context.tr('profile.delete_family_tooltip'),
                           icon: Icon(Icons.delete,
                               size: 16,
                               color: Colors.red.withValues(alpha: 0.7)),
@@ -1374,7 +1499,7 @@ class _ProfilePageState extends State<ProfilePage> {
         }
         if (!snapshot.hasData || snapshot.data!.isEmpty) {
           return Column(children: [
-            Text('Nenhum pet cadastrado.',
+            Text(context.tr('profile.no_pets'),
                 style: TextStyle(
                     fontSize: 12,
                     color:
@@ -1388,7 +1513,7 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (result == true) _loadPets();
               },
               icon: const Icon(Icons.add, size: 16),
-              label: const Text('Adicionar Pet'),
+              label: Text(context.tr('profile.add_pet_btn')),
             ),
           ]);
         }
@@ -1459,19 +1584,15 @@ class _ProfilePageState extends State<ProfilePage> {
                   trailing: isOwner
                       ? Row(mainAxisSize: MainAxisSize.min, children: [
                           IconButton(
-                              tooltip: 'Editar pet',
+                              tooltip: context.tr('profile.edit_pet_tooltip'),
                               icon: const Icon(Icons.edit,
                                   size: 16, color: AppColors.patasColor),
                               onPressed: () async {
-                                final result = await Navigator.push(
-                                    context,
-                                    MaterialPageRoute(
-                                        builder: (context) =>
-                                            EditPetPage(pet: pet)));
+                                final result = await _openEditPet(context, pet);
                                 if (result == true && mounted) _loadPets();
                               }),
                           IconButton(
-                              tooltip: 'Excluir pet',
+                              tooltip: context.tr('profile.delete_pet_tooltip'),
                               icon: Icon(Icons.delete,
                                   size: 16,
                                   color:
@@ -1480,16 +1601,13 @@ class _ProfilePageState extends State<ProfilePage> {
                                   ? () => showDialog(
                                         context: context,
                                         builder: (context) => AlertDialog(
-                                          title: const Text(
-                                              'Ação não permitida'),
-                                          content: const Text(
-                                              'Você deve manter pelo menos um perfil de pet ativo.'),
+                                          title: Text(context.tr('profile.delete_pet_limit_title')),
+                                          content: Text(context.tr('profile.delete_pet_limit_desc')),
                                           actions: [
                                             TextButton(
                                                 onPressed: () =>
                                                     Navigator.pop(context),
-                                                child:
-                                                    const Text('Entendido'))
+                                                child: Text(context.tr('common.understood')))
                                           ],
                                         ),
                                       )
@@ -1520,25 +1638,20 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text('Família',
-                style: TextStyle(
+            Text(context.tr('profile.family_section'), style: TextStyle(
                     fontSize: 18,
                     color: thmode.darkMode
                         ? Colors.white
                         : AppColors.darkBG)),
             if (isOwner)
               IconButton(
-                tooltip: 'Adicionar membro da família',
+                tooltip: context.tr('profile.add_family_tooltip'),
                 icon: Icon(Icons.add,
                     color: thmode.darkMode
                         ? Colors.white70
                         : Colors.black54),
                 onPressed: () async {
-                  final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) =>
-                              const CreateFamilyMemberPage()));
+                  final result = await _openCreateFamilyMember(context);
                   if (result == true) _loadFamilyMembers();
                 },
               ),
@@ -1558,8 +1671,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: ExpansionTile(
         trailing:
             const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
-        title: Text('Fotos',
-            style: TextStyle(
+        title: Text(context.tr('profile.photos_section'), style: TextStyle(
                 fontSize: 18,
                 color: thmode.darkMode
                     ? Colors.white
@@ -1585,14 +1697,13 @@ class _ProfilePageState extends State<ProfilePage> {
         title: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            const Text('Meus Pets',
-                style: TextStyle(
+            Text(context.tr('profile.my_pets_section'), style: TextStyle(
                     fontSize: 21,
                     fontFamily: 'Fredoka',
                     color: AppColors.patasColor)),
             if (isOwner)
               IconButton(
-                tooltip: 'Adicionar pet',
+                tooltip: context.tr('profile.add_pet_tooltip'),
                 icon: const Icon(Icons.add_circle,
                     color: AppColors.patasColor, size: 28),
                 onPressed: () async {
@@ -1619,13 +1730,12 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text(
-            'Excluir ${member.name} (${member.relationship})? Esta ação não pode ser desfeita.'),
+        title: Text(context.tr('profile.confirm_delete_title')),
+        content: Text(context.tr('profile.confirm_delete_family_desc', {'name': member.name, 'relationship': member.relationship})),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar')),
+              child: Text(context.tr('common.cancel'))),
           TextButton(
             onPressed: () async {
               final nav = Navigator.of(context);
@@ -1636,16 +1746,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (!mounted) return;
                 msg.showSnackBar(SnackBar(
                     content: Text(
-                        '${member.name} foi excluído com sucesso!')));
+                        context.tr('profile.family_deleted_success', {'name': member.name}))));
                 _loadFamilyMembers();
               } catch (e) {
                 if (!mounted) return;
                 msg.showSnackBar(SnackBar(
-                    content: Text('Erro ao excluir: $e')));
+                    content: Text(context.tr('profile.delete_error', {'error': '$e'}))));
               }
             },
-            child: const Text('Excluir',
-                style: TextStyle(color: Colors.red)),
+            child: Text(context.tr('common.delete'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -1657,13 +1766,12 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        title: const Text('Confirmar Exclusão'),
-        content: Text(
-            'Excluir ${pet.name}? Esta ação não pode ser desfeita.'),
+        title: Text(context.tr('profile.confirm_delete_title')),
+        content: Text(context.tr('profile.confirm_delete_pet_desc', {'name': pet.name})),
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Cancelar')),
+              child: Text(context.tr('common.cancel'))),
           TextButton(
             onPressed: () async {
               final nav = Navigator.of(context);
@@ -1675,16 +1783,15 @@ class _ProfilePageState extends State<ProfilePage> {
                 if (wasActive) activePetProvider.setActivePet(null);
                 if (!mounted) return;
                 msg.showSnackBar(SnackBar(
-                    content: Text('${pet.name} foi excluído!')));
+                    content: Text(context.tr('profile.pet_deleted_success', {'name': pet.name}))));
                 _loadPets();
               } catch (e) {
                 if (!mounted) return;
                 msg.showSnackBar(
-                    SnackBar(content: Text('Erro ao excluir: $e')));
+                    SnackBar(content: Text(context.tr('profile.delete_error', {'error': '$e'}))));
               }
             },
-            child: const Text('Excluir',
-                style: TextStyle(color: Colors.red)),
+            child: Text(context.tr('common.delete'), style: const TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -1748,8 +1855,8 @@ class _ProfilePageState extends State<ProfilePage> {
             });
           } catch (e) {
             if (mounted) {
-              ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-                content: Text('Erro ao processar sua solicitação :('),
+              ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+                content: Text(context.tr('profile.follow_error')),
                 backgroundColor: Colors.red,
               ));
             }
@@ -1763,10 +1870,7 @@ class _ProfilePageState extends State<ProfilePage> {
           elevation: 0,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         ),
-        child: const Text(
-          'Seguir',
-          style: TextStyle(fontSize: 13, fontWeight: FontWeight.bold),
-        ),
+        child: Text(context.tr('profile.follow'), style: const TextStyle(fontSize: 13, fontWeight: FontWeight.bold)),
       );
     }
 
@@ -1800,9 +1904,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               Icon(Icons.person_remove_rounded, color: iconColor, size: 20),
               const SizedBox(width: 10),
-              Text(
-                'Deixar de seguir',
-                style: TextStyle(
+              Text(context.tr('profile.unfollow'), style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: textColor,
@@ -1811,15 +1913,13 @@ class _ProfilePageState extends State<ProfilePage> {
             ],
           ),
         ),
-        const PopupMenuItem(
+        PopupMenuItem(
           value: 'block',
           child: Row(
             children: [
-              Icon(Icons.block_rounded, color: Colors.redAccent, size: 20),
-              SizedBox(width: 10),
-              Text(
-                'Bloquear',
-                style: TextStyle(
+              const Icon(Icons.block_rounded, color: Colors.redAccent, size: 20),
+              const SizedBox(width: 10),
+              Text(context.tr('profile.block_option'), style: const TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w600,
                   color: Colors.redAccent,
@@ -1834,9 +1934,7 @@ class _ProfilePageState extends State<ProfilePage> {
             children: [
               const Icon(Icons.flag_rounded, color: Colors.orange, size: 20),
               const SizedBox(width: 10),
-              Text(
-                'Denunciar',
-                style: TextStyle(
+              Text(context.tr('profile.report_option'), style: TextStyle(
                   fontSize: 14,
                   fontWeight: FontWeight.w500,
                   color: textColor,
@@ -1858,9 +1956,7 @@ class _ProfilePageState extends State<ProfilePage> {
         child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(
-              'Seguindo',
-              style: TextStyle(
+            Text(context.tr('profile.following'), style: TextStyle(
                 fontSize: 13,
                 fontWeight: FontWeight.bold,
                 color: textColor,
@@ -1887,8 +1983,8 @@ class _ProfilePageState extends State<ProfilePage> {
       });
     } catch (e) {
       if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(const SnackBar(
-          content: Text('Erro ao deixar de seguir :('),
+        ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+          content: Text(context.tr('profile.unfollow_error')),
           backgroundColor: Colors.red,
         ));
       }
@@ -1900,14 +1996,12 @@ class _ProfilePageState extends State<ProfilePage> {
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Bloquear Tutor?'),
-        content: Text(
-          'Você tem certeza que deseja bloquear o tutor de ${targetPet.name}? Vocês não poderão mais enviar mensagens ou visualizar os perfis um do outro.',
-        ),
+        title: Text(context.tr('profile.block_tutor_title')),
+        content: Text(context.tr('profile.block_tutor_desc', {'name': targetPet.name})),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Cancelar'),
+            child: Text(context.tr('common.cancel')),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
@@ -1937,7 +2031,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   // 2. Notificar o usuário com SnackBar flutuante
                   messenger.showSnackBar(
                     SnackBar(
-                      content: Text('Tutor de ${targetPet.name} foi bloqueado com sucesso.'),
+                      content: Text(context.tr('profile.tutor_blocked_success', {'name': targetPet.name})),
                       behavior: SnackBarBehavior.floating,
                     ),
                   );
@@ -1954,12 +2048,12 @@ class _ProfilePageState extends State<ProfilePage> {
               } else {
                 if (mounted) {
                   messenger.showSnackBar(
-                    const SnackBar(content: Text('Falha ao bloquear tutor. Tente novamente.')),
+                    SnackBar(content: Text(context.tr('profile.tutor_block_error'))),
                   );
                 }
               }
             },
-            child: const Text('Bloquear', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('profile.block_option'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -1990,7 +2084,7 @@ class _ProfilePageState extends State<ProfilePage> {
               const SizedBox(width: 10),
               Expanded(
                 child: Text(
-                  'Denunciar ${targetPet.name}',
+                  context.tr('profile.report_tutor_title', {'name': targetPet.name}),
                   style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 20,
@@ -2006,16 +2100,16 @@ class _ProfilePageState extends State<ProfilePage> {
               mainAxisSize: MainAxisSize.min,
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'Por favor, selecione o motivo da denúncia para que nossa equipe possa avaliar o perfil:',
-                  style: TextStyle(fontSize: 14, height: 1.4),
+                Text(
+                  context.tr('profile.report_tutor_desc'),
+                  style: const TextStyle(fontSize: 14, height: 1.4),
                 ),
                 const SizedBox(height: 16),
                 DropdownButtonFormField<String>(
                   initialValue: selectedReason,
                   isExpanded: true,
                   decoration: InputDecoration(
-                    labelText: 'Motivo da Denúncia',
+                    labelText: context.tr('profile.report_reason_label'),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),
@@ -2046,7 +2140,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   maxLines: 3,
                   style: const TextStyle(fontSize: 13),
                   decoration: InputDecoration(
-                    hintText: 'Descreva mais detalhes sobre o ocorrido (opcional)...',
+                    hintText: context.tr('profile.report_details_hint'),
                     hintStyle: const TextStyle(fontSize: 13, color: Colors.grey),
                     border: OutlineInputBorder(
                       borderRadius: BorderRadius.circular(12),
@@ -2060,7 +2154,7 @@ class _ProfilePageState extends State<ProfilePage> {
           actions: [
             TextButton(
               onPressed: isSubmitting ? null : () => Navigator.of(dialogContext).pop(),
-              child: const Text('Cancelar'),
+              child: Text(context.tr('common.cancel')),
             ),
             ElevatedButton(
               style: ElevatedButton.styleFrom(
@@ -2089,9 +2183,9 @@ class _ProfilePageState extends State<ProfilePage> {
                       nav.pop();
                       if (mounted) {
                         ScaffoldMessenger.of(context).showSnackBar(
-                          const SnackBar(
+                          SnackBar(
                             content: Text(
-                                'Sua denúncia foi enviada. Agradecemos por ajudar a manter nossa comunidade segura!'),
+                                context.tr('profile.report_success')),
                           ),
                         );
                       }
@@ -2105,8 +2199,8 @@ class _ProfilePageState extends State<ProfilePage> {
                         color: Colors.white,
                       ),
                     )
-                  : const Text('Enviar Denúncia',
-                      style: TextStyle(color: Colors.white)),
+                  : Text(context.tr('profile.report_submit_btn'),
+                      style: const TextStyle(color: Colors.white)),
             ),
           ],
         ),
@@ -2135,9 +2229,7 @@ class _ProfilePageState extends State<ProfilePage> {
       child: ExpansionTile(
         initiallyExpanded: false,
         trailing: const Icon(Icons.keyboard_arrow_down, color: Colors.grey),
-        title: const Text(
-          'Patas Love',
-          style: TextStyle(
+        title: Text(context.tr('profile.patas_love_title'), style: const TextStyle(
             fontSize: 21,
             fontFamily: 'Fredoka',
             color: Colors.pinkAccent,
@@ -2202,8 +2294,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Disponível para Patas Love',
+                  Text(context.tr('profile.patas_love_available'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.bold,
@@ -2211,8 +2302,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: textColor,
                     ),
                   ),
-                  Text(
-                    'Acasalamento & encontros',
+                  Text(context.tr('profile.patas_love_subtitle'),
                     style: TextStyle(
                       fontSize: 10,
                       color: thmode.darkMode ? Colors.white60 : Colors.black54,
@@ -2291,8 +2381,7 @@ class _ProfilePageState extends State<ProfilePage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Text(
-                    'Disponível no Patas Love',
+                  Text(context.tr('profile.patas_love_public_available'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.bold,
@@ -2300,8 +2389,7 @@ class _ProfilePageState extends State<ProfilePage> {
                       color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                     ),
                   ),
-                  Text(
-                    'Aberto para encontros e acasalamento',
+                  Text(context.tr('profile.patas_love_public_subtitle'),
                     style: TextStyle(
                       fontSize: 10,
                       color: thmode.darkMode ? Colors.white60 : Colors.black54,
@@ -2322,13 +2410,12 @@ class _ProfilePageState extends State<ProfilePage> {
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
-          children: const [
-            Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 28),
-            SizedBox(width: 10),
+          children: [
+            const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 28),
+            const SizedBox(width: 10),
             Expanded(
-              child: Text(
-                'Patas Love Ativado!',
-                style: TextStyle(
+              child: Text(context.tr('profile.love_activated_title'),
+                style: const TextStyle(
                     fontFamily: 'Fredoka',
                     color: AppColors.patasColor,
                     fontSize: 18),
@@ -2337,8 +2424,7 @@ class _ProfilePageState extends State<ProfilePage> {
           ],
         ),
         content: Text(
-          'O recurso foi ativado com sucesso para $petName!\n\n'
-          'Outros tutores agora verão no perfil do seu pet o selo de disponibilidade para encontros, e você já pode buscar parceiros através do botão Patas Love no hub Patas Essencial.',
+          context.tr('profile.love_activated_desc', {'name': petName}),
           style: const TextStyle(fontSize: 14, height: 1.4),
         ),
         actions: [
@@ -2349,7 +2435,7 @@ class _ProfilePageState extends State<ProfilePage> {
                   borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () => Navigator.of(dialogContext).pop(),
-            child: const Text('Entendi', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('common.understood'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),

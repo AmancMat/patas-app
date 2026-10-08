@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import '../../../../app.dart';
@@ -93,8 +94,8 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
     return Scaffold(
       backgroundColor: bgColor,
       appBar: PatasEssencialAppBar(
-        title: 'Patas Love',
-        subtitle: 'Conexões e encontros para seu pet',
+        title: context.tr('love.title'),
+        subtitle: context.tr('love.subtitle'),
         leadingIcon: const Icon(Icons.favorite_rounded, color: Colors.pinkAccent, size: 22),
         bottomHeight: 52.0,
         bottomWidget: Center(
@@ -128,9 +129,9 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
                 labelColor: Colors.white,
                 unselectedLabelColor:
                     thmode.darkMode ? Colors.white54 : Colors.black54,
-                tabs: const [
-                  Tab(text: 'Feed de Encontros'),
-                  Tab(text: 'Mensagens'),
+                tabs: [
+                  Tab(text: context.tr('love.tab_compatible')),
+                  Tab(text: context.tr('love.tab_chats')),
                 ],
               ),
             ),
@@ -179,7 +180,7 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
               ),
               const SizedBox(height: 20),
               Text(
-                'Nenhum parceiro encontrado no momento',
+                context.tr('love.no_compatible_pets'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontFamily: 'Fredoka',
@@ -190,7 +191,7 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                'Assim que novos tutores ativarem o Patas Love para pets da mesma espécie de ${activePet?.name ?? 'seu pet'}, eles aparecerão aqui!',
+                context.tr('love.no_compatible_desc', {'name': activePet?.name ?? 'seu pet'}),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -277,7 +278,7 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Patas Love: ${activePet.name}',
+                      context.tr('love.pet_banner_title', {'name': activePet.name}),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 14,
@@ -287,8 +288,8 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
                     ),
                     Text(
                       isLoveActive
-                          ? 'Perfil ativado para novos encontros 💖'
-                          : 'Perfil desativado para encontros',
+                          ? context.tr('love.active_badge')
+                          : context.tr('love.inactive_badge'),
                       style: TextStyle(
                         fontSize: 11,
                         color: isLoveActive
@@ -363,7 +364,7 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
               ),
               const SizedBox(height: 16),
               Text(
-                'Nenhuma conversa iniciada',
+                context.tr('love.no_chats_yet'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 18,
@@ -373,7 +374,7 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
               ),
               const SizedBox(height: 8),
               Text(
-                'Navegue pela aba Feed e clique em "Enviar Mensagem" no perfil de um pet para iniciar uma conversa.',
+                context.tr('love.no_chats_desc'),
                 textAlign: TextAlign.center,
                 style: TextStyle(
                   fontSize: 13,
@@ -487,14 +488,14 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
           ),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.favorite_rounded, color: Colors.white, size: 12),
+            const Icon(Icons.favorite_rounded, color: Colors.white, size: 12),
             SizedBox(width: 4),
             Text(
-              'Encontro!',
-              style: TextStyle(
+              context.tr('love.status_match'),
+              style: const TextStyle(
                 color: Colors.white,
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
@@ -512,15 +513,15 @@ class _PatasLoveMainScreenState extends State<PatasLoveMainScreen>
           border: Border.all(color: Colors.amber.shade400),
           borderRadius: BorderRadius.circular(20),
         ),
-        child: const Row(
+        child: Row(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Icon(Icons.hourglass_top_rounded,
+            const Icon(Icons.hourglass_top_rounded,
                 color: Colors.amber, size: 12),
             SizedBox(width: 4),
             Text(
-              'Pendente',
-              style: TextStyle(
+              context.tr('love.status_pending'),
+              style: const TextStyle(
                 color: Colors.amber,
                 fontSize: 11,
                 fontWeight: FontWeight.bold,
@@ -708,13 +709,13 @@ class _LovePetCardState extends State<_LovePetCard> {
                   children: [
                     _buildBadge(
                       icon: Icons.verified_user_rounded,
-                      label: 'Vacinação OK',
+                      label: context.tr('love.vaccines_ok'),
                       color: Colors.green,
                     ),
                     const SizedBox(width: 8),
                     _buildBadge(
                       icon: Icons.workspace_premium_rounded,
-                      label: 'Pedigree',
+                      label: context.tr('love.pedigree'),
                       color: Colors.amber.shade700,
                     ),
                   ],
@@ -748,8 +749,8 @@ class _LovePetCardState extends State<_LovePetCard> {
                           ScaffoldMessenger.of(context).showSnackBar(
                             SnackBar(
                               content: Text(_isFollowing
-                                  ? 'Você começou a seguir ${widget.pet.name}!'
-                                  : 'Você deixou de seguir ${widget.pet.name}.'),
+                                  ? context.tr('love.follow_started', {'name': widget.pet.name})
+                                  : context.tr('love.follow_stopped', {'name': widget.pet.name})),
                               duration: const Duration(seconds: 2),
                             ),
                           );
@@ -757,7 +758,7 @@ class _LovePetCardState extends State<_LovePetCard> {
                         icon: Icon(_isFollowing
                             ? Icons.check
                             : Icons.person_add_rounded),
-                        label: Text(_isFollowing ? 'Seguindo' : 'Seguir'),
+                        label: Text(_isFollowing ? context.tr('profile.following_btn') : context.tr('profile.follow_btn')),
                       ),
                     ),
                     const SizedBox(width: 8),
@@ -784,8 +785,8 @@ class _LovePetCardState extends State<_LovePetCard> {
                             backgroundColor: Colors.pinkAccent,
                             content: Text(
                               _hasExpressedInterest
-                                  ? 'Notificação enviada ao tutor de ${widget.pet.name}!'
-                                  : 'Interesse removido.',
+                                  ? context.tr('love.interest_sent', {'name': widget.pet.name})
+                                  : context.tr('love.interest_removed'),
                             ),
                           ),
                         );
@@ -803,7 +804,7 @@ class _LovePetCardState extends State<_LovePetCard> {
                       ),
                       onPressed: widget.onMessageTap,
                       icon: const Icon(Icons.chat_bubble_rounded, size: 18),
-                      label: const Text('Conversar'),
+                      label: Text(context.tr('love.start_chat_btn')),
                     ),
                   ],
                 ),

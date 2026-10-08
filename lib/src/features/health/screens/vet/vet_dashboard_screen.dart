@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
@@ -159,7 +160,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Voltar', style: TextStyle(color: Colors.grey)),
+            child: Text(context.tr('common.back'), style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -169,8 +170,8 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text(
-              'Confirmar Cancelamento',
+            child: Text(
+              context.tr('health.confirm_cancellation'),
               style: TextStyle(color: Colors.white),
             ),
           ),
@@ -273,7 +274,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+            child: Text(context.tr('common.cancel'), style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             onPressed: () => Navigator.pop(context, true),
@@ -283,7 +284,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text('Sair', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('health.logout_account'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -341,7 +342,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
           actions: [
             IconButton(
               icon: const Icon(Icons.logout_rounded, color: Colors.redAccent),
-              tooltip: 'Sair da Conta',
+              tooltip: context.tr('health.logout_account'),
               onPressed: _confirmLogout,
             ),
           ],
@@ -423,7 +424,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
               child: Scaffold(
                 backgroundColor: scaffoldBg,
                 appBar: PatasEssencialAppBar(
-                  title: 'Painel Patas Vet',
+                  title: context.tr('health.vet_panel_title'),
                   subtitle: 'Dr(a). ${_vetProfile!.fullName}',
                   showBackButton: false,
                 ),
@@ -444,7 +445,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
     return Scaffold(
       backgroundColor: scaffoldBg,
       appBar: PatasEssencialAppBar(
-        title: 'Painel Patas Vet',
+        title: context.tr('health.vet_panel_title'),
         subtitle: 'Dr(a). ${_vetProfile!.fullName}',
         showBackButton: false,
       ),
@@ -467,14 +468,14 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
           fontSize: 11,
           fontFamily: 'Fredoka',
         ),
-        items: const [
+        items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.calendar_month_rounded),
             activeIcon: Icon(
               Icons.calendar_month_rounded,
               color: AppColors.patasColor,
             ),
-            label: 'Agendamentos',
+            label: context.tr('health.tab_appointments'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.history_rounded),
@@ -482,12 +483,12 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
               Icons.history_rounded,
               color: AppColors.patasColor,
             ),
-            label: 'Histórico',
+            label: context.tr('health.tab_history'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.groups_rounded),
             activeIcon: Icon(Icons.groups_rounded, color: AppColors.patasColor),
-            label: 'Equipe',
+            label: context.tr('health.tab_team'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.account_balance_wallet_rounded),
@@ -495,7 +496,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
               Icons.account_balance_wallet_rounded,
               color: AppColors.patasColor,
             ),
-            label: 'Financeiro',
+            label: context.tr('health.tab_financial'),
           ),
           BottomNavigationBarItem(
             icon: Icon(Icons.settings_rounded),
@@ -503,7 +504,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
               Icons.settings_rounded,
               color: AppColors.patasColor,
             ),
-            label: 'Ajustes',
+            label: context.tr('health.tab_settings'),
           ),
         ],
       ),
@@ -601,19 +602,19 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
           _buildSidebarNavItem(
             index: 0,
             icon: Icons.calendar_month_rounded,
-            label: 'Agendamentos',
+            label: context.tr('health.tab_appointments'),
             isDark: isDark,
           ),
           _buildSidebarNavItem(
             index: 1,
             icon: Icons.history_rounded,
-            label: 'Histórico',
+            label: context.tr('health.tab_history'),
             isDark: isDark,
           ),
           _buildSidebarNavItem(
             index: 2,
             icon: Icons.groups_rounded,
-            label: 'Equipe Clínica',
+            label: context.tr('health.tab_team'),
             isDark: isDark,
           ),
           const Divider(height: 24),
@@ -622,13 +623,13 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
           _buildSidebarNavItem(
             index: 3,
             icon: Icons.account_balance_wallet_rounded,
-            label: 'Financeiro',
+            label: context.tr('health.tab_financial'),
             isDark: isDark,
           ),
           _buildSidebarNavItem(
             index: 4,
             icon: Icons.settings_rounded,
-            label: 'Ajustes CRMV',
+            label: context.tr('health.tab_settings'),
             isDark: isDark,
           ),
           const Spacer(),
@@ -638,7 +639,7 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
           _buildSidebarNavItem(
             index: 5,
             icon: Icons.logout_rounded,
-            label: 'Sair da Conta',
+            label: context.tr('health.logout_account'),
             isDark: isDark,
             color: Colors.redAccent,
             onTapCustom: _confirmLogout,

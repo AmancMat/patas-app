@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
@@ -17,9 +18,9 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     final result = await ApplyAdoptionSheet.show(context, animal: animal);
     if (result == true && context.mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Proposta de adoção enviada com sucesso! A ONG entrará em contato.',
+            context.tr('acolhe.apply_success_snackbar'),
           ),
           backgroundColor: Colors.green,
         ),
@@ -37,7 +38,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
         title: animal.name,
-        subtitle: 'Disponível para Adoção Responsável',
+        subtitle: context.tr('acolhe.detail_available_tag'),
         leadingIcon: const Icon(
           Icons.favorite_rounded,
           color: Colors.purpleAccent,
@@ -84,7 +85,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
                   ),
                   icon: const Icon(Icons.favorite_rounded, size: 20),
                   label: Text(
-                    'Quero Adotar ${animal.name} ❤️',
+                    context.tr('acolhe.apply_button', {'name': animal.name}),
                     style: const TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 16,
@@ -109,29 +110,29 @@ class AdoptionPetDetailScreen extends StatelessWidget {
                   _buildPhotoSection(context, isDark),
 
                   // 2. Informações Básicas (Nome, Porte, Raça)
-                  _buildBasicInfo(isDark),
+                  _buildBasicInfo(context, isDark),
 
                   const SizedBox(height: 14),
 
                   // 3. Cuidados de Saúde
-                  _buildHealthSection(isDark),
+                  _buildHealthSection(context, isDark),
 
                   const SizedBox(height: 14),
 
                   // 4. História do Resgate
                   if (animal.rescueStory != null && animal.rescueStory!.isNotEmpty)
-                    _buildStorySection(isDark),
+                    _buildStorySection(context, isDark),
 
                   const SizedBox(height: 14),
 
                   // 5. Temperamento
                   if (animal.behaviorNotes != null && animal.behaviorNotes!.isNotEmpty)
-                    _buildBehaviorSection(isDark),
+                    _buildBehaviorSection(context, isDark),
 
                   const SizedBox(height: 14),
 
                   // 6. ONG Responsável
-                  _buildOngCard(isDark),
+                  _buildOngCard(context, isDark),
 
                   const SizedBox(height: 40),
                 ],
@@ -188,7 +189,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBasicInfo(bool isDark) {
+  Widget _buildBasicInfo(BuildContext context, bool isDark) {
     return Padding(
       padding: const EdgeInsets.symmetric(horizontal: 20),
       child: Column(
@@ -213,8 +214,8 @@ class AdoptionPetDetailScreen extends StatelessWidget {
                   color: Colors.green.withValues(alpha: 0.15),
                   borderRadius: BorderRadius.circular(12),
                 ),
-                child: const Text(
-                  'Disponível para Adoção',
+                child: Text(
+                  context.tr('acolhe.status_available'),
                   style: TextStyle(
                     fontSize: 11,
                     fontWeight: FontWeight.bold,
@@ -241,12 +242,12 @@ class AdoptionPetDetailScreen extends StatelessWidget {
             children: [
               _buildFeaturePill(
                 icon: animal.species == 'felino' ? Icons.pets : Icons.pets_rounded,
-                label: animal.species == 'felino' ? 'Gato' : 'Cachorro',
+                label: animal.species == 'felino' ? context.tr('acolhe.cat_label') : context.tr('acolhe.dog_label'),
                 isDark: isDark,
               ),
               _buildFeaturePill(
                 icon: Icons.straighten_rounded,
-                label: 'Porte ${animal.size.toUpperCase()}',
+                label: context.tr('acolhe.size_pill', {'size': animal.size.toUpperCase()}),
                 isDark: isDark,
               ),
               if (animal.ageEstimate != null)
@@ -294,7 +295,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildHealthSection(bool isDark) {
+  Widget _buildHealthSection(BuildContext context, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(16),
@@ -308,8 +309,8 @@ class AdoptionPetDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Cuidados de Saúde',
+          Text(
+            context.tr('acolhe.health_care_section'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 16,
@@ -321,21 +322,21 @@ class AdoptionPetDetailScreen extends StatelessWidget {
           Row(
             children: [
               _buildHealthItem(
-                'Castrado(a)',
+                context.tr('acolhe.castrated_item'),
                 animal.isCastrated,
                 Icons.check_circle_rounded,
                 isDark,
               ),
               const SizedBox(width: 8),
               _buildHealthItem(
-                'Vacinado(a)',
+                context.tr('acolhe.vaccinated_item'),
                 animal.isVaccinated,
                 Icons.vaccines_rounded,
                 isDark,
               ),
               const SizedBox(width: 8),
               _buildHealthItem(
-                'Vermifugado(a)',
+                context.tr('acolhe.dewormed_item'),
                 animal.isDewormed,
                 Icons.shield_rounded,
                 isDark,
@@ -378,7 +379,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildStorySection(bool isDark) {
+  Widget _buildStorySection(BuildContext context, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(16),
@@ -392,12 +393,12 @@ class AdoptionPetDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Row(
+          Row(
             children: [
-              Icon(Icons.auto_stories_rounded, size: 18, color: Colors.purpleAccent),
+              const Icon(Icons.auto_stories_rounded, size: 18, color: Colors.purpleAccent),
               SizedBox(width: 6),
               Text(
-                'História do Resgate',
+                context.tr('acolhe.rescue_story_section'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 16,
@@ -421,7 +422,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildBehaviorSection(bool isDark) {
+  Widget _buildBehaviorSection(BuildContext context, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(16),
@@ -435,8 +436,8 @@ class AdoptionPetDetailScreen extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Temperamento & Convivência',
+          Text(
+            context.tr('acolhe.behavior_section'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 16,
@@ -458,7 +459,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
     );
   }
 
-  Widget _buildOngCard(bool isDark) {
+  Widget _buildOngCard(BuildContext context, bool isDark) {
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 20),
       padding: const EdgeInsets.all(16),
@@ -482,7 +483,7 @@ class AdoptionPetDetailScreen extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  animal.ongName ?? 'ONG Responsável',
+                  animal.ongName ?? context.tr('acolhe.shelter_responsible'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 15,

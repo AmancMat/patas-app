@@ -4,6 +4,7 @@ import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../../app.dart';
+import '../../../../core/localization/app_localizations.dart';
 import '../../../constants/app_colors.dart';
 import '../../../common_widgets/patas_essencial_app_bar.dart';
 import '../../../common_widgets/mobile_scroll_padding.dart';
@@ -34,6 +35,49 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
   bool _isLoading = true;
   String _selectedTypeFilter = 'todos';
   String _effectiveOngId = '';
+
+  String _getUrgencyLabel(RescueAlert alert, BuildContext context) {
+    switch (alert.urgency) {
+      case RescueUrgency.critico:
+        return context.tr('acolhe.urgency_critical');
+      case RescueUrgency.alta:
+        return context.tr('acolhe.urgency_high');
+      case RescueUrgency.media:
+        return context.tr('acolhe.urgency_medium');
+      case RescueUrgency.baixa:
+        return context.tr('acolhe.urgency_low');
+    }
+  }
+
+  String _getStatusLabel(RescueAlert alert, BuildContext context) {
+    switch (alert.status) {
+      case RescueAlertStatus.aberto:
+        return context.tr('acolhe.status_open');
+      case RescueAlertStatus.emAtendimento:
+        return context.tr('acolhe.status_in_progress');
+      case RescueAlertStatus.resgatado:
+        return context.tr('acolhe.status_rescued');
+      case RescueAlertStatus.cancelado:
+        return context.tr('acolhe.status_canceled');
+    }
+  }
+
+  String _getTypeLabel(RescueAlert alert, BuildContext context) {
+    switch (alert.alertType) {
+      case RescueAlertType.ferido:
+        return context.tr('acolhe.type_injured');
+      case RescueAlertType.atropelado:
+        return context.tr('acolhe.type_hit_by_car');
+      case RescueAlertType.abandonadoFilhotes:
+        return context.tr('acolhe.type_puppies');
+      case RescueAlertType.mausTratos:
+        return context.tr('acolhe.type_abuse');
+      case RescueAlertType.perdido:
+        return context.tr('acolhe.type_lost');
+      case RescueAlertType.outro:
+        return context.tr('acolhe.type_other');
+    }
+  }
 
   @override
   void initState() {
@@ -99,9 +143,9 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
   Future<void> _assumeRescue(RescueAlert alert) async {
     if (_effectiveOngId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
+        SnackBar(
           content: Text(
-            'Apenas ONGs cadastradas podem assumir chamados de resgate.',
+            context.tr('acolhe.snack_only_ong_assume'),
           ),
           backgroundColor: Colors.orange,
         ),
@@ -118,7 +162,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Chamado "${alert.title}" assumido pela sua ONG! 🚑'),
+            content: Text(context.tr('acolhe.snack_call_assumed', {'title': alert.title})),
             backgroundColor: Colors.teal,
           ),
         );
@@ -139,8 +183,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
   Future<void> _convertToShelterAnimal(RescueAlert alert) async {
     if (_effectiveOngId.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Selecione uma ONG para acolher e cadastrar o animal.'),
+        SnackBar(
+          content: Text(context.tr('acolhe.snack_select_ong_first')),
           backgroundColor: Colors.orange,
         ),
       );
@@ -176,9 +220,9 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
       );
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
+          SnackBar(
             content: Text(
-              'Animal cadastrado como acolhido e chamado finalizado! 🐶🎉',
+              context.tr('acolhe.snack_animal_sheltered'),
             ),
             backgroundColor: Colors.green,
           ),
@@ -197,7 +241,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          'Concluir Resgate',
+          context.tr('acolhe.dialog_complete_title'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 18,
@@ -210,7 +254,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'O animal já foi socorrido ou encaminhado para atendimento veterinário?',
+              context.tr('acolhe.dialog_complete_prompt'),
               style: TextStyle(
                 fontSize: 14,
                 color: isDark ? Colors.white70 : Colors.black87,
@@ -222,7 +266,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
               maxLines: 2,
               style: TextStyle(color: isDark ? Colors.white : AppColors.darkBG),
               decoration: InputDecoration(
-                hintText: 'Observações do resgate (opcional)...',
+                hintText: context.tr('acolhe.dialog_notes_hint'),
                 hintStyle: TextStyle(
                   color: isDark ? Colors.white38 : Colors.grey.shade400,
                   fontSize: 13,
@@ -245,7 +289,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Cancelar',
+              context.tr('common.cancel'),
               style: TextStyle(color: isDark ? Colors.white60 : Colors.black54),
             ),
           ),
@@ -258,7 +302,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Confirmar Resgate ✅'),
+            child: Text(context.tr('acolhe.dialog_confirm_rescue_btn')),
           ),
         ],
       ),
@@ -282,7 +326,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          'Remover Chamado?',
+          context.tr('acolhe.dialog_delete_call_title'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 16,
@@ -291,7 +335,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           ),
         ),
         content: Text(
-          'Tem certeza de que deseja remover este chamado de resgate da lista?',
+          context.tr('acolhe.dialog_delete_call_prompt'),
           style: TextStyle(
             fontSize: 14,
             color: isDark ? Colors.white70 : Colors.black87,
@@ -301,7 +345,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Voltar',
+              context.tr('common.back'),
               style: TextStyle(color: isDark ? Colors.white60 : Colors.black54),
             ),
           ),
@@ -314,7 +358,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Remover'),
+            child: Text(context.tr('common.delete')),
           ),
         ],
       ),
@@ -422,10 +466,10 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Resgates & Alertas',
+        title: context.tr('acolhe.rescue_alerts_title'),
         subtitle: isOng
-            ? 'Chamados comunitários e socorro a animais em risco'
-            : 'Rede solidária de socorro e proteção animal',
+            ? context.tr('acolhe.rescue_sub_ong')
+            : context.tr('acolhe.rescue_sub_tutor'),
         showBackButton: true,
         leadingIcon: const Icon(
           Icons.warning_amber_rounded,
@@ -444,7 +488,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           Padding(
             padding: const EdgeInsets.only(right: 12),
             child: IconButton(
-              tooltip: 'Reportar Animal em Risco',
+              tooltip: context.tr('acolhe.report_risk_animal'),
               icon: Container(
                 padding: const EdgeInsets.all(6),
                 decoration: BoxDecoration(
@@ -475,8 +519,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
           backgroundColor: Colors.redAccent,
           foregroundColor: Colors.white,
           icon: const Icon(Icons.add_alert_rounded),
-          label: const Text(
-            'Reportar Animal em Risco',
+          label: Text(
+            context.tr('acolhe.report_risk_animal'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontWeight: FontWeight.bold,
@@ -641,8 +685,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
               children: [
                 Text(
                   isOng
-                      ? 'Central de Resgates da Região'
-                      : 'Rede Solidária de Resgate',
+                      ? context.tr('acolhe.banner_rescue_ong')
+                      : context.tr('acolhe.banner_rescue_tutor'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 18,
@@ -653,8 +697,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                 const SizedBox(height: 4),
                 Text(
                   isOng
-                      ? 'Atenda chamados de animais em risco reportados pela comunidade. Assuma o resgate, faça o atendimento e converta diretamente em acolhido do abrigo.'
-                      : 'Viu um animal ferido, abandonado ou em perigo? Reporte imediatamente com fotos e localização para que abrigos e protetores parceiros possam socorrer.',
+                      ? context.tr('acolhe.banner_rescue_desc_ong')
+                      : context.tr('acolhe.banner_rescue_desc_tutor'),
                   style: TextStyle(
                     fontSize: 13,
                     color: isDark ? Colors.white70 : Colors.black87,
@@ -680,25 +724,25 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
   }) {
     final kpis = [
       _KpiData(
-        title: 'Chamados Abertos',
+        title: context.tr('acolhe.kpi_open_calls'),
         value: openAlerts.toString(),
         icon: Icons.campaign_rounded,
         color: Colors.amber.shade700,
       ),
       _KpiData(
-        title: 'Casos Críticos',
+        title: context.tr('acolhe.kpi_critical_cases'),
         value: criticalAlerts.toString(),
         icon: Icons.error_outline_rounded,
         color: Colors.redAccent,
       ),
       _KpiData(
-        title: 'Em Atendimento',
+        title: context.tr('acolhe.kpi_in_treatment'),
         value: inProgressAlerts.toString(),
         icon: Icons.medical_services_rounded,
         color: Colors.blueAccent,
       ),
       _KpiData(
-        title: 'Resgatados',
+        title: context.tr('acolhe.kpi_rescued'),
         value: rescuedAlerts.toString(),
         icon: Icons.task_alt_rounded,
         color: Colors.green,
@@ -816,12 +860,12 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
     required int rescuedCount,
   }) {
     final filterOptions = [
-      {'key': 'todos', 'label': 'Todos os Riscos'},
-      {'key': 'ferido', 'label': 'Feridos 🩹'},
-      {'key': 'atropelado', 'label': 'Atropelados 🚗'},
-      {'key': 'abandonado_filhotes', 'label': 'Filhotes 🐾'},
-      {'key': 'maus_tratos', 'label': 'Maus-Tratos ⚠️'},
-      {'key': 'perdido', 'label': 'Perdidos 🔍'},
+      {'key': 'todos', 'label': context.tr('acolhe.filter_all_risks')},
+      {'key': 'ferido', 'label': context.tr('acolhe.filter_injured')},
+      {'key': 'atropelado', 'label': context.tr('acolhe.filter_hit_by_car')},
+      {'key': 'abandonado_filhotes', 'label': context.tr('acolhe.filter_puppies')},
+      {'key': 'maus_tratos', 'label': context.tr('acolhe.filter_mistreatment')},
+      {'key': 'perdido', 'label': context.tr('acolhe.filter_lost')},
     ];
 
     return Column(
@@ -875,19 +919,19 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
               Tab(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text('Abertos ($openCount)'),
+                  child: Text(context.tr('acolhe.tab_open_calls', {'count': openCount.toString()})),
                 ),
               ),
               Tab(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text('Em Atendimento ($inProgressCount)'),
+                  child: Text(context.tr('acolhe.tab_in_progress_calls', {'count': inProgressCount.toString()})),
                 ),
               ),
               Tab(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 4),
-                  child: Text('Resgatados ($rescuedCount)'),
+                  child: Text(context.tr('acolhe.tab_rescued_calls', {'count': rescuedCount.toString()})),
                 ),
               ),
             ],
@@ -1009,7 +1053,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                         ),
                         const SizedBox(width: 5),
                         Text(
-                          alert.urgencyLabel,
+                          _getUrgencyLabel(alert, context),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 12,
@@ -1038,7 +1082,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                         Icon(alert.typeIcon, size: 14, color: alert.typeColor),
                         const SizedBox(width: 5),
                         Text(
-                          alert.typeLabel,
+                          _getTypeLabel(alert, context),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 12,
@@ -1195,7 +1239,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                           Padding(
                             padding: const EdgeInsets.only(left: 26),
                             child: Text(
-                              'Ponto de Ref.: ${alert.referencePoint}',
+                              context.tr('acolhe.ref_point', {'point': alert.referencePoint ?? ''}),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontStyle: FontStyle.italic,
@@ -1229,7 +1273,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Reportado por: ${alert.reporterName}',
+                              context.tr('acolhe.reported_by', {'name': alert.reporterName}),
                               style: TextStyle(
                                 fontSize: 12,
                                 fontWeight: FontWeight.bold,
@@ -1299,7 +1343,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                           const SizedBox(width: 8),
                           Expanded(
                             child: Text(
-                              'Desfecho: ${alert.notes}',
+                              context.tr('acolhe.outcome_label', {'notes': alert.notes ?? ''}),
                               style: TextStyle(
                                 fontSize: 12,
                                 color: isDark ? Colors.white70 : Colors.black87,
@@ -1340,7 +1384,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                       borderRadius: BorderRadius.circular(6),
                     ),
                     child: Text(
-                      alert.statusLabel,
+                      _getStatusLabel(alert, context),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 11,
@@ -1368,8 +1412,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                         ),
                       ),
                       icon: const Icon(Icons.local_hospital_rounded, size: 16),
-                      label: const Text(
-                        'Assumir Chamado 🚑',
+                      label: Text(
+                        context.tr('acolhe.assume_call_btn'),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -1393,8 +1437,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                         ),
                       ),
                       icon: const Icon(Icons.pets_rounded, size: 16),
-                      label: const Text(
-                        'Acolher no Abrigo 🐶',
+                      label: Text(
+                        context.tr('acolhe.shelter_pet_btn'),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -1418,8 +1462,8 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
                         ),
                       ),
                       icon: const Icon(Icons.check_rounded, size: 16),
-                      label: const Text(
-                        'Concluir',
+                      label: Text(
+                        context.tr('common.finish'),
                         style: TextStyle(
                           fontSize: 12,
                           fontWeight: FontWeight.bold,
@@ -1430,7 +1474,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
 
                   // Botão de Excluir / Cancelar
                   IconButton(
-                    tooltip: 'Remover Chamado',
+                    tooltip: context.tr('acolhe.delete_call_tooltip'),
                     icon: Icon(
                       Icons.delete_outline_rounded,
                       color: isDark ? Colors.white38 : Colors.grey.shade500,
@@ -1474,7 +1518,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
             ),
             const SizedBox(height: 18),
             Text(
-              'Nenhum chamado nesta aba',
+              context.tr('acolhe.empty_calls_title'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
@@ -1484,7 +1528,7 @@ class _OngRescueAlertsScreenState extends State<OngRescueAlertsScreen>
             ),
             const SizedBox(height: 6),
             Text(
-              'Tudo calmo por aqui! Quando novos pedidos de socorro\nforem reportados, eles aparecerão nesta lista.',
+              context.tr('acolhe.empty_calls_desc'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 13,

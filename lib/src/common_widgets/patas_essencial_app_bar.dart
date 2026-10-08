@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import '../../app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import '../constants/app_colors.dart';
 import '../features/pets/widgets/active_pet_header_chip.dart';
 
@@ -82,7 +83,7 @@ class PatasEssencialAppBar extends StatelessWidget implements PreferredSizeWidge
                         size: 20,
                       ),
                       onPressed: onBack ?? () => Navigator.maybePop(context),
-                      tooltip: 'Voltar',
+                      tooltip: context.tr('common.back'),
                     ),
                     const SizedBox(width: 4),
                   ],
@@ -168,7 +169,7 @@ class PatasEssencialAppBar extends StatelessWidget implements PreferredSizeWidge
                 size: 20,
               ),
               onPressed: onBack ?? () => Navigator.maybePop(context),
-              tooltip: 'Voltar',
+              tooltip: context.tr('common.back'),
             )
           : null,
       title: Row(

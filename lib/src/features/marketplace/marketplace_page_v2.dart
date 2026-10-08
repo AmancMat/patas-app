@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import '../../../app.dart';
 import '../../constants/app_colors.dart';
 import '../../constants/routes.dart';
@@ -159,14 +160,14 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     final String appBarSubtitle;
 
     if (isOng) {
-      appBarTitle = 'Patas Acolhe';
-      appBarSubtitle = 'Hub de gestão da ONG e animais acolhidos';
+      appBarTitle = context.tr('market.app_bar_title_ong');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_ong');
     } else if (isCompany) {
-      appBarTitle = 'Patas Negócios';
-      appBarSubtitle = 'Painel de serviços, agenda e clientes';
+      appBarTitle = context.tr('market.app_bar_title_biz');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_biz');
     } else {
-      appBarTitle = 'Patas Essencial';
-      appBarSubtitle = 'Hub de facilidades e serviços pet';
+      appBarTitle = context.tr('market.app_bar_title_tutor');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_tutor');
     }
 
     return Scaffold(
@@ -237,14 +238,14 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     final String appBarSubtitle;
 
     if (isOng) {
-      appBarTitle = 'Patas Acolhe';
-      appBarSubtitle = 'Hub de gestão da ONG e animais acolhidos';
+      appBarTitle = context.tr('market.app_bar_title_ong');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_ong');
     } else if (isCompany) {
-      appBarTitle = 'Patas Negócios';
-      appBarSubtitle = 'Painel de serviços, agenda e clientes';
+      appBarTitle = context.tr('market.app_bar_title_biz');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_biz');
     } else {
-      appBarTitle = 'Patas Essencial';
-      appBarSubtitle = 'Hub de facilidades e serviços pet';
+      appBarTitle = context.tr('market.app_bar_title_tutor');
+      appBarSubtitle = context.tr('market.app_bar_subtitle_tutor');
     }
 
     return Scaffold(
@@ -278,8 +279,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
                   // Título da seção
                   Text(
                     isOng
-                        ? 'Ferramentas de Gestão do Abrigo'
-                        : (isCompany ? 'Ferramentas do Profissional' : 'Serviços e Microapps'),
+                        ? context.tr('market.section_ong_tools')
+                        : (isCompany ? context.tr('market.section_biz_tools') : context.tr('market.section_tutor_tools')),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 18,
@@ -339,19 +340,16 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     final Color headerColor;
 
     if (isOng) {
-      headerTitle = 'Patas Acolhe 🐾';
-      headerSubtitle =
-          'Painel de impacto social, animais acolhidos, doações e adoções responsáveis.';
+      headerTitle = context.tr('market.header_desktop_ong_title');
+      headerSubtitle = context.tr('market.header_desktop_ong_sub');
       headerColor = const Color(0xFF7C3AED);
     } else if (isCompany) {
-      headerTitle = 'Patas Negócios 💼';
-      headerSubtitle =
-          'Gerenciamento profissional de serviços, agendamentos, clientes e faturamento.';
+      headerTitle = context.tr('market.header_desktop_biz_title');
+      headerSubtitle = context.tr('market.header_desktop_biz_sub');
       headerColor = const Color(0xFF0D9488);
     } else {
-      headerTitle = 'Patas Essencial';
-      headerSubtitle =
-          'Explore os microapps e serviços exclusivos para o seu pet.';
+      headerTitle = context.tr('market.header_desktop_tutor_title');
+      headerSubtitle = context.tr('market.header_desktop_tutor_sub');
       headerColor = AppColors.patasColor;
     }
 
@@ -385,7 +383,7 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
                 const SizedBox(height: 32),
 
                 // Seção de Destaque (Desktop Hero)
-                const _SectionTitle(title: 'Destaques'),
+                _SectionTitle(title: context.tr('market.section_highlights')),
                 const SizedBox(height: 16),
                 if (isOng)
                   _buildOngHeroCard(context, isDesktop: true)
@@ -399,8 +397,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
                 // Seção de Microapps
                 _SectionTitle(
                   title: isOng
-                      ? 'Ferramentas de Gestão do Abrigo'
-                      : (isCompany ? 'Ferramentas do Profissional' : 'Serviços e Microapps'),
+                      ? context.tr('market.section_ong_tools')
+                      : (isCompany ? context.tr('market.section_biz_tools') : context.tr('market.section_tutor_tools')),
                 ),
                 const SizedBox(height: 20),
                 LayoutBuilder(
@@ -435,10 +433,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
   Widget _buildTutorHeroCard(BuildContext context, {required bool isDesktop}) {
     return _HeroCard(
-      title: 'Patas Saúde',
+      title: context.tr('market.hero_tutor_title'),
       description: isDesktop
-          ? 'A rede de saúde completa para seu animal de estimação. Consultas, exames em domicílio e telemedicina 24h.'
-          : 'Consultas, exames de laboratório e muito mais',
+          ? context.tr('market.hero_tutor_desc_desktop')
+          : context.tr('market.hero_tutor_desc_mobile'),
       icon: Icons.monitor_heart_outlined,
       iconColor: Colors.white,
       backgroundColor: AppColors.patasColor,
@@ -453,10 +451,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     return [
       // 1. NOVO: Adestradores e Especialistas em Comportamento Pet
       _GridCard(
-        title: 'Adestradores',
-        description: 'Treinadores & Comportamento Pet',
+        title: context.tr('market.trainers_card_title'),
+        description: context.tr('market.trainers_card_desc'),
         icon: Icons.sports_score_rounded,
-        customBadgeText: 'NOVO',
+        customBadgeText: context.tr('market.badge_new'),
         customBadgeColor: Colors.orangeAccent,
         isDesktop: isDesktop,
         onTap: () {
@@ -480,10 +478,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 2. NOVO: Adoção Responsável de Pets de ONGs
       _GridCard(
-        title: 'Adote um Pet',
-        description: 'Amigos acolhidos por ONGs parceiras',
+        title: context.tr('market.adopt_card_title'),
+        description: context.tr('market.adopt_card_desc'),
         icon: Icons.favorite_rounded,
-        customBadgeText: 'SOCIAL',
+        customBadgeText: context.tr('market.badge_social'),
         customBadgeColor: Colors.purpleAccent,
         iconColor: Colors.purpleAccent,
         iconBgColor: Colors.purpleAccent.withValues(alpha: 0.15),
@@ -509,10 +507,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 3. NOVO: Mural de Doações & Campanhas de ONGs
       _GridCard(
-        title: 'Mural de Doações',
-        description: 'Apoie ONGs com PIX direto e ração',
+        title: context.tr('market.donations_card_title'),
+        description: context.tr('market.donations_card_desc'),
         icon: Icons.volunteer_activism_rounded,
-        customBadgeText: 'SOLIDÁRIO',
+        customBadgeText: context.tr('market.badge_solidarity'),
         customBadgeColor: Colors.pinkAccent,
         iconColor: Colors.pinkAccent,
         iconBgColor: Colors.pinkAccent.withValues(alpha: 0.15),
@@ -538,10 +536,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 4. Lar Temporário (Voluntariado da Comunidade para ONGs)
       _GridCard(
-        title: 'Lar Temporário',
-        description: 'Acolha pets de ONGs até a adoção',
+        title: context.tr('market.temp_home_card_title'),
+        description: context.tr('market.temp_home_card_desc'),
         icon: Icons.home_work_rounded,
-        customBadgeText: 'VOLUNTÁRIO',
+        customBadgeText: context.tr('market.badge_volunteer'),
         customBadgeColor: Colors.blueAccent,
         iconColor: Colors.blueAccent,
         iconBgColor: Colors.blueAccent.withValues(alpha: 0.15),
@@ -553,10 +551,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 5. Feiras & Eventos (Encontros e Adoções Presenciais)
       _GridCard(
-        title: 'Feiras & Eventos',
-        description: 'Feiras de adoção e encontros pet',
+        title: context.tr('market.events_card_title'),
+        description: context.tr('market.events_card_desc'),
         icon: Icons.campaign_rounded,
-        customBadgeText: 'PRESENCIAL',
+        customBadgeText: context.tr('market.badge_in_person'),
         customBadgeColor: Colors.deepPurpleAccent,
         iconColor: Colors.deepPurpleAccent,
         iconBgColor: Colors.deepPurpleAccent.withValues(alpha: 0.15),
@@ -582,10 +580,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 6. Resgates & Alertas (Rede Solidária de Socorro a Animais em Risco)
       _GridCard(
-        title: 'Resgates & Alertas',
-        description: 'Reporte e acompanhe animais em risco',
+        title: context.tr('market.rescues_card_title'),
+        description: context.tr('market.rescues_card_desc'),
         icon: Icons.emergency_rounded,
-        customBadgeText: 'SOS REGIONAL',
+        customBadgeText: context.tr('market.badge_sos_regional'),
         customBadgeColor: Colors.redAccent,
         iconColor: Colors.redAccent,
         iconBgColor: Colors.redAccent.withValues(alpha: 0.15),
@@ -617,8 +615,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 4. Patas História
       _GridCard(
-        title: 'História',
-        description: 'Linha do tempo e memórias do seu pet',
+        title: context.tr('market.history_card_title'),
+        description: context.tr('market.history_card_desc'),
         icon: Icons.auto_stories_outlined,
         showSoonBadge: false,
         isDesktop: isDesktop,
@@ -648,8 +646,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
       // 7. Patas Shop
       _GridCard(
-        title: 'Shop',
-        description: 'Mimos, Ração & Acessórios',
+        title: context.tr('market.shop_card_title'),
+        description: context.tr('market.shop_card_desc'),
         icon: Icons.storefront_outlined,
         showSoonBadge: true,
         isDesktop: isDesktop,
@@ -664,10 +662,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
   Widget _buildOngHeroCard(BuildContext context, {required bool isDesktop}) {
     return _HeroCard(
-      title: 'Central de Adoção',
+      title: context.tr('market.hero_ong_title'),
       description: isDesktop
-          ? 'Gerencie os animais acolhidos, fichas de resgate, histórico de castração e formulários de adotantes interessados em tempo real.'
-          : 'Animais acolhidos, resgates e adotantes',
+          ? context.tr('market.hero_ong_desc_desktop')
+          : context.tr('market.hero_ong_desc_mobile'),
       icon: Icons.volunteer_activism_rounded,
       iconColor: Colors.white,
       backgroundColor: const Color(0xFF7C3AED), // Roxo moderno e empático
@@ -681,10 +679,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
   List<Widget> _buildOngGridCards({bool isDesktop = false}) {
     return [
       _GridCard(
-        title: 'Mural de Doações',
-        description: 'PIX direto e campanhas de ração',
+        title: context.tr('market.donations_card_title'),
+        description: context.tr('market.ong_donations_desc'),
         icon: Icons.handshake_rounded,
-        customBadgeText: 'PIX DIRETO',
+        customBadgeText: context.tr('market.ong_badge_pix_direct'),
         customBadgeColor: Colors.pinkAccent,
         iconColor: Colors.pinkAccent,
         iconBgColor: Colors.pinkAccent.withValues(alpha: 0.15),
@@ -708,10 +706,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         },
       ),
       _GridCard(
-        title: 'Prontuário Coletivo',
-        description: 'Lotes de vacinas e castrações',
+        title: context.tr('market.ong_medical_title'),
+        description: context.tr('market.ong_medical_desc'),
         icon: Icons.assignment_turned_in_rounded,
-        customBadgeText: 'SAÚDE',
+        customBadgeText: context.tr('market.ong_badge_health'),
         customBadgeColor: Colors.tealAccent,
         iconColor: Colors.teal,
         iconBgColor: Colors.teal.withValues(alpha: 0.15),
@@ -735,10 +733,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         },
       ),
       _GridCard(
-        title: 'Alertas da Região',
-        description: 'Animais em risco e resgates',
+        title: context.tr('market.ong_alerts_title'),
+        description: context.tr('market.ong_alerts_desc'),
         icon: Icons.warning_amber_rounded,
-        customBadgeText: 'REGIONAL',
+        customBadgeText: context.tr('market.ong_badge_regional'),
         customBadgeColor: Colors.redAccent,
         iconColor: Colors.redAccent,
         iconBgColor: Colors.redAccent.withValues(alpha: 0.15),
@@ -762,10 +760,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         },
       ),
       _GridCard(
-        title: 'Lares Temporários',
-        description: 'Banco de voluntários da rede',
+        title: context.tr('market.ong_temp_homes_title'),
+        description: context.tr('market.ong_temp_homes_desc'),
         icon: Icons.home_work_rounded,
-        customBadgeText: 'VOLUNTÁRIOS',
+        customBadgeText: context.tr('market.ong_badge_volunteers'),
         customBadgeColor: Colors.blueAccent,
         iconColor: Colors.blueAccent,
         iconBgColor: Colors.blueAccent.withValues(alpha: 0.15),
@@ -789,10 +787,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         },
       ),
       _GridCard(
-        title: 'Eventos & Feiras',
-        description: 'Divulgue feirinhas no feed',
+        title: context.tr('market.ong_events_title'),
+        description: context.tr('market.ong_events_desc'),
         icon: Icons.campaign_rounded,
-        customBadgeText: 'DIVULGAÇÃO',
+        customBadgeText: context.tr('market.ong_badge_promo'),
         customBadgeColor: Colors.deepPurpleAccent,
         iconColor: Colors.deepPurpleAccent,
         iconBgColor: Colors.deepPurpleAccent.withValues(alpha: 0.15),
@@ -816,8 +814,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         },
       ),
       _GridCard(
-        title: 'Espaços Parceiros',
-        description: 'Locais pet friendly parceiros',
+        title: context.tr('market.ong_friendly_title'),
+        description: context.tr('market.ong_friendly_desc'),
         icon: Icons.place_rounded,
         iconColor: Colors.teal,
         iconBgColor: Colors.teal.withValues(alpha: 0.15),
@@ -844,10 +842,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
   Widget _buildCompanyHeroCard(BuildContext context, {required bool isDesktop}) {
     return _HeroCard(
-      title: 'Agenda & Atendimentos',
+      title: context.tr('market.hero_biz_title'),
       description: isDesktop
-          ? 'Visualize e gerencie os atendimentos do dia, sessões de adestramento agendadas, horários disponíveis e solicitações de tutores.'
-          : 'Sessões, consultas e horários marcados',
+          ? context.tr('market.hero_biz_desc_desktop')
+          : context.tr('market.hero_biz_desc_mobile'),
       icon: Icons.calendar_month_rounded,
       iconColor: Colors.white,
       backgroundColor: const Color(0xFF0D9488), // Teal profissional
@@ -873,10 +871,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
   List<Widget> _buildCompanyGridCards({bool isDesktop = false}) {
     return [
       _GridCard(
-        title: 'Meus Serviços',
-        description: 'Modalidades de treino e valores',
+        title: context.tr('market.biz_services_title'),
+        description: context.tr('market.biz_services_desc'),
         icon: Icons.tune_rounded,
-        customBadgeText: 'CATÁLOGO',
+        customBadgeText: context.tr('market.biz_badge_catalog'),
         customBadgeColor: Colors.tealAccent,
         iconColor: const Color(0xFF0D9488),
         iconBgColor: const Color(0xFF0D9488).withValues(alpha: 0.15),
@@ -898,10 +896,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         ),
       ),
       _GridCard(
-        title: 'Fichas de Alunos',
-        description: 'Diário de treino e evolução',
+        title: context.tr('market.biz_students_title'),
+        description: context.tr('market.biz_students_desc'),
         icon: Icons.folder_shared_rounded,
-        customBadgeText: 'RELATÓRIOS',
+        customBadgeText: context.tr('market.biz_badge_reports'),
         customBadgeColor: Colors.blueAccent,
         iconColor: Colors.blueAccent,
         iconBgColor: Colors.blueAccent.withValues(alpha: 0.15),
@@ -923,8 +921,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         ),
       ),
       _GridCard(
-        title: 'Faturamento',
-        description: 'Cobranças PIX e Cartão Asaas',
+        title: context.tr('market.biz_billing_title'),
+        description: context.tr('market.biz_billing_desc'),
         icon: Icons.payments_rounded,
         customBadgeText: 'ASAAS',
         customBadgeColor: Colors.greenAccent,
@@ -948,10 +946,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         ),
       ),
       _GridCard(
-        title: 'Avaliações',
-        description: 'Reputação e reviews verificados',
+        title: context.tr('market.biz_reviews_title'),
+        description: context.tr('market.biz_reviews_desc'),
         icon: Icons.star_rounded,
-        customBadgeText: 'REPUTAÇÃO',
+        customBadgeText: context.tr('market.biz_badge_reputation'),
         customBadgeColor: Colors.amberAccent,
         iconColor: Colors.amber.shade800,
         iconBgColor: Colors.amber.withValues(alpha: 0.15),
@@ -973,10 +971,10 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         ),
       ),
       _GridCard(
-        title: 'Alcance Local',
-        description: 'Raio de atendimento na cidade',
+        title: context.tr('market.biz_reach_title'),
+        description: context.tr('market.biz_reach_desc'),
         icon: Icons.radar_rounded,
-        customBadgeText: 'GEOLOCALIZAÇÃO',
+        customBadgeText: context.tr('market.biz_badge_geo'),
         customBadgeColor: Colors.purpleAccent,
         iconColor: Colors.purpleAccent,
         iconBgColor: Colors.purpleAccent.withValues(alpha: 0.15),
@@ -998,8 +996,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
         ),
       ),
       _GridCard(
-        title: 'Produtos & Loja',
-        description: 'Rações, petiscos e mimos',
+        title: context.tr('market.biz_shop_title'),
+        description: context.tr('market.biz_shop_desc'),
         icon: Icons.storefront_rounded,
         showSoonBadge: true,
         isDesktop: isDesktop,
@@ -1130,7 +1128,7 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
 
                   // Título de Recursos Planejados
                   Text(
-                    'RECURSOS DESTE MÓDULO',
+                    context.tr('market.modal_module_features'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 12,
@@ -1182,8 +1180,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
                           borderRadius: BorderRadius.circular(16),
                         ),
                       ),
-                      child: const Text(
-                        'Entendido 👍',
+                      child: Text(
+                        context.tr('market.modal_understood'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 15,
@@ -1210,9 +1208,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     if (activePet == null) {
       _showLoveDialog(
         context,
-        title: 'Nenhum Pet Selecionado',
-        content:
-            'Por favor, selecione um pet ativo no perfil para acessar o Patas Love.',
+        title: context.tr('market.love_dialog_no_pet_title'),
+        content: context.tr('market.love_dialog_no_pet_content'),
         icon: Icons.pets,
         iconColor: Colors.orange,
       );
@@ -1231,9 +1228,8 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     if (!isDogOrCat) {
       _showLoveDialog(
         context,
-        title: 'Espécie Incompatível',
-        content:
-            'O Patas Love está disponível no momento apenas para cães e gatos. Em breve traremos novidades para outras espécies!',
+        title: context.tr('market.love_dialog_incompatible_title'),
+        content: context.tr('market.love_dialog_incompatible_content'),
         icon: Icons.info_outline,
         iconColor: Colors.amber,
       );
@@ -1243,12 +1239,11 @@ class _MarketplaceHomeScreenState extends State<MarketplaceHomeScreen> {
     if (!activePet.isLoveActive) {
       _showLoveDialog(
         context,
-        title: 'Ativação Pendente',
-        content:
-            'Para utilizar o Patas Love, você precisa ativar a opção "Disponível para Patas Love" no perfil de ${activePet.name}.',
+        title: context.tr('market.love_dialog_pending_title'),
+        content: context.tr('market.love_dialog_pending_content', {'name': activePet.name}),
         icon: Icons.favorite_border_rounded,
         iconColor: Colors.pinkAccent,
-        buttonText: 'Ir para Perfil',
+        buttonText: context.tr('market.love_dialog_go_to_profile'),
         onPressed: () {
           Navigator.push(
             context,
@@ -1456,8 +1451,8 @@ class _HeroCard extends StatelessWidget {
                       color: Colors.white,
                       borderRadius: BorderRadius.circular(16),
                     ),
-                    child: const Text(
-                      'CONHECER',
+                    child: Text(
+                      context.tr('market.btn_discover'),
                       style: TextStyle(
                         color: AppColors.patasColor,
                         fontWeight: FontWeight.w800,
@@ -1691,7 +1686,7 @@ class _GridCardState extends State<_GridCard> {
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Text(
-                          'Em breve',
+                          context.tr('market.badge_soon'),
                           style: TextStyle(
                             color: AppColors.patasColor,
                             fontSize: widget.isDesktop ? 10 : 9,
@@ -1859,7 +1854,7 @@ class _EncontraGridCardState extends State<_EncontraGridCard>
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Patas Encontra',
+                                    context.tr('market.encontra_card_title'),
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: widget.isDesktop ? 16 : 14,
@@ -1878,7 +1873,7 @@ class _EncontraGridCardState extends State<_EncontraGridCard>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Tecnologia de busca ativa',
+                                    context.tr('market.encontra_card_desc'),
                                     style: TextStyle(
                                       fontSize: widget.isDesktop ? 11 : 10,
                                       color: subtitleColor,
@@ -1953,8 +1948,8 @@ class _EncontraGridCardState extends State<_EncontraGridCard>
                               },
                             ),
                             const SizedBox(width: 6),
-                            const Text(
-                              'ATIVO',
+                            Text(
+                              context.tr('market.badge_active'),
                               style: TextStyle(
                                 color: Color(0xFF10B981),
                                 fontSize: 10,
@@ -2093,7 +2088,7 @@ class _FriendlyGridCardState extends State<_FriendlyGridCard> {
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Patas Friendly',
+                                    context.tr('market.friendly_card_title'),
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: widget.isDesktop ? 16 : 14,
@@ -2112,7 +2107,7 @@ class _FriendlyGridCardState extends State<_FriendlyGridCard> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Locais próximos p/ ir junto',
+                                    context.tr('market.friendly_card_desc'),
                                     style: TextStyle(
                                       fontSize: widget.isDesktop ? 11 : 10,
                                       color: subtitleColor,
@@ -2168,8 +2163,8 @@ class _FriendlyGridCardState extends State<_FriendlyGridCard> {
                               ),
                             ),
                             const SizedBox(width: 6),
-                            const Text(
-                              'ATIVO',
+                            Text(
+                              context.tr('market.badge_active'),
                               style: TextStyle(
                                 color: Color(0xFF10B981),
                                 fontSize: 10,
@@ -2317,7 +2312,7 @@ class _LoveGridCardState extends State<_LoveGridCard>
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Patas Love',
+                                    context.tr('market.love_card_title'),
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: widget.isDesktop ? 16 : 14,
@@ -2336,7 +2331,7 @@ class _LoveGridCardState extends State<_LoveGridCard>
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Encontros & acasalamento',
+                                    context.tr('market.love_card_desc'),
                                     style: TextStyle(
                                       fontSize: widget.isDesktop ? 11 : 10,
                                       color: subtitleColor,

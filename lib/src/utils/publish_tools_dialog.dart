@@ -9,6 +9,7 @@ import 'package:patas_web_app/src/features/home/timeline/services/share_service.
 import '../../main.dart';
 import '../constants/app_colors.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class PublishToolsDialog extends StatelessWidget {
   final Post post;
@@ -75,8 +76,8 @@ class PublishToolsDialog extends StatelessWidget {
                 isDark: isDark,
                 icon: Icons.share_rounded,
                 iconColor: AppColors.patasColor,
-                title: 'Compartilhar publicação',
-                subtitle: 'Enviar para amigos ou outras redes',
+                title: context.tr('feed.share_post'),
+                subtitle: context.tr('feed.share_post_subtitle'),
                 onTap: () {
                   Navigator.pop(context);
                   ShareService().showShareModal(context, post);
@@ -91,8 +92,8 @@ class PublishToolsDialog extends StatelessWidget {
                 isDark: isDark,
                 icon: Icons.link_rounded,
                 iconColor: const Color(0xFF3B82F6),
-                title: 'Copiar link da publicação',
-                subtitle: 'Copiar link inteligente para a área de transferência',
+                title: context.tr('feed.copy_link'),
+                subtitle: context.tr('feed.copy_link_subtitle'),
                 onTap: () {
                   Navigator.pop(context);
                   ShareService().copyPostLink(context, post.id);
@@ -107,8 +108,8 @@ class PublishToolsDialog extends StatelessWidget {
                 isDark: isDark,
                 icon: Icons.info_outline_rounded,
                 iconColor: AppColors.patasColor,
-                title: 'Por que estou vendo isso?',
-                subtitle: 'Você segue este usuário ou é relevante para você',
+                title: context.tr('feed.why_seeing'),
+                subtitle: context.tr('feed.why_seeing_subtitle'),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -122,8 +123,8 @@ class PublishToolsDialog extends StatelessWidget {
                 isDark: isDark,
                 icon: Icons.flag_outlined,
                 iconColor: Colors.orange[700]!,
-                title: 'Denunciar publicação',
-                subtitle: 'Esta publicação viola diretrizes da comunidade',
+                title: context.tr('feed.report_post'),
+                subtitle: context.tr('feed.report_subtitle'),
                 onTap: () {
                   Navigator.pop(context);
                 },
@@ -138,11 +139,11 @@ class PublishToolsDialog extends StatelessWidget {
                 icon: isOwner ? Icons.delete_outline_rounded : Icons.visibility_off_outlined,
                 iconColor: Colors.red[600]!,
                 title: isOwner
-                    ? (isStory ? 'Excluir story' : 'Excluir publicação')
-                    : 'Ocultar publicação',
+                    ? (isStory ? context.tr('feed.delete_story') : context.tr('feed.delete_post'))
+                    : context.tr('feed.hide_post'),
                 subtitle: isOwner
-                    ? 'Remover permanentemente'
-                    : 'Ver menos publicações como esta',
+                    ? context.tr('feed.delete_subtitle')
+                    : context.tr('feed.hide_subtitle'),
                 onTap: () async {
                   final navigator = Navigator.of(context);
 
@@ -158,7 +159,9 @@ class PublishToolsDialog extends StatelessWidget {
                           ),
                         ),
                         title: Text(
-                          isStory ? 'Excluir Story' : 'Excluir Publicação',
+                          isStory
+                              ? context.tr('feed.delete_dialog_title_story')
+                              : context.tr('feed.delete_dialog_title_post'),
                           style: TextStyle(
                             fontSize: context.isWide ? 20 : 20.sp,
                             fontWeight: FontWeight.bold,
@@ -166,7 +169,9 @@ class PublishToolsDialog extends StatelessWidget {
                           ),
                         ),
                         content: Text(
-                          'Tem certeza que deseja excluir esta publicação permanentemente?',
+                          isStory
+                              ? context.tr('feed.delete_confirm_story')
+                              : context.tr('feed.delete_confirm'),
                           style: TextStyle(
                             fontSize: context.isWide ? 15 : 15.sp,
                             color: isDark ? Colors.white70 : Colors.black87,
@@ -176,7 +181,7 @@ class PublishToolsDialog extends StatelessWidget {
                           TextButton(
                             onPressed: () => Navigator.pop(ctx, false),
                             child: Text(
-                              'Cancelar',
+                              context.tr('common.cancel'),
                               style: TextStyle(
                                 color: isDark ? Colors.white60 : Colors.grey[600],
                                 fontSize: context.isWide ? 15 : 15.sp,
@@ -199,7 +204,7 @@ class PublishToolsDialog extends StatelessWidget {
                                 vertical: context.isWide ? 4 : 4.h,
                               ),
                               child: Text(
-                                'Excluir',
+                                context.tr('common.delete'),
                                 style: TextStyle(
                                   color: Colors.red[600],
                                   fontSize: context.isWide ? 15 : 15.sp,

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart' show kDebugMode;
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/features/encontra/services/encontra_service.dart';
 
@@ -104,7 +105,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
                 ),
                 const SizedBox(height: 24),
                 Text(
-                  'Tag não cadastrada',
+                  context.tr('encontra.tag_not_found_title'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 22,
@@ -114,7 +115,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Esta tag inteligente do Patas Encontra ainda não foi ativada por nenhum tutor.',
+                  context.tr('encontra.tag_not_found_desc'),
                   style: TextStyle(
                     fontSize: 14,
                     color: isDark ? Colors.white60 : Colors.black54,
@@ -184,7 +185,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
               ),
               const SizedBox(width: 8),
               Text(
-                'Simular: ${_isLostMode ? "Modo Perdido" : "Modo Normal"}',
+                context.tr('encontra.simulate_label', {'mode': _isLostMode ? context.tr('encontra.lost_mode') : 'Normal'}),
                 style: TextStyle(
                   fontSize: 12,
                   fontWeight: FontWeight.bold,
@@ -254,17 +255,17 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
                 color: Colors.redAccent,
                 borderRadius: BorderRadius.circular(20),
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(
+                  const Icon(
                     Icons.warning_amber_rounded,
                     color: Colors.white,
                     size: 18,
                   ),
-                  SizedBox(width: 8),
+                  const SizedBox(width: 8),
                   Text(
-                    'PET PERDIDO',
+                    context.tr('encontra.pet_lost_badge'),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -340,7 +341,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
 
           // Raça e Espécie
           Text(
-            petDetail.isEmpty ? 'Animal de estimação' : petDetail,
+            petDetail.isEmpty ? context.tr('encontra.default_pet_name') : petDetail,
             style: TextStyle(
               fontSize: 14,
               color: isDark ? Colors.white60 : Colors.black54,
@@ -357,10 +358,10 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             context,
             isDark,
             icon: Icons.health_and_safety_outlined,
-            title: 'Cuidados Médicos',
+            title: context.tr('encontra.medical_care_title'),
             content: _isLostMode
-                ? 'Se você encontrar este pet, por favor, tente mantê-lo calmo e compartilhe sua localização imediatamente.'
-                : 'Animal saudável e protegido pela comunidade Patas.',
+                ? context.tr('encontra.medical_care_lost')
+                : context.tr('encontra.medical_care_normal'),
             iconColor: Colors.teal,
           ),
           const SizedBox(height: 16),
@@ -368,10 +369,10 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             context,
             isDark,
             icon: Icons.info_outline_rounded,
-            title: 'Comportamento',
+            title: context.tr('encontra.behavior_title'),
             content: _isLostMode
-                ? 'Pode estar assustado devido à fuga. Aproxime-se com cuidado, de preferência com tons de voz suaves.'
-                : 'Super amigável e dócil com as pessoas.',
+                ? context.tr('encontra.behavior_lost')
+                : context.tr('encontra.behavior_normal'),
             iconColor: Colors.orange,
           ),
         ],
@@ -454,7 +455,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
         children: [
           if (_isLostMode) ...[
             Text(
-              'Aviso Importante',
+              context.tr('encontra.important_notice'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
@@ -467,7 +468,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              'O tutor de $petName já foi notificado sobre este escaneamento. Para ajudá-lo a encontrar seu amigo de forma mais rápida e precisa, você pode compartilhar sua localização atual no botão abaixo:',
+              context.tr('encontra.notice_lost_desc', {'name': petName}),
               style: TextStyle(
                 fontSize: 13,
                 color: isDark ? Colors.white60 : Colors.black54,
@@ -481,8 +482,8 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             TextField(
               controller: _finderNameController,
               decoration: InputDecoration(
-                labelText: 'Seu Nome (Opcional)',
-                hintText: 'Como o tutor pode te chamar?',
+                labelText: context.tr('encontra.finder_name_label'),
+                hintText: context.tr('encontra.finder_name_hint'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -495,9 +496,9 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
               controller: _messageController,
               maxLines: 2,
               decoration: InputDecoration(
-                labelText: 'Mensagem Adicional (Opcional)',
+                labelText: context.tr('encontra.finder_msg_label'),
                 hintText:
-                    'Ex: "Está sob a sombra de uma árvore ao lado do parquinho."',
+                    context.tr('encontra.finder_msg_hint'),
                 border: OutlineInputBorder(
                   borderRadius: BorderRadius.circular(12),
                 ),
@@ -539,10 +540,10 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
                     ),
               label: Text(
                 _isSendingLocation
-                    ? 'Capturando GPS...'
+                    ? context.tr('encontra.sending_gps')
                     : (_locationSent
-                          ? 'Localização Enviada!'
-                          : 'Enviar Minha Localização Atual'),
+                          ? context.tr('encontra.location_sent')
+                          : context.tr('encontra.send_location_btn')),
                 style: const TextStyle(
                   fontWeight: FontWeight.bold,
                   fontSize: 15,
@@ -551,7 +552,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             ),
           ] else ...[
             Text(
-              'Tudo Certo!',
+              context.tr('encontra.all_good_title'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
@@ -564,7 +565,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
             ),
             const SizedBox(height: 8),
             Text(
-              '$petName está seguro no momento e não está perdido. Obrigado por se preocupar!',
+              context.tr('encontra.all_good_desc', {'name': petName}),
               style: TextStyle(
                 fontSize: 13,
                 color: isDark ? Colors.white60 : Colors.black54,
@@ -586,7 +587,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
                 ),
               ),
               icon: const Icon(Icons.language),
-              label: const Text('Conhecer o Patas'),
+              label: Text(context.tr('encontra.meet_patas_btn')),
             ),
           ],
         ],
@@ -605,7 +606,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       // 1. Verifica se o serviço de localização está habilitado
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        throw 'O serviço de localização (GPS) está desativado. Ative-o para enviar.';
+        throw context.tr('encontra.gps_disabled_err');
       }
 
       // 2. Verifica a permissão de localização
@@ -613,12 +614,12 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw 'Permissão de localização negada. Ative o acesso nas configurações do navegador ou celular.';
+          throw context.tr('encontra.gps_denied_err');
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw 'Permissão de localização negada permanentemente nas configurações.';
+        throw context.tr('encontra.gps_denied_forever_err');
       }
 
       // 3. Captura a localização atual
@@ -649,7 +650,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       debugPrint('📤 Resultado do saveSighting: $success');
 
       if (!success) {
-        throw 'Erro ao registrar avistamento no banco de dados. Tente novamente.';
+        throw context.tr('encontra.sighting_save_err');
       }
 
       if (mounted) {
@@ -661,13 +662,13 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
             content: Row(
-              children: const [
-                Icon(Icons.check_circle, color: Colors.white),
-                SizedBox(width: 12),
+              children: [
+                const Icon(Icons.check_circle, color: Colors.white),
+                const SizedBox(width: 12),
                 Expanded(
                   child: Text(
-                    'Localização GPS enviada com sucesso! O tutor foi notificado.',
-                    style: TextStyle(fontWeight: FontWeight.bold),
+                    context.tr('encontra.location_sent_success'),
+                    style: const TextStyle(fontWeight: FontWeight.bold),
                   ),
                 ),
               ],
@@ -690,8 +691,8 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
         showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
-            title: const Text(
-              'Localização Necessária',
+            title: Text(
+              context.tr('encontra.location_required_title'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
@@ -735,7 +736,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
         ),
         const SizedBox(height: 4),
         Text(
-          'Tag de Identificação Comunitária Inteligente',
+          context.tr('encontra.tag_tagline'),
           style: TextStyle(
             fontSize: 10,
             color: isDark ? Colors.white30 : Colors.black38,

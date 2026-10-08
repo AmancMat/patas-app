@@ -22,6 +22,7 @@ import 'package:patas_web_app/src/features/video/services/video_compression_serv
 import 'package:patas_web_app/src/features/video/screens/camera_recording_screen.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/common_widgets/patas_button.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class ToPublishPage extends StatefulWidget {
   const ToPublishPage({super.key});
@@ -102,13 +103,13 @@ class _ToPublishPageState extends State<ToPublishPage> {
       barrierDismissible: false,
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.timer_outlined, color: AppColors.patasColor, size: 26),
-            SizedBox(width: 8),
+            const Icon(Icons.timer_outlined, color: AppColors.patasColor, size: 26),
+            const SizedBox(width: 8),
             Text(
-              'Vídeo Longo',
-              style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
+              context.tr('feed.video_limit_title'),
+              style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
             ),
           ],
         ),
@@ -117,12 +118,18 @@ class _ToPublishPageState extends State<ToPublishPage> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Este vídeo tem $durationSeconds segundos. O limite máximo para publicações no feed é de $maxLimitSeconds segundos.',
+              context.tr(
+                'feed.video_limit_desc',
+                {'seconds': '$durationSeconds', 'max': '$maxLimitSeconds'},
+              ),
               style: const TextStyle(fontSize: 14, height: 1.4),
             ),
             const SizedBox(height: 12),
             Text(
-              'Se continuar, o vídeo será publicado considerando os primeiros $maxLimitSeconds segundos.',
+              context.tr(
+                'feed.video_limit_continue',
+                {'max': '$maxLimitSeconds'},
+              ),
               style: const TextStyle(fontSize: 13, color: Colors.grey, height: 1.4),
             ),
           ],
@@ -130,7 +137,10 @@ class _ToPublishPageState extends State<ToPublishPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+            child: Text(
+              context.tr('common.cancel'),
+              style: const TextStyle(color: Colors.grey),
+            ),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -139,7 +149,12 @@ class _ToPublishPageState extends State<ToPublishPage> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: Text('Continuar (${maxLimitSeconds}s)'),
+            child: Text(
+              context.tr(
+                'feed.video_limit_btn',
+                {'max': '$maxLimitSeconds'},
+              ),
+            ),
           ),
         ],
       ),
@@ -160,8 +175,9 @@ class _ToPublishPageState extends State<ToPublishPage> {
 
     if (_contentController.text.isEmpty && selectedImagePath.isEmpty && selectedVideoPath.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text('Adicione uma imagem, vídeo ou texto para publicar.')),
+        SnackBar(
+          content: Text(context.tr('feed.empty_post_validation')),
+        ),
       );
       return;
     }
@@ -171,7 +187,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
 
     setState(() {
       _isPublishing = true;
-      _publishingStatus = 'Preparando...';
+      _publishingStatus = context.tr('feed.status_preparing');
     });
 
     // Pequeno delay para garantir que o overlay apareça
@@ -182,7 +198,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
 
       if (isVideo && selectedVideoPath.isNotEmpty) {
         // Publicar post com vídeo
-        setState(() => _publishingStatus = 'Enviando vídeo...');
+        setState(() => _publishingStatus = context.tr('feed.status_uploading_video'));
 
         createdPost = await _postService.createPostWithVideo(
           videoFile: kIsWeb ? File(_pickedVideoXFile!.path) : File(selectedVideoPath),
@@ -196,8 +212,10 @@ class _ToPublishPageState extends State<ToPublishPage> {
           profileType: _selectedProfile?.type ?? 'pet',
           onUploadProgress: (progress) {
             if (mounted) {
-              setState(() => _publishingStatus =
-                  'Enviando vídeo... ${(progress * 100).toInt()}%');
+              setState(() => _publishingStatus = context.tr(
+                    'feed.status_uploading_video_progress',
+                    {'progress': '${(progress * 100).toInt()}'},
+                  ));
             }
           },
         );
@@ -205,13 +223,13 @@ class _ToPublishPageState extends State<ToPublishPage> {
         // Publicar post com imagem
         String? imageUrl;
         if (selectedImagePath.isNotEmpty) {
-          setState(() => _publishingStatus = 'Enviando imagem...');
+          setState(() => _publishingStatus = context.tr('feed.status_uploading_image'));
           imageUrl = await _postService.uploadPostImage(
             File(selectedImagePath),
           );
         }
 
-        setState(() => _publishingStatus = 'Finalizando publicação...');
+        setState(() => _publishingStatus = context.tr('feed.status_finishing'));
 
         final post = Post(
           id: '', // Supabase gera
@@ -252,7 +270,9 @@ class _ToPublishPageState extends State<ToPublishPage> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao publicar: $e')),
+          SnackBar(
+            content: Text(context.tr('feed.publish_error', {'error': '$e'})),
+          ),
         );
       }
     } finally {
@@ -406,7 +426,13 @@ class _ToPublishPageState extends State<ToPublishPage> {
                     const SizedBox(width: 5),
                     Text(
                       _isDurationCapped
-                          ? '${_videoDurationSeconds ?? 60}s (máx. 60s)'
+                          ? context.tr(
+                              'feed.video_duration_capped',
+                              {
+                                'seconds': '${_videoDurationSeconds ?? 60}',
+                                'max': '60',
+                              },
+                            )
                           : '${_videoDurationSeconds ?? 0}s',
                       style: const TextStyle(
                         color: Colors.white,
@@ -438,14 +464,14 @@ class _ToPublishPageState extends State<ToPublishPage> {
                       width: 0.8,
                     ),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.cached_rounded, color: Colors.white, size: 14),
-                      SizedBox(width: 4),
+                      const Icon(Icons.cached_rounded, color: Colors.white, size: 14),
+                      const SizedBox(width: 4),
                       Text(
-                        'Trocar',
-                        style: TextStyle(
+                        context.tr('feed.change_media'),
+                        style: const TextStyle(
                           color: Colors.white,
                           fontSize: 12,
                           fontWeight: FontWeight.w600,
@@ -532,7 +558,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
                       const SizedBox(width: 7),
                       Flexible(
                         child: Text(
-                          _selectedProfile?.name ?? 'Selecionar Perfil',
+                          _selectedProfile?.name ?? context.tr('feed.select_profile'),
                           overflow: TextOverflow.ellipsis,
                           style: TextStyle(
                             fontSize: 13,
@@ -554,7 +580,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
             ),
           ),
           PatasButton(
-            text: 'Publicar',
+            text: context.tr('feed.publish_btn'),
             onPressed: _handlePublish,
             isLoading: _isPublishing,
             variant: PatasButtonVariant.primary,
@@ -594,7 +620,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
           // Botão Galeria de Fotos
           _buildDockIconButton(
             icon: Icons.photo_library_outlined,
-            label: 'Galeria',
+            label: context.tr('story.gallery'),
             onTap: selectImageFromGallery,
             thmode: thmode,
           ),
@@ -603,7 +629,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
           // Botão Câmera
           _buildDockIconButton(
             icon: Icons.camera_alt_outlined,
-            label: 'Câmera',
+            label: context.tr('story.camera'),
             onTap: selectImageFromCamera,
             thmode: thmode,
           ),
@@ -612,7 +638,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
           // Botão Vídeo
           _buildDockIconButton(
             icon: Icons.videocam_outlined,
-            label: 'Vídeo',
+            label: context.tr('story.video'),
             onTap: _showVideoSourceDialog,
             thmode: thmode,
           ),
@@ -641,7 +667,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
                   ),
                   const SizedBox(width: 4),
                   Text(
-                    isVideo ? 'Vídeo' : 'Foto',
+                    isVideo ? context.tr('story.video') : context.tr('feed.photo'),
                     style: const TextStyle(
                       fontSize: 12,
                       fontWeight: FontWeight.w600,
@@ -730,18 +756,20 @@ class _ToPublishPageState extends State<ToPublishPage> {
                 ),
               ),
             ),
-          Container(
-            width: double.infinity,
-            height: double.infinity,
-            color: Colors.transparent,
-            child: Center(
-              child: ConstrainedBox(
-                constraints: BoxConstraints(
-                  maxWidth: isWide ? 750 : double.infinity,
-                  maxHeight: isWide ? 850 : double.infinity,
-                ),
-                child: Container(
-                  margin: isWide ? const EdgeInsets.symmetric(vertical: 24, horizontal: 20) : EdgeInsets.zero,
+          Positioned.fill(
+            child: GestureDetector(
+              behavior: isWide ? HitTestBehavior.opaque : HitTestBehavior.deferToChild,
+              onTap: isWide ? () => Navigator.pop(context) : null,
+              child: Center(
+                child: GestureDetector(
+                  onTap: () {},
+                  child: ConstrainedBox(
+                    constraints: BoxConstraints(
+                      maxWidth: isWide ? 750 : double.infinity,
+                      maxHeight: isWide ? 850 : double.infinity,
+                    ),
+                    child: Container(
+                      margin: isWide ? const EdgeInsets.symmetric(vertical: 24, horizontal: 20) : EdgeInsets.zero,
                   decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -806,7 +834,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
                                         height: 1.4,
                                       ),
                                       decoration: InputDecoration(
-                                        hintText: "No que seu pet está pensando agora?",
+                                        hintText: context.tr('feed.quick_post_hint'),
                                         hintStyle: TextStyle(
                                           fontSize: 16,
                                           color: (thmode.darkMode
@@ -842,6 +870,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
               ),
             ),
           ),
+        ),
+      ),
           
           // Overlay de publicação (Processing)
           if (_isPublishing) _buildPublishingOverlay(),
@@ -876,9 +906,9 @@ class _ToPublishPageState extends State<ToPublishPage> {
                   ),
                 ),
                 const SizedBox(height: 8),
-                const Text(
-                  'Estamos preparando sua publicação...',
-                  style: TextStyle(
+                Text(
+                  context.tr('feed.preparing_post_desc'),
+                  style: const TextStyle(
                     color: Colors.white70,
                     fontSize: 14,
                     decoration: TextDecoration.none,
@@ -961,7 +991,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Adicionar Foto',
+                context.tr('feed.add_photo_title'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -972,8 +1002,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
               const SizedBox(height: 20),
               _buildSheetOption(
                 icon: Icons.photo_library_outlined,
-                title: 'Galeria',
-                subtitle: 'Escolha uma foto da galeria do seu aparelho',
+                title: context.tr('story.gallery'),
+                subtitle: context.tr('feed.add_photo_gallery_sub'),
                 onTap: () async {
                   Navigator.pop(ctx);
                   await selectImageFromGallery();
@@ -983,8 +1013,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
               const SizedBox(height: 12),
               _buildSheetOption(
                 icon: Icons.camera_alt_outlined,
-                title: 'Câmera',
-                subtitle: 'Tire uma foto nova agora com a câmera',
+                title: context.tr('story.camera'),
+                subtitle: context.tr('feed.add_photo_camera_sub'),
                 onTap: () async {
                   Navigator.pop(ctx);
                   await selectImageFromCamera();
@@ -1027,7 +1057,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Adicionar Vídeo',
+                context.tr('feed.add_video_title'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -1038,8 +1068,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
               const SizedBox(height: 20),
               _buildSheetOption(
                 icon: Icons.video_library_outlined,
-                title: 'Escolher da Galeria',
-                subtitle: 'Selecione um vídeo já gravado (máx. 60s)',
+                title: context.tr('feed.add_video_gallery_title'),
+                subtitle: context.tr('feed.add_video_gallery_sub'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _handleVideoSelection();
@@ -1049,8 +1079,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
               const SizedBox(height: 12),
               _buildSheetOption(
                 icon: Icons.videocam_outlined,
-                title: 'Gravar com a Câmera',
-                subtitle: 'Grave um novo vídeo agora com edição rápida',
+                title: context.tr('feed.add_video_camera_title'),
+                subtitle: context.tr('feed.add_video_camera_sub'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _handleCameraRecording();
@@ -1160,7 +1190,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(validation.errorMessage ?? 'Vídeo inválido'),
+              content: Text(validation.errorMessage ?? context.tr('feed.invalid_video')),
               backgroundColor: Colors.red,
             ),
           );
@@ -1201,14 +1231,19 @@ class _ToPublishPageState extends State<ToPublishPage> {
                   const SizedBox(height: 16),
                   Text(
                     _videoCompressionProgress > 0
-                        ? 'Otimizando e ajustando vídeo... ${(_videoCompressionProgress * 100).toInt()}%'
-                        : 'Otimizando e ajustando vídeo...',
+                        ? context.tr(
+                            'feed.optimizing_video_progress',
+                            {
+                              'progress': '${(_videoCompressionProgress * 100).toInt()}',
+                            },
+                          )
+                        : context.tr('feed.optimizing_video'),
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Compactando para envio rápido e sem falhas.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  Text(
+                    context.tr('feed.compressing_video_desc'),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
@@ -1254,8 +1289,11 @@ class _ToPublishPageState extends State<ToPublishPage> {
             SnackBar(
               content: Text(
                 _isDurationCapped
-                    ? 'Vídeo cortado para 60s e otimizado com sucesso!'
-                    : 'Vídeo otimizado com sucesso! Duração: ${targetDuration}s',
+                    ? context.tr('feed.video_cropped_success')
+                    : context.tr(
+                        'feed.video_optimized_success',
+                        {'duration': '$targetDuration'},
+                      ),
               ),
               backgroundColor: Colors.green,
             ),
@@ -1265,7 +1303,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(result.errorMessage ?? 'Erro ao otimizar vídeo'),
+              content: Text(result.errorMessage ?? context.tr('feed.video_optimize_error')),
               backgroundColor: Colors.red,
             ),
           );
@@ -1279,7 +1317,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erro inesperado: $e'),
+            content: Text(context.tr('feed.unexpected_error', {'error': '$e'})),
             backgroundColor: Colors.red,
           ),
         );
@@ -1316,7 +1354,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
             SnackBar(
-              content: Text(validation.errorMessage ?? 'Vídeo inválido'),
+              content: Text(validation.errorMessage ?? context.tr('feed.invalid_video')),
               backgroundColor: Colors.red,
             ),
           );
@@ -1355,14 +1393,19 @@ class _ToPublishPageState extends State<ToPublishPage> {
                   const SizedBox(height: 16),
                   Text(
                     _videoCompressionProgress > 0
-                        ? 'Otimizando e ajustando vídeo... ${(_videoCompressionProgress * 100).toInt()}%'
-                        : 'Otimizando e ajustando vídeo...',
+                        ? context.tr(
+                            'feed.optimizing_video_progress',
+                            {
+                              'progress': '${(_videoCompressionProgress * 100).toInt()}',
+                            },
+                          )
+                        : context.tr('feed.optimizing_video'),
                     style: const TextStyle(fontSize: 15, fontWeight: FontWeight.w600),
                   ),
                   const SizedBox(height: 8),
-                  const Text(
-                    'Compactando para envio rápido e sem falhas.',
-                    style: TextStyle(fontSize: 12, color: Colors.grey),
+                  Text(
+                    context.tr('feed.compressing_video_desc'),
+                    style: const TextStyle(fontSize: 12, color: Colors.grey),
                   ),
                 ],
               ),
@@ -1406,8 +1449,8 @@ class _ToPublishPageState extends State<ToPublishPage> {
             SnackBar(
               content: Text(
                 _isDurationCapped
-                    ? 'Vídeo cortado para 60s e otimizado com sucesso!'
-                    : 'Vídeo gravado e otimizado com sucesso!',
+                    ? context.tr('feed.video_cropped_success')
+                    : context.tr('feed.video_recorded_success'),
               ),
               backgroundColor: Colors.green,
             ),
@@ -1422,7 +1465,7 @@ class _ToPublishPageState extends State<ToPublishPage> {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erro inesperado: $e'),
+            content: Text(context.tr('feed.unexpected_error', {'error': '$e'})),
             backgroundColor: Colors.red,
           ),
         );

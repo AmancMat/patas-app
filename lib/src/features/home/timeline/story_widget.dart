@@ -11,6 +11,7 @@ import '../../../../app.dart';
 import 'package:patas_web_app/src/providers/connectivity_provider.dart';
 import 'full_screen_story.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class StoryWidget extends StatelessWidget {
   final List<Story> stories;
@@ -46,7 +47,7 @@ class StoryWidget extends StatelessWidget {
       children: [
         Semantics(
           button: true,
-          label: 'Criar novo Story',
+          label: context.tr('story.create_semantic'),
           child: GestureDetector(
             onTap: () async {
             final bool? result = await showGeneralDialog<bool>(
@@ -93,16 +94,16 @@ class StoryWidget extends StatelessWidget {
                   colors: AppColors.patasGradient,
                 ),
                 borderRadius: const BorderRadius.all(Radius.circular(10))),
-            child: const Column(
+            child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   '+',
                   style: TextStyle(fontSize: 40, color: AppColors.lightBG),
                 ),
                 Text(
-                  'Story',
-                  style: TextStyle(fontSize: 18, color: AppColors.lightBG),
+                  context.tr('story.badge'),
+                  style: const TextStyle(fontSize: 18, color: AppColors.lightBG),
                 ),
               ],
             ),
@@ -127,8 +128,8 @@ class StoryWidget extends StatelessWidget {
                                       errorMessage!.contains('Network is unreachable') ||
                                       errorMessage!.contains('Failed host lookup');
                                   final String storyErrorText = isRealOffline
-                                      ? 'Sem conexão com a internet'
-                                      : 'Instabilidade no servidor ao carregar stories';
+                                      ? context.tr('feed.network_error')
+                                      : context.tr('story.server_error');
 
                                   return Column(
                                     mainAxisSize: MainAxisSize.min,
@@ -164,7 +165,7 @@ class StoryWidget extends StatelessWidget {
                                                 ),
                                                 const SizedBox(width: 4),
                                                 Text(
-                                                  'Tentar novamente',
+                                                  context.tr('common.try_again'),
                                                   style: TextStyle(
                                                     fontSize: 11,
                                                     fontWeight: FontWeight.w500,
@@ -183,7 +184,7 @@ class StoryWidget extends StatelessWidget {
                                 },
                               )
                             : Text(
-                                'Stories das pessoas que você segue aparecerão aqui',
+                                context.tr('story.empty'),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                   fontSize: 12,

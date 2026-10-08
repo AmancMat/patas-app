@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
 import 'package:patas_web_app/src/providers/active_account_provider.dart';
@@ -49,13 +50,13 @@ class ActivePetHeaderChip extends StatelessWidget {
     } else if (activeAccount?.type == AccountType.user) {
       badgeColor = AppColors.patasColor;
       defaultIcon = Icons.person_rounded;
-      displayName = activeAccount?.name ?? 'Perfil Pessoal';
+      displayName = activeAccount?.name ?? context.tr('nav.personal_profile');
       photoUrl = activeAccount?.photoUrl;
     } else {
       // Caso padrão: Pet ativo (AccountType.pet ou fallback)
       badgeColor = AppColors.patasColor;
       defaultIcon = Icons.pets_rounded;
-      displayName = activePet?.name ?? activeAccount?.name ?? 'Meu Pet';
+      displayName = activePet?.name ?? activeAccount?.name ?? context.tr('nav.my_pet');
       photoUrl = activePet?.photoUrl ?? activeAccount?.photoUrl;
     }
 

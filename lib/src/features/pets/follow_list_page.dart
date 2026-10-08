@@ -9,6 +9,8 @@ import '../pets/models/follow_item_model.dart';
 import '../pets/services/follow_service.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 class FollowListPage extends StatefulWidget {
   final String? petId; // Para buscar seguidores deste Pet
   final String? userId; // Para buscar quem este Usuário segue
@@ -106,9 +108,9 @@ class _FollowListPageState extends State<FollowListPage> {
             ),
             onPressed: () => Navigator.pop(context),
           ),
-          title: const Text(
-            'Conexões',
-            style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
+          title: Text(
+            context.tr('profile.connections'),
+            style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
           ),
           backgroundColor: isDark ? const Color(0xFF1E1E1E) : Colors.white,
           foregroundColor: isDark ? Colors.white : AppColors.darkBG,
@@ -121,16 +123,16 @@ class _FollowListPageState extends State<FollowListPage> {
               fontWeight: FontWeight.bold,
               fontSize: 15,
             ),
-            tabs: const [
-              Tab(text: 'Seguidores'),
-              Tab(text: 'Seguindo'),
+            tabs: [
+              Tab(text: context.tr('profile.followers')),
+              Tab(text: context.tr('profile.following')),
             ],
           ),
         ),
         body: TabBarView(
           children: [
-            _buildList(_followersFuture, isDark, 'Nenhum seguidor ainda.'),
-            _buildList(_followingFuture, isDark, 'Não segue nenhum perfil ainda.'),
+            _buildList(_followersFuture, isDark, context.tr('profile.no_followers_yet')),
+            _buildList(_followingFuture, isDark, context.tr('profile.not_following_yet')),
           ],
         ),
       ),
@@ -154,7 +156,7 @@ class _FollowListPageState extends State<FollowListPage> {
         if (snapshot.hasError) {
           return Center(
             child: Text(
-              'Erro ao carregar dados.',
+              context.tr('profile.error_loading_connections'),
               style: TextStyle(color: isDark ? Colors.white70 : Colors.black54),
             ),
           );
@@ -206,22 +208,22 @@ class _FollowListPageState extends State<FollowListPage> {
             switch (item.type) {
               case FollowItemType.ong:
                 badgeColor = const Color(0xFF2E7D32);
-                badgeText = 'ONG';
+                badgeText = context.tr('profile.badge_ong');
                 fallbackIcon = Icons.volunteer_activism;
                 break;
               case FollowItemType.corp:
                 badgeColor = const Color(0xFF1976D2);
-                badgeText = 'EMPRESA';
+                badgeText = context.tr('profile.badge_corp');
                 fallbackIcon = Icons.business;
                 break;
               case FollowItemType.pet:
                 badgeColor = AppColors.patasColor;
-                badgeText = 'PET';
+                badgeText = context.tr('profile.badge_pet');
                 fallbackIcon = Icons.pets;
                 break;
               case FollowItemType.tutor:
                 badgeColor = const Color(0xFF7B1FA2);
-                badgeText = 'TUTOR';
+                badgeText = context.tr('profile.badge_tutor');
                 fallbackIcon = Icons.person;
                 break;
             }

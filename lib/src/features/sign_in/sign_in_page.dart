@@ -28,6 +28,7 @@ import '../auth/recovery_account.dart';
 import '../pets/services/pet_service.dart';
 import '../auth/services/auth_services.dart';
 import '../settings/widgets/account_deletion_dialog.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class SignInPage extends StatefulWidget {
   const SignInPage({super.key});
@@ -56,9 +57,11 @@ class _SignInPageState extends State<SignInPage> {
   }
 
   void _closeLoadingDialog() {
-    if (_isLoadingDialogShowing && mounted) {
+    if (_isLoadingDialogShowing) {
       _isLoadingDialogShowing = false;
-      Navigator.of(context, rootNavigator: true).pop();
+      if (mounted && Navigator.of(context, rootNavigator: true).canPop()) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     }
   }
 
@@ -105,7 +108,9 @@ class _SignInPageState extends State<SignInPage> {
         context: context,
         barrierDismissible: false,
         builder: (context) => const CustomCircularProgressIndicator(),
-      );
+      ).then((_) {
+        _isLoadingDialogShowing = false;
+      });
     }
     if (_controller.state is SignInStateSuccess) {
       _closeLoadingDialog();
@@ -127,7 +132,7 @@ class _SignInPageState extends State<SignInPage> {
       customModalBottomSheet(
         context,
         content: AuthErrorTranslator.translate(error.message),
-        buttonText: "Tentar novamente",
+        buttonText: context.tr('common.try_again'),
       );
     }
   }
@@ -320,9 +325,9 @@ class _SignInPageState extends State<SignInPage> {
                                     ],
                                   ),
                                   const SizedBox(height: 20),
-                                  const Text(
-                                    'Bem-vindo de volta!',
-                                    style: TextStyle(
+                                  Text(
+                                    context.tr('auth.sign_in_title'),
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Fredoka',
                                       fontWeight: FontWeight.bold,
@@ -331,7 +336,7 @@ class _SignInPageState extends State<SignInPage> {
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'Entre na sua conta Patas',
+                                    context.tr('auth.sign_in_subtitle'),
                                     style: TextStyle(
                                       color: Colors.white.withValues(alpha: 0.65),
                                       fontFamily: 'Roboto_flex',
@@ -346,8 +351,8 @@ class _SignInPageState extends State<SignInPage> {
                                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                                     prefixIcon: const Icon(Icons.email_outlined,
                                         color: AppColors.patasColor, size: 20),
-                                    labelText: 'Email',
-                                    hintText: 'Adicione seu email',
+                                    labelText: context.tr('auth.email'),
+                                    hintText: context.tr('auth.email_hint'),
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
                                     validator: Validator.validateEmail,
@@ -360,8 +365,8 @@ class _SignInPageState extends State<SignInPage> {
                                     padding: const EdgeInsets.symmetric(vertical: 8.0),
                                     prefixIcon: const Icon(Icons.lock_outline,
                                         color: AppColors.patasColor, size: 20),
-                                    labelText: 'Senha',
-                                    hintText: '*********',
+                                    labelText: context.tr('auth.password'),
+                                    hintText: context.tr('auth.password_hint'),
                                     textInputAction: TextInputAction.done,
                                     onFieldSubmitted: (_) => _doSignIn(),
                                     validator: Validator.validatePassword,
@@ -396,7 +401,7 @@ class _SignInPageState extends State<SignInPage> {
                                               const SizedBox(width: 4),
                                               Flexible(
                                                 child: Text(
-                                                  'Lembrar-me',
+                                                  context.tr('auth.remember_me'),
                                                   style: TextStyle(
                                                       color: Colors.white
                                                           .withValues(alpha: 0.75),
@@ -420,9 +425,9 @@ class _SignInPageState extends State<SignInPage> {
                                           tapTargetSize:
                                               MaterialTapTargetSize.shrinkWrap,
                                         ),
-                                        child: const Text(
-                                          'Esqueceu a senha?',
-                                          style: TextStyle(
+                                        child: Text(
+                                          context.tr('auth.forgot_password'),
+                                          style: const TextStyle(
                                               color: AppColors.patasColor,
                                               fontSize: 13),
                                         ),
@@ -446,9 +451,9 @@ class _SignInPageState extends State<SignInPage> {
                                                   BorderRadius.circular(32)),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Entrar',
-                                        style: TextStyle(
+                                      child: Text(
+                                        context.tr('auth.login'),
+                                        style: const TextStyle(
                                           color: Colors.white,
                                           fontFamily: 'Fredoka',
                                           fontSize: 20,
@@ -465,7 +470,7 @@ class _SignInPageState extends State<SignInPage> {
                                     Padding(
                                       padding:
                                           const EdgeInsets.symmetric(horizontal: 12),
-                                      child: Text('ou entre com',
+                                      child: Text(context.tr('auth.or_continue_with'),
                                           style: TextStyle(
                                               color: Colors.white.withValues(alpha: 0.55),
                                               fontSize: 13)),
@@ -482,21 +487,21 @@ class _SignInPageState extends State<SignInPage> {
                                     children: [
                                         _buildSocialButton(
                                           asset: 'assets/face_icon.svg',
-                                          semanticLabel: 'Entrar com Facebook',
+                                          semanticLabel: context.tr('auth.facebook_login'),
                                           onPressed: () =>
                                               _controller.signInWithFacebook(),
                                         ),
                                         const SizedBox(width: 16),
                                         _buildSocialButton(
                                           asset: 'assets/apple_logo.svg',
-                                          semanticLabel: 'Entrar com Apple',
+                                          semanticLabel: context.tr('auth.apple_login'),
                                           showSoonBadge: true,
                                           onPressed: () {},
                                         ),
                                         const SizedBox(width: 16),
                                         _buildSocialButton(
                                           asset: 'assets/google_icon.svg',
-                                          semanticLabel: 'Entrar com Google',
+                                          semanticLabel: context.tr('auth.google_login'),
                                           onPressed: () =>
                                               _controller.signInWithGoogle(),
                                         ),
@@ -509,13 +514,13 @@ class _SignInPageState extends State<SignInPage> {
                                         context, NamedRoute.signUp),
                                     children: [
                                       Text(
-                                        'Ainda não tem uma conta? ',
+                                        context.tr('auth.no_account'),
                                         style: AppTextStyles.smallText.copyWith(
                                             color: Colors.white.withValues(alpha: 0.7)),
                                       ),
-                                      const Text(
-                                        'Criar conta',
-                                        style: TextStyle(
+                                      Text(
+                                        context.tr('auth.sign_up'),
+                                        style: const TextStyle(
                                           fontFamily: 'Fredoka',
                                           color: AppColors.patasColor,
                                           fontWeight: FontWeight.bold,
@@ -537,9 +542,9 @@ class _SignInPageState extends State<SignInPage> {
                                       size: 16,
                                       color: AppColors.patasColor,
                                     ),
-                                    label: const Text(
-                                      'É Médico Veterinário? Acesse aqui',
-                                      style: TextStyle(
+                                    label: Text(
+                                      context.tr('auth.vet_shortcut'),
+                                      style: const TextStyle(
                                         fontFamily: 'Fredoka',
                                         fontSize: 13,
                                         fontWeight: FontWeight.bold,

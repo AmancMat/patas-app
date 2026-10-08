@@ -6,6 +6,7 @@ import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/acolhe/models/shelter_event_model.dart';
 import 'package:patas_web_app/src/features/acolhe/services/shelter_service.dart';
 import 'package:patas_web_app/src/features/acolhe/screens/ong_events_dashboard_screen.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class EventsFeedHighlightWidget extends StatefulWidget {
   const EventsFeedHighlightWidget({super.key});
@@ -77,7 +78,7 @@ class _EventsFeedHighlightWidgetState extends State<EventsFeedHighlightWidget> {
     final dateFormat = DateFormat('dd/MM');
     final timeFormat = DateFormat('HH:mm');
     final dateStr =
-        '${dateFormat.format(event.startDate)} às ${timeFormat.format(event.startDate)}';
+        '${dateFormat.format(event.startDate)} ${context.tr('feed.event_at')} ${timeFormat.format(event.startDate)}';
 
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -117,7 +118,7 @@ class _EventsFeedHighlightWidgetState extends State<EventsFeedHighlightWidget> {
                 ),
                 const SizedBox(width: 8),
                 Text(
-                  'FEIRA CONFIRMADA',
+                  context.tr('feed.confirmed_fair'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 11,
@@ -141,7 +142,7 @@ class _EventsFeedHighlightWidgetState extends State<EventsFeedHighlightWidget> {
                   child: Row(
                     children: [
                       Text(
-                        'Ver todas (${_upcomingEvents.length})',
+                        context.tr('feed.view_all_events', {'count': '${_upcomingEvents.length}'}),
                         style: const TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.w600,
@@ -247,8 +248,8 @@ class _EventsFeedHighlightWidgetState extends State<EventsFeedHighlightWidget> {
                         ),
                         label: Text(
                           event.isUserAttending
-                              ? 'Presença Confirmada 🎉'
-                              : 'Vou Comparecer!',
+                              ? context.tr('feed.presence_confirmed')
+                              : context.tr('feed.will_attend'),
                           style: const TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 12,
@@ -279,7 +280,7 @@ class _EventsFeedHighlightWidgetState extends State<EventsFeedHighlightWidget> {
                         borderRadius: BorderRadius.circular(10),
                       ),
                       child: Text(
-                        '${event.attendeesCount} confirmados',
+                        context.tr('feed.confirmed_attendees', {'count': '${event.attendeesCount}'}),
                         style: TextStyle(
                           fontSize: 11,
                           fontWeight: FontWeight.bold,

@@ -11,6 +11,7 @@ import '../../../../main.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 
 class CreateOngProfilePage extends StatefulWidget {
@@ -94,7 +95,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Galeria'),
+              title: Text(context.tr('pet_create.gallery')),
               onTap: () {
                 _pickImage(ImageSource.gallery, isProfileImage);
                 Navigator.of(context).pop();
@@ -102,7 +103,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Câmera'),
+              title: Text(context.tr('pet_create.camera')),
               onTap: () {
                 _pickImage(ImageSource.camera, isProfileImage);
                 Navigator.of(context).pop();
@@ -125,9 +126,8 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Campos Obrigatórios'),
-          content: const Text(
-              'Por favor, preencha todos os campos com * para continuar.'),
+          title: Text(context.tr('pet_create.required_fields_title')),
+          content: Text(context.tr('pet_create.required_fields_desc')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -152,9 +152,8 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
       if (user == null) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Erro: Usuário não identificado. Tente fazer login novamente.')),
+          SnackBar(
+              content: Text(context.tr('pet_create.user_not_identified'))),
         );
         setState(() {
           _isLoading = false;
@@ -181,7 +180,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro no upload das imagens: $e')),
+          SnackBar(content: Text(context.tr('pet_create.upload_error', {'error': e.toString()}))),
         );
         setState(() {
           _isLoading = false;
@@ -224,7 +223,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perfil de ONG criado com sucesso!')),
+          SnackBar(content: Text(context.tr('ong_create.success'))),
         );
 
         // Navega para a Home limpando todo o histórico
@@ -236,7 +235,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao criar o perfil: $e')),
+          SnackBar(content: Text(context.tr('ong_create.create_error', {'error': e.toString()}))),
         );
       } finally {
         if (mounted) {
@@ -275,7 +274,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
       appBar: AppBar(
-        title: const Text('Criar Perfil de ONG ou Abrigo'),
+        title: Text(context.tr('ong_create.title')),
         automaticallyImplyLeading: false,
         leading: Navigator.canPop(context)
             ? IconButton(
@@ -312,7 +311,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               Center(
                 child: Semantics(
                   button: true,
-                  label: 'Adicionar logo da instituição',
+                  label: context.tr('ong_create.logo'),
                   child: GestureDetector(
                     onTap: () => _showImageSourceActionSheet(true),
                   child: CircleAvatar(
@@ -339,7 +338,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  'Logo da Instituição*',
+                  context.tr('ong_create.logo'),
                   style: TextStyle(
                     color: textColor.withValues(alpha: 0.6),
                     fontSize: 12,
@@ -349,29 +348,29 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Informações Básicas
-              _buildSectionHeader('Informações Básicas', textColor),
+              _buildSectionHeader(context.tr('ong_create.basic_info'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('Nome da Instituição*', textColor),
+              _buildLabel(context.tr('ong_create.name'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _nameController,
                 decoration: _buildInputDecoration(
-                  hint: 'Nome da ONG ou Abrigo',
+                  hint: context.tr('ong_create.name_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o nome da instituição.';
+                    return context.tr('ong_create.name_error');
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('CNPJ (opcional)', textColor),
+              _buildLabel(context.tr('ong_create.cnpj'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
@@ -385,14 +384,14 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Endereço Completo*', textColor),
+              _buildLabel(context.tr('ong_create.address'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _addressController,
                 maxLines: 2,
                 decoration: _buildInputDecoration(
-                  hint: 'Rua, número, bairro, cidade, estado',
+                  hint: context.tr('ong_create.address_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -405,14 +404,14 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Telefone*', textColor),
+                        _buildLabel(context.tr('ong_create.phone'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _phoneController,
                           keyboardType: TextInputType.phone,
                           decoration: _buildInputDecoration(
-                            hint: '(00) 00000-0000',
+                            hint: context.tr('ong_create.phone_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -425,14 +424,14 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Email*', textColor),
+                        _buildLabel(context.tr('ong_create.email'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: _buildInputDecoration(
-                            hint: 'contato@ong.org',
+                            hint: context.tr('ong_create.email_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -444,14 +443,14 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Site ou Rede Social', textColor),
+              _buildLabel(context.tr('ong_create.website'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _websiteController,
                 keyboardType: TextInputType.url,
                 decoration: _buildInputDecoration(
-                  hint: 'www.exemplo.com ou @instagram',
+                  hint: context.tr('ong_create.website_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -459,10 +458,10 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Atuação
-              _buildSectionHeader('Área de Atuação', textColor),
+              _buildSectionHeader(context.tr('ong_create.activity_section'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('Selecione as áreas de atuação*', textColor),
+              _buildLabel(context.tr('ong_create.activity_areas'), textColor),
               const SizedBox(height: 8),
               _buildActivityAreasSelector(cardColor, textColor),
               const SizedBox(height: 16),
@@ -473,14 +472,14 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Animais sob cuidado', textColor),
+                        _buildLabel(context.tr('ong_create.animals_count'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _animalsUnderCareController,
                           keyboardType: TextInputType.number,
                           decoration: _buildInputDecoration(
-                            hint: 'Quantidade',
+                            hint: context.tr('ong_create.animals_count_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -493,13 +492,13 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Anos de atuação', textColor),
+                        _buildLabel(context.tr('ong_create.years_operating'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _yearsOfOperationController,
                           decoration: _buildInputDecoration(
-                            hint: 'Ex: 5 anos',
+                            hint: context.tr('ong_create.years_operating_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -512,44 +511,44 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Doações
-              _buildSectionHeader('Formas de Doação', textColor),
+              _buildSectionHeader(context.tr('ong_create.donations_section'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('PIX', textColor),
+              _buildLabel(context.tr('ong_create.pix_key'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _donationPixController,
                 decoration: _buildInputDecoration(
-                  hint: 'Chave PIX',
+                  hint: context.tr('ong_create.pix_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Dados Bancários', textColor),
+              _buildLabel(context.tr('ong_create.bank_details'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _bankDetailsController,
                 maxLines: 3,
                 decoration: _buildInputDecoration(
-                  hint: 'Banco, agência, conta',
+                  hint: context.tr('ong_create.bank_details_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Necessidades Atuais', textColor),
+              _buildLabel(context.tr('ong_create.current_needs'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _currentNeedsController,
                 maxLines: 3,
                 decoration: _buildInputDecoration(
-                  hint: 'Ração, medicamentos, voluntários, etc.',
+                  hint: context.tr('ong_create.current_needs_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -557,17 +556,17 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Sobre
-              _buildSectionHeader('Sobre a Instituição', textColor),
+              _buildSectionHeader(context.tr('ong_create.about'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('História e Missão', textColor),
+              _buildLabel(context.tr('ong_create.about_mission'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _aboutController,
                 maxLines: 5,
                 decoration: _buildInputDecoration(
-                  hint: 'Conte a história da sua instituição...',
+                  hint: context.tr('ong_create.about_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -586,8 +585,8 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                         ),
                       ),
                       onPressed: _submitForm,
-                      child: const Text('Salvar Perfil',
-                          style: TextStyle(fontSize: 16, color: Colors.white)),
+                      child: Text(context.tr('ong_create.save_button'),
+                          style: const TextStyle(fontSize: 16, color: Colors.white)),
                     ),
               const SizedBox(height: 24),
                 ],
@@ -606,7 +605,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
 
     return Semantics(
       button: true,
-      label: 'Adicionar foto de capa da ONG',
+      label: context.tr('ong_create.cover_label'),
       child: GestureDetector(
         onTap: () => _showImageSourceActionSheet(false),
         child: AspectRatio(
@@ -641,7 +640,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Adicionar Foto de Capa (16:9)',
+                          context.tr('ong_create.cover_title'),
                           style: TextStyle(
                             color: textColor.withValues(alpha: 0.8),
                             fontSize: 13,
@@ -650,7 +649,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                         ),
                         const SizedBox(height: 4),
                         Text(
-                          'Toque para escolher e enquadrar',
+                          context.tr('ong_create.cover_hint'),
                           style: TextStyle(
                             color: textColor.withValues(alpha: 0.5),
                             fontSize: 11,
@@ -672,15 +671,15 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
                         color: Colors.black.withValues(alpha: 0.7),
                         borderRadius: BorderRadius.circular(8),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.crop_rounded,
+                          const Icon(Icons.crop_rounded,
                               size: 14, color: Colors.white),
-                          SizedBox(width: 4),
+                          const SizedBox(width: 4),
                           Text(
-                            'Ajustar Capa',
-                            style: TextStyle(
+                            context.tr('ong_create.cover_adjust'),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -722,6 +721,25 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
     );
   }
 
+  String _getActivityAreaLabel(BuildContext context, String area) {
+    switch (area) {
+      case 'Resgate':
+        return context.tr('ong_create.area_rescue');
+      case 'Adoção':
+        return context.tr('ong_create.area_adoption');
+      case 'Tratamento Veterinário':
+        return context.tr('ong_create.area_vet_treatment');
+      case 'Castração':
+        return context.tr('ong_create.area_neutering');
+      case 'Educação e Conscientização':
+        return context.tr('ong_create.area_education');
+      case 'Abrigo Temporário':
+        return context.tr('ong_create.area_temp_shelter');
+      default:
+        return area;
+    }
+  }
+
   Widget _buildActivityAreasSelector(Color cardColor, Color textColor) {
     final thmode = Provider.of<DarkMode>(context);
     final isDark = thmode.darkMode;
@@ -732,7 +750,7 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
       children: _availableActivityAreas.map((area) {
         final isSelected = _selectedActivityAreas.contains(area);
         return FilterChip(
-          label: Text(area),
+          label: Text(_getActivityAreaLabel(context, area)),
           selected: isSelected,
           onSelected: (selected) {
             setState(() {
@@ -757,8 +775,8 @@ class CreateOngProfilePageState extends State<CreateOngProfilePage> {
               : Colors.grey.shade200, // Cinza claro para texto preto
           side: BorderSide(
             color: isSelected
-                ? AppColors.patasColor
-                : (isDark ? Colors.grey.shade700 : Colors.grey.shade300),
+              ? AppColors.patasColor
+              : (isDark ? Colors.grey.shade700 : Colors.grey.shade300),
             width: isSelected ? 1.5 : 1,
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),

@@ -4,6 +4,7 @@ import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/features/encontra/services/encontra_service.dart';
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
@@ -112,7 +113,7 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
     } else {
       if (mounted) {
         setState(() {
-          _errorMessage = 'Código lido não é uma tag válida do Patas.';
+          _errorMessage = context.tr('encontra.invalid_tag_code');
         });
       }
     }
@@ -133,9 +134,9 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Ativar Tag QR',
-        subtitle: 'Vincule a medalha física ao perfil do seu pet',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('encontra.activate_title'),
+        subtitle: context.tr('encontra.activate_subtitle'),
         showBackButton: true,
         leadingIcon: Icon(
           Icons.qr_code_scanner_rounded,
@@ -270,16 +271,16 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
       children: [
         Text(
           _isScanning
-              ? 'Aponte a câmera para o QR Code da Tag'
-              : 'Tag Identificada!',
+              ? context.tr('encontra.scan_instruction_title')
+              : context.tr('encontra.tag_identified_title'),
           style: const TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           textAlign: TextAlign.center,
         ),
         const SizedBox(height: 8),
         Text(
           _isScanning
-              ? 'O QR Code está impresso na frente da tag física do Patas.'
-              : 'Agora digite o código PIN para confirmar o vínculo.',
+              ? context.tr('encontra.scan_instruction_subtitle')
+              : context.tr('encontra.tag_identified_subtitle'),
           style: TextStyle(
             fontSize: 12,
             color: isDark ? Colors.white60 : Colors.black54,
@@ -378,7 +379,7 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
       ),
       icon: const Icon(Icons.flash_on),
-      label: const Text('Simular Leitura do QR Code'),
+      label: Text(context.tr('encontra.simulate_scan_btn')),
     );
   }
 
@@ -405,13 +406,13 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                const Text(
-                  'QR Code Escaneado!',
-                  style: TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
+                Text(
+                  context.tr('encontra.qr_scanned_success'),
+                  style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 15),
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Código: $_scannedUuid',
+                  context.tr('encontra.code_label', {'uuid': '$_scannedUuid'}),
                   style: const TextStyle(
                     fontSize: 11,
                     fontFamily: 'monospace',
@@ -452,13 +453,13 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
-          const Text(
-            'Digite o PIN de Segurança',
-            style: TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
+          Text(
+            context.tr('encontra.enter_security_pin'),
+            style: const TextStyle(fontSize: 15, fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 6),
           Text(
-            'O código PIN de 6 dígitos está impresso no encarte interno ou na embalagem da tag.',
+            context.tr('encontra.pin_desc'),
             style: TextStyle(
               fontSize: 12,
               color: isDark ? Colors.white60 : Colors.black54,
@@ -502,10 +503,10 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
             ),
             validator: (value) {
               if (value == null || value.isEmpty) {
-                return 'Por favor, digite o PIN.';
+                return context.tr('encontra.pin_required');
               }
               if (value.length != 6) {
-                return 'O PIN deve conter exatamente 6 dígitos.';
+                return context.tr('encontra.pin_length_err');
               }
               return null;
             },
@@ -534,9 +535,9 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                 strokeWidth: 2,
               ),
             )
-          : const Text(
-              'Concluir Ativação da Tag',
-              style: TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
+          : Text(
+              context.tr('encontra.finish_activation_btn'),
+              style: const TextStyle(fontWeight: FontWeight.bold, fontSize: 16),
             ),
     );
   }
@@ -554,8 +555,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'Instruções de Ativação',
+          Text(
+            context.tr('encontra.step_instructions_title'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 18,
@@ -567,25 +568,25 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
           _buildStepRow(
             isDark,
             stepNum: '1',
-            title: 'Posicione a Tag',
+            title: context.tr('encontra.step1_title'),
             desc:
-                'Segure a tag de identificação em frente à câmera do computador ou celular, alinhando o QR Code na moldura.',
+                context.tr('encontra.step1_desc'),
           ),
           const SizedBox(height: 16),
           _buildStepRow(
             isDark,
             stepNum: '2',
-            title: 'Leitura Automática',
+            title: context.tr('encontra.step2_title'),
             desc:
-                'Assim que o QR Code for focado, o sistema lerá o UUID automaticamente e liberará a próxima etapa.',
+                context.tr('encontra.step2_desc'),
           ),
           const SizedBox(height: 16),
           _buildStepRow(
             isDark,
             stepNum: '3',
-            title: 'Código PIN de Segurança',
+            title: context.tr('encontra.step3_title'),
             desc:
-                'Digite o código de 6 dígitos contido na embalagem para validar a ativação e vincular ao seu pet com segurança.',
+                context.tr('encontra.step3_desc'),
           ),
         ],
       ),
@@ -671,12 +672,12 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                   ),
                 ),
                 const SizedBox(width: 14),
-                const Expanded(
+                Expanded(
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Nenhum pet selecionado',
+                        context.tr('encontra.no_pet_selected_title'),
                         style: TextStyle(
                           fontWeight: FontWeight.bold,
                           fontSize: 14,
@@ -685,8 +686,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                       ),
                       SizedBox(height: 2),
                       Text(
-                        'Volte ao painel e selecione o pet antes de continuar.',
-                        style: TextStyle(fontSize: 12, color: Colors.orange),
+                        context.tr('encontra.no_pet_selected_desc'),
+                        style: const TextStyle(fontSize: 12, color: Colors.orange),
                       ),
                     ],
                   ),
@@ -744,9 +745,9 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    const Text(
-                      'A tag será ativada para:',
-                      style: TextStyle(fontSize: 11, color: Colors.grey),
+                    Text(
+                      context.tr('encontra.tag_activating_for'),
+                      style: const TextStyle(fontSize: 11, color: Colors.grey),
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -775,7 +776,7 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                 TextButton.icon(
                   onPressed: () => _showPetSelectionSheet(isDark),
                   icon: const Icon(Icons.swap_horiz_rounded, size: 18),
-                  label: const Text('Alterar'),
+                  label: Text(context.tr('encontra.change_pet_btn')),
                   style: TextButton.styleFrom(
                     foregroundColor: AppColors.patasColor,
                     padding: const EdgeInsets.symmetric(
@@ -872,8 +873,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                 ),
               ),
               const SizedBox(height: 16),
-              const Text(
-                'Selecionar Pet',
+              Text(
+                context.tr('encontra.select_pet_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 20,
@@ -884,7 +885,7 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
               ),
               const SizedBox(height: 4),
               Text(
-                'Para qual pet você quer ativar esta tag?',
+                context.tr('encontra.select_pet_subtitle'),
                 style: TextStyle(
                   fontSize: 13,
                   color: isDark ? Colors.white54 : Colors.black45,
@@ -897,8 +898,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                   child: CircularProgressIndicator(color: AppColors.patasColor),
                 )
               else if (_allPets.isEmpty)
-                const Text(
-                  'Nenhum pet encontrado. Cadastre um pet primeiro.',
+                Text(
+                  context.tr('encontra.no_pets_found'),
                   textAlign: TextAlign.center,
                   style: TextStyle(color: Colors.grey),
                 )
@@ -1050,8 +1051,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
             mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              const Text(
-                'Simular QR Code da Tag',
+              Text(
+                context.tr('encontra.simulate_dialog_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontWeight: FontWeight.bold,
@@ -1061,8 +1062,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                 textAlign: TextAlign.center,
               ),
               const SizedBox(height: 8),
-              const Text(
-                'Selecione uma tag disponível para testar o fluxo de ativação.',
+              Text(
+                context.tr('encontra.simulate_dialog_subtitle'),
                 style: TextStyle(fontSize: 12, color: Colors.grey),
                 textAlign: TextAlign.center,
               ),
@@ -1077,10 +1078,10 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                       ),
                     )
                   : _availableTags.isEmpty
-                  ? const Padding(
-                      padding: EdgeInsets.symmetric(vertical: 16),
+                  ? Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 16),
                       child: Text(
-                        'Nenhuma tag disponível para simulação.\nTodas as tags já estão ativadas ou não foram cadastradas.',
+                        context.tr('encontra.no_tags_available'),
                         textAlign: TextAlign.center,
                         style: TextStyle(color: Colors.grey),
                       ),
@@ -1182,8 +1183,8 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
                   ),
                   padding: const EdgeInsets.symmetric(vertical: 14),
                 ),
-                child: const Text(
-                  'Cancelar',
+                child: Text(
+                  context.tr('common_cancel'),
                   style: TextStyle(color: Colors.grey),
                 ),
               ),
@@ -1237,14 +1238,14 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(24),
           ),
-          title: const Row(
+          title: Row(
             children: [
-              Icon(Icons.check_circle, color: Colors.green, size: 28),
-              SizedBox(width: 12),
+              const Icon(Icons.check_circle, color: Colors.green, size: 28),
+              const SizedBox(width: 12),
               Expanded(
                 child: Text(
-                  'Sucesso!',
-                  style: TextStyle(
+                  context.tr('encontra.activation_success_title'),
+                  style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.bold,
                   ),
@@ -1253,7 +1254,7 @@ class _AtivarTagScreenState extends State<AtivarTagScreen> {
             ],
           ),
           content: Text(
-            'Tag inteligente ativada e vinculada a ${activePet.name} com sucesso!\n\nAgora, caso ele se perca, você receberá a localização de qualquer pessoa que ler o QR Code.',
+            context.tr('encontra.activation_success_desc', {'name': activePet.name}),
           ),
           actions: [
             ElevatedButton(

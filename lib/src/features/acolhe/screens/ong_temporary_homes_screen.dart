@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:patas_web_app/app.dart';
@@ -204,10 +205,10 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Lares Temporários',
+        title: context.tr('acolhe.temp_homes_title'),
         subtitle: isOng
-            ? 'Rede de acolhimento voluntário'
-            : 'Apoie acolhendo um pet de ONG',
+            ? context.tr('acolhe.temp_homes_sub_ong')
+            : context.tr('acolhe.temp_homes_sub_tutor'),
         leadingIcon: const Icon(
           Icons.home_work_rounded,
           color: Colors.blueAccent,
@@ -233,8 +234,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 backgroundColor: Colors.blueAccent,
                 icon: const Icon(Icons.person_add_alt_1_rounded,
                     color: Colors.white),
-                label: const Text(
-                  'Novo Voluntário',
+                label: Text(
+                  context.tr('acolhe.new_volunteer'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     color: Colors.white,
@@ -254,8 +255,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 backgroundColor: Colors.blueAccent,
                 icon: const Icon(Icons.volunteer_activism_rounded,
                     color: Colors.white),
-                label: const Text(
-                  'Quero Acolher 🤝',
+                label: Text(
+                  context.tr('acolhe.want_to_foster'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     color: Colors.white,
@@ -341,7 +342,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                                       size: 20,
                                     ),
                                     onPressed: () => Navigator.maybePop(context),
-                                    tooltip: 'Voltar',
+                                    tooltip: context.tr('common.back'),
                                   ),
                                   const SizedBox(width: 8),
                                   Text(
@@ -360,8 +361,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                               const SizedBox(height: 6),
                               Text(
                                 isOng
-                                    ? 'Rede de Lares Temporários (LTs)'
-                                    : 'Lares Temporários & Acolhimento 🏡',
+                                    ? context.tr('acolhe.temp_homes_title')
+                                    : context.tr('acolhe.temp_homes_title'),
                                 style: TextStyle(
                                   fontFamily: 'Fredoka',
                                   fontSize: 26,
@@ -397,7 +398,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                                       : Colors.black87,
                                 ),
                                 label: Text(
-                                  'Atualizar',
+                                  context.tr('common.update'),
                                   style: TextStyle(
                                     color: isDark
                                         ? Colors.white
@@ -561,8 +562,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
               children: [
                 Text(
                   isOng
-                      ? 'Conexão Aberta com Tutores da Região 🤝'
-                      : 'Seja um Lar Temporário Voluntário! 🏡🐾',
+                      ? context.tr('acolhe.banner_conn_title_ong')
+                      : context.tr('acolhe.banner_conn_title_tutor'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.bold,
@@ -574,9 +575,9 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 Text(
                   isOng
                       ? (pendingCount > 0
-                          ? 'Você tem $pendingCount nova(s) candidatura(s) de tutor(es) querendo acolher pets da sua ONG!'
-                          : 'Tutores da comunidade podem se candidatar espontaneamente pelo app para acolher os animais da sua ONG.')
-                      : 'Você pode salvar vidas abrindo sua casa provisoriamente para acolher com carinho um animal resgatado até a adoção definitiva!',
+                          ? context.tr('acolhe.banner_conn_desc_ong_pending', {'count': '$pendingCount'})
+                          : context.tr('acolhe.banner_conn_desc_ong_empty'))
+                      : context.tr('acolhe.banner_conn_desc_tutor'),
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark ? Colors.white70 : Colors.black87,
@@ -599,7 +600,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 ),
               ),
               child: Text(
-                'Ver ($pendingCount)',
+                context.tr('acolhe.view_pending_count', {'count': '$pendingCount'}),
                 style: const TextStyle(
                   fontFamily: 'Fredoka',
                   color: Colors.white,
@@ -615,8 +616,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
               },
               icon: const Icon(Icons.favorite_rounded,
                   size: 16, color: Colors.white),
-              label: const Text(
-                'Me Candidatar',
+              label: Text(
+                context.tr('acolhe.apply_volunteer'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   color: Colors.white,
@@ -653,36 +654,36 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
         .length;
 
     final kpi1 = _buildKpiCard(
-      title: 'Total de Lares',
+      title: context.tr('acolhe.kpi_total_homes'),
       value: '$totalHomes',
-      subtitle: 'Voluntários ativos',
+      subtitle: context.tr('acolhe.kpi_sub_active_volunteers'),
       icon: Icons.home_work_rounded,
       color: Colors.blueAccent,
       isDark: isDark,
     );
 
     final kpi2 = _buildKpiCard(
-      title: 'Vagas Livres',
+      title: context.tr('acolhe.kpi_free_spots'),
       value: '$totalFreeSpots',
-      subtitle: 'Disponíveis agora',
+      subtitle: context.tr('acolhe.kpi_sub_available_now'),
       icon: Icons.event_seat_rounded,
       color: Colors.teal,
       isDark: isDark,
     );
 
     final kpi3 = _buildKpiCard(
-      title: 'Pets em LT',
+      title: context.tr('acolhe.kpi_pets_in_foster'),
       value: '$totalAnimalsInHomes',
-      subtitle: 'Acolhidos hospedados',
+      subtitle: context.tr('acolhe.kpi_sub_sheltered_hosted'),
       icon: Icons.pets_rounded,
       color: Colors.orange,
       isDark: isDark,
     );
 
     final kpi4 = _buildKpiCard(
-      title: 'Candidaturas',
+      title: context.tr('acolhe.kpi_applications'),
       value: '$pendingCount',
-      subtitle: 'Tutores da comunidade',
+      subtitle: context.tr('acolhe.kpi_sub_community_tutors'),
       icon: Icons.volunteer_activism_rounded,
       color: pendingCount > 0 ? Colors.purpleAccent : Colors.grey,
       isDark: isDark,
@@ -802,7 +803,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
         color: isDark ? Colors.white : AppColors.darkBG,
       ),
       decoration: InputDecoration(
-        hintText: 'Buscar por voluntário, bairro, cidade ou telefone...',
+        hintText: context.tr('acolhe.search_temp_homes_hint'),
         hintStyle: TextStyle(
           fontSize: 13,
           color: isDark ? Colors.white38 : Colors.black38,
@@ -840,10 +841,10 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
 
   Widget _buildFilterChips(bool isDark) {
     final filters = [
-      {'key': 'todos', 'label': 'Todos'},
-      {'key': 'com_vagas', 'label': 'Com Vagas'},
-      {'key': 'lotados', 'label': 'Lotados'},
-      {'key': 'candidaturas', 'label': 'Candidaturas'},
+      {'key': 'todos', 'label': context.tr('acolhe.filter_chip_all')},
+      {'key': 'com_vagas', 'label': context.tr('acolhe.filter_chip_with_spots')},
+      {'key': 'lotados', 'label': context.tr('acolhe.filter_chip_full')},
+      {'key': 'candidaturas', 'label': context.tr('acolhe.filter_chip_applications')},
     ];
 
     return SingleChildScrollView(
@@ -926,8 +927,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 const SizedBox(height: 14),
                 Text(
                   _homes.isEmpty
-                      ? 'Nenhum lar temporário cadastrado ainda.'
-                      : 'Nenhum lar corresponde aos filtros selecionados.',
+                      ? context.tr('acolhe.empty_temp_homes_title')
+                      : context.tr('acolhe.empty_temp_homes_filter_title'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 16,
@@ -939,9 +940,9 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 Text(
                   _homes.isEmpty
                       ? (isOng
-                          ? 'Cadastre tutores voluntários ou receba candidaturas da comunidade para expandir a capacidade do abrigo!'
-                          : 'Ainda não há lares cadastrados nesta ONG. Seja o primeiro voluntário a acolher um pet!')
-                      : 'Tente alterar os termos de busca ou filtros rápidos acima.',
+                          ? context.tr('acolhe.empty_temp_homes_desc_ong')
+                          : context.tr('acolhe.empty_temp_homes_desc_tutor'))
+                      : context.tr('acolhe.empty_temp_homes_filter_desc'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 13,
@@ -1047,8 +1048,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                                       .withValues(alpha: 0.3),
                                 ),
                               ),
-                              child: const Text(
-                                'Tutor Voluntário 🤝',
+                              child: Text(
+                                context.tr('acolhe.volunteer_tutor_badge'),
                                 style: TextStyle(
                                   fontSize: 10,
                                   fontWeight: FontWeight.bold,
@@ -1077,7 +1078,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                                       home.neighborhood!,
                                     if (home.city != null) home.city!,
                                   ].join(', ')
-                                : 'Endereço não informado',
+                                : context.tr('acolhe.unspecified_address'),
                             style: TextStyle(
                               fontSize: 12,
                               color: isDark ? Colors.white60 : Colors.black54,
@@ -1141,7 +1142,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                                 size: 18,
                                 color: isDark ? Colors.white70 : Colors.black87),
                             const SizedBox(width: 8),
-                            Text('Editar Voluntário',
+                            Text(context.tr('acolhe.edit_volunteer'),
                                 style: TextStyle(
                                     color: isDark
                                         ? Colors.white
@@ -1149,15 +1150,15 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                           ],
                         ),
                       ),
-                      const PopupMenuItem(
+                      PopupMenuItem(
                         value: 'delete',
                         child: Row(
                           children: [
-                            Icon(Icons.delete_outline_rounded,
+                            const Icon(Icons.delete_outline_rounded,
                                 size: 18, color: Colors.redAccent),
-                            SizedBox(width: 8),
-                            Text('Excluir Lar',
-                                style: TextStyle(color: Colors.redAccent)),
+                            const SizedBox(width: 8),
+                            Text(context.tr('acolhe.delete_home'),
+                                style: const TextStyle(color: Colors.redAccent)),
                           ],
                         ),
                       ),
@@ -1188,24 +1189,24 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                     if (home.hasYard)
                       _buildInfoBadge(
                         Icons.fence_rounded,
-                        'Quintal/Telas Seguras',
+                        context.tr('acolhe.secure_yard_tag'),
                         isDark,
                       ),
                     _buildInfoBadge(
                       Icons.pets_rounded,
-                      'Aceita: ${home.speciesLabel}',
+                      context.tr('acolhe.accepts_species_tag', {'species': home.speciesLabel}),
                       isDark,
                     ),
                     if (home.canAdministerMedication)
                       _buildInfoBadge(
                         Icons.medication_rounded,
-                        'Aplica Medicação',
+                        context.tr('acolhe.gives_meds_tag'),
                         isDark,
                       ),
                     if (home.hasOtherPets)
                       _buildInfoBadge(
                         Icons.groups_rounded,
-                        'Tem outros pets',
+                        context.tr('acolhe.has_other_pets_tag'),
                         isDark,
                       ),
                   ],
@@ -1218,7 +1219,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Capacidade: ${home.occupiedSpots}/${home.maxCapacity} vagas ocupadas',
+                      context.tr('acolhe.capacity_label', {'occupied': '${home.occupiedSpots}', 'max': '${home.maxCapacity}'}),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.w600,
@@ -1227,8 +1228,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                     ),
                     Text(
                       home.freeSpots > 0
-                          ? '${home.freeSpots} vaga(s) disponível(is)'
-                          : 'Lotado',
+                          ? context.tr('acolhe.spots_available_label', {'count': '${home.freeSpots}'})
+                          : context.tr('acolhe.spots_full_label'),
                       style: TextStyle(
                         fontSize: 12,
                         fontWeight: FontWeight.bold,
@@ -1261,7 +1262,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                 if (home.currentAnimals.isNotEmpty) ...[
                   const SizedBox(height: 14),
                   Text(
-                    'PETS HOSPEDADOS ATUALMENTE:',
+                    context.tr('acolhe.currently_hosted_pets'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 11,
@@ -1379,7 +1380,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                           onPressed: () => _openWhatsApp(home.phone, home.name),
                           icon: const Icon(Icons.chat_bubble_outline_rounded,
                               size: 16),
-                          label: const Text('Entrevistar no Zap'),
+                          label: Text(context.tr('acolhe.interview_zap')),
                           style: OutlinedButton.styleFrom(
                             foregroundColor: isDark
                                 ? Colors.greenAccent
@@ -1402,8 +1403,8 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                             onPressed: () => _approveVolunteer(home),
                             icon: const Icon(Icons.check_rounded,
                                 size: 16, color: Colors.white),
-                            label: const Text(
-                              'Aprovar Lar',
+                            label: Text(
+                              context.tr('acolhe.approve_home'),
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
                                 color: Colors.white,
@@ -1472,7 +1473,7 @@ class _OngTemporaryHomesScreenState extends State<OngTemporaryHomesScreen> {
                             icon: const Icon(Icons.pets_rounded,
                                 size: 16, color: Colors.white),
                             label: Text(
-                              home.isFull ? 'Lar Lotado' : 'Hospedar Pet',
+                              home.isFull ? context.tr('acolhe.home_full_btn') : context.tr('acolhe.host_pet_btn'),
                               style: const TextStyle(
                                 fontFamily: 'Fredoka',
                                 color: Colors.white,

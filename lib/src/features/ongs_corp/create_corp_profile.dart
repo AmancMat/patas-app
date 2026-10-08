@@ -10,6 +10,7 @@ import '../../../../main.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/models/active_account_model.dart';
@@ -110,7 +111,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Galeria'),
+              title: Text(context.tr('pet_create.gallery')),
               onTap: () {
                 _pickImage(ImageSource.gallery, isProfileImage);
                 Navigator.of(context).pop();
@@ -118,7 +119,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Câmera'),
+              title: Text(context.tr('pet_create.camera')),
               onTap: () {
                 _pickImage(ImageSource.camera, isProfileImage);
                 Navigator.of(context).pop();
@@ -142,9 +143,8 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Campos Obrigatórios'),
-          content: const Text(
-              'Por favor, preencha todos os campos com * para continuar.'),
+          title: Text(context.tr('pet_create.required_fields_title')),
+          content: Text(context.tr('pet_create.required_fields_desc')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -169,9 +169,8 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
       if (user == null) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Erro: Usuário não identificado. Tente fazer login novamente.')),
+          SnackBar(
+              content: Text(context.tr('pet_create.user_not_identified'))),
         );
         setState(() {
           _isLoading = false;
@@ -196,7 +195,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro no upload das imagens: $e')),
+          SnackBar(content: Text(context.tr('pet_create.upload_error', {'error': e.toString()}))),
         );
         setState(() {
           _isLoading = false;
@@ -248,8 +247,8 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Perfil de Empresa criado com sucesso!')),
+          SnackBar(
+              content: Text(context.tr('corp_create.success'))),
         );
 
         // Navega para a Home limpando todo o histórico
@@ -261,7 +260,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao criar o perfil: $e')),
+          SnackBar(content: Text(context.tr('corp_create.create_error', {'error': e.toString()}))),
         );
       } finally {
         if (mounted) {
@@ -297,7 +296,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
       appBar: AppBar(
-        title: const Text('Criar Perfil de Empresa'),
+        title: Text(context.tr('corp_create.title')),
         automaticallyImplyLeading: false,
         leading: Navigator.canPop(context)
             ? IconButton(
@@ -332,32 +331,36 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
 
               // Foto de Perfil
               Center(
-                child: GestureDetector(
-                  onTap: () => _showImageSourceActionSheet(true),
-                  child: CircleAvatar(
-                    radius: 60,
-                    backgroundColor: thmode.darkMode
-                        ? Colors.grey.shade800
-                        : Colors.grey.shade300,
-                    backgroundImage: _profileImage != null
-                        ? (kIsWeb
-                            ? NetworkImage(_profileImage!.path) as ImageProvider
-                            : FileImage(_profileImage!) as ImageProvider)
-                        : null,
-                    child: _profileImage == null
-                        ? Icon(Icons.camera_alt,
-                            size: 50,
-                            color: thmode.darkMode
-                                ? Colors.grey.shade400
-                                : Colors.grey.shade600)
-                        : null,
+                child: Semantics(
+                  button: true,
+                  label: context.tr('corp_create.logo'),
+                  child: GestureDetector(
+                    onTap: () => _showImageSourceActionSheet(true),
+                    child: CircleAvatar(
+                      radius: 60,
+                      backgroundColor: thmode.darkMode
+                          ? Colors.grey.shade800
+                          : Colors.grey.shade300,
+                      backgroundImage: _profileImage != null
+                          ? (kIsWeb
+                              ? NetworkImage(_profileImage!.path) as ImageProvider
+                              : FileImage(_profileImage!) as ImageProvider)
+                          : null,
+                      child: _profileImage == null
+                          ? Icon(Icons.camera_alt,
+                              size: 50,
+                              color: thmode.darkMode
+                                  ? Colors.grey.shade400
+                                  : Colors.grey.shade600)
+                          : null,
+                    ),
                   ),
                 ),
               ),
               const SizedBox(height: 8),
               Center(
                 child: Text(
-                  'Logo da Empresa*',
+                  context.tr('corp_create.logo'),
                   style: TextStyle(
                     color: textColor.withValues(alpha: 0.6),
                     fontSize: 12,
@@ -367,29 +370,29 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Informações Básicas
-              _buildSectionHeader('Informações Básicas', textColor),
+              _buildSectionHeader(context.tr('corp_create.basic_info'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('Nome da Empresa*', textColor),
+              _buildLabel(context.tr('corp_create.name'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _nameController,
                 decoration: _buildInputDecoration(
-                  hint: 'Nome Comercial',
+                  hint: context.tr('corp_create.name_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o nome da empresa.';
+                    return context.tr('corp_create.name_error');
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('CNPJ*', textColor),
+              _buildLabel(context.tr('corp_create.cnpj'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
@@ -402,29 +405,56 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o CNPJ.';
+                    return context.tr('corp_create.cnpj_error');
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Categoria*', textColor),
+              _buildLabel(context.tr('corp_create.category'), textColor),
               const SizedBox(height: 8),
               DropdownButtonFormField<String>(
                 initialValue: _selectedCategory,
+                hint: Text(
+                  context.tr('corp_create.category_hint'),
+                  style: TextStyle(
+                      color: textColor.withValues(alpha: 0.5), fontSize: 14),
+                ),
                 decoration: _buildInputDecoration(
-                  hint: 'Selecione a categoria',
+                  hint: context.tr('corp_create.category_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
                 dropdownColor:
-                    thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-                style: TextStyle(color: textColor),
+                    thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+                icon: Icon(
+                  Icons.keyboard_arrow_down_rounded,
+                  color: textColor.withValues(alpha: 0.7),
+                ),
+                style: TextStyle(color: textColor, fontSize: 14),
+                selectedItemBuilder: (context) {
+                  return _categories.map((String value) {
+                    return Align(
+                      alignment: Alignment.centerLeft,
+                      child: Text(
+                        _getCategoryLabel(context, value),
+                        style: TextStyle(
+                          color: textColor,
+                          fontSize: 14,
+                          fontWeight: FontWeight.w500,
+                        ),
+                      ),
+                    );
+                  }).toList();
+                },
                 items: _categories.map((String value) {
                   return DropdownMenuItem<String>(
                     value: value,
-                    child: Text(value),
+                    child: Text(
+                      _getCategoryLabel(context, value),
+                      style: TextStyle(color: textColor, fontSize: 14),
+                    ),
                   );
                 }).toList(),
                 onChanged: (newValue) {
@@ -434,27 +464,27 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                 },
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, selecione uma categoria.';
+                    return context.tr('corp_create.category_error');
                   }
                   return null;
                 },
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Endereço Completo*', textColor),
+              _buildLabel(context.tr('corp_create.address'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _addressController,
                 maxLines: 2,
                 decoration: _buildInputDecoration(
-                  hint: 'Rua, número, bairro, cidade, estado',
+                  hint: context.tr('corp_create.address_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Por favor, insira o endereço.';
+                    return context.tr('corp_create.address_error');
                   }
                   return null;
                 },
@@ -467,20 +497,20 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Telefone*', textColor),
+                        _buildLabel(context.tr('corp_create.phone'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _phoneController,
                           keyboardType: TextInputType.phone,
                           decoration: _buildInputDecoration(
-                            hint: '(00) 00000-0000',
+                            hint: context.tr('corp_create.phone_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Obrigatório.';
+                              return context.tr('corp_create.required_field');
                             }
                             return null;
                           },
@@ -493,20 +523,20 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Email*', textColor),
+                        _buildLabel(context.tr('corp_create.email'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _emailController,
                           keyboardType: TextInputType.emailAddress,
                           decoration: _buildInputDecoration(
-                            hint: 'contato@empresa.com',
+                            hint: context.tr('corp_create.email_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
                           validator: (value) {
                             if (value == null || value.isEmpty) {
-                              return 'Obrigatório.';
+                              return context.tr('corp_create.required_field');
                             }
                             return null;
                           },
@@ -518,14 +548,14 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
               ),
               const SizedBox(height: 16),
 
-              _buildLabel('Site ou Rede Social', textColor),
+              _buildLabel(context.tr('corp_create.website'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _websiteController,
                 keyboardType: TextInputType.url,
                 decoration: _buildInputDecoration(
-                  hint: 'www.exemplo.com ou @instagram',
+                  hint: context.tr('corp_create.website_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -533,7 +563,7 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
               const SizedBox(height: 32),
 
               // Seção: Operação
-              _buildSectionHeader('Operação', textColor),
+              _buildSectionHeader(context.tr('corp_create.operation_section'), textColor),
               const SizedBox(height: 16),
 
               Row(
@@ -542,13 +572,13 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Horário Funcionamento', textColor),
+                        _buildLabel(context.tr('corp_create.opening_hours'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _openingHoursController,
                           decoration: _buildInputDecoration(
-                            hint: 'Ex: 08:00 - 18:00',
+                            hint: context.tr('corp_create.opening_hours_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -561,13 +591,13 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        _buildLabel('Dias de Atendimento', textColor),
+                        _buildLabel(context.tr('corp_create.working_days'), textColor),
                         const SizedBox(height: 8),
                         TextFormField(
                           style: TextStyle(color: textColor),
                           controller: _workingDaysController,
                           decoration: _buildInputDecoration(
-                            hint: 'Ex: Seg a Sex',
+                            hint: context.tr('corp_create.working_days_hint'),
                             cardColor: cardColor,
                             textColor: textColor,
                           ),
@@ -579,38 +609,40 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
               ),
               const SizedBox(height: 24),
 
-              _buildLabel('Serviços Oferecidos', textColor),
+              _buildLabel(context.tr('corp_create.services_offered'), textColor),
               const SizedBox(height: 8),
               _buildSelectionChips(
                 items: _availableServices,
                 selectedItems: _selectedServices,
                 cardColor: cardColor,
                 textColor: textColor,
+                labelBuilder: (item) => _getServiceLabel(context, item),
               ),
               const SizedBox(height: 24),
 
-              _buildLabel('Formas de Pagamento', textColor),
+              _buildLabel(context.tr('corp_create.payment_methods'), textColor),
               const SizedBox(height: 8),
               _buildSelectionChips(
                 items: _availablePaymentMethods,
                 selectedItems: _selectedPaymentMethods,
                 cardColor: cardColor,
                 textColor: textColor,
+                labelBuilder: (item) => _getPaymentMethodLabel(context, item),
               ),
               const SizedBox(height: 32),
 
               // Seção: Sobre
-              _buildSectionHeader('Sobre a Empresa', textColor),
+              _buildSectionHeader(context.tr('corp_create.about_section'), textColor),
               const SizedBox(height: 16),
 
-              _buildLabel('Sobre / Biografia', textColor),
+              _buildLabel(context.tr('corp_create.about'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 style: TextStyle(color: textColor),
                 controller: _aboutController,
                 maxLines: 5,
                 decoration: _buildInputDecoration(
-                  hint: 'Conte um pouco sobre seu negócio e diferenciais...',
+                  hint: context.tr('corp_create.about_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                 ),
@@ -629,8 +661,8 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
                         ),
                       ),
                       onPressed: _submitForm,
-                      child: const Text('Salvar Perfil',
-                          style: TextStyle(fontSize: 16, color: Colors.white)),
+                      child: Text(context.tr('corp_create.save_button'),
+                          style: const TextStyle(fontSize: 16, color: Colors.white)),
                     ),
               const SizedBox(height: 24),
                 ],
@@ -645,46 +677,50 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
 
   Widget _buildCoverImagePicker(
       DarkMode thmode, Color cardColor, Color textColor) {
-    return GestureDetector(
-      onTap: () => _showImageSourceActionSheet(false),
-      child: Container(
-        height: 150,
-        decoration: BoxDecoration(
-          color: cardColor,
-          borderRadius: BorderRadius.circular(15),
-          image: _coverImage != null
-              ? DecorationImage(
-                  image: kIsWeb
-                      ? NetworkImage(_coverImage!.path) as ImageProvider
-                      : FileImage(_coverImage!) as ImageProvider,
-                  fit: BoxFit.cover,
+    return Semantics(
+      button: true,
+      label: context.tr('corp_create.cover_label'),
+      child: GestureDetector(
+        onTap: () => _showImageSourceActionSheet(false),
+        child: Container(
+          height: 150,
+          decoration: BoxDecoration(
+            color: cardColor,
+            borderRadius: BorderRadius.circular(15),
+            image: _coverImage != null
+                ? DecorationImage(
+                    image: kIsWeb
+                        ? NetworkImage(_coverImage!.path) as ImageProvider
+                        : FileImage(_coverImage!) as ImageProvider,
+                    fit: BoxFit.cover,
+                  )
+                : null,
+          ),
+          child: _coverImage == null
+              ? Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.add_photo_alternate,
+                        size: 40,
+                        color: thmode.darkMode
+                            ? Colors.grey.shade400
+                            : Colors.grey.shade600,
+                      ),
+                      const SizedBox(height: 8),
+                      Text(
+                        context.tr('corp_create.cover_title'),
+                        style: TextStyle(
+                          color: textColor.withValues(alpha: 0.6),
+                          fontSize: 12,
+                        ),
+                      ),
+                    ],
+                  ),
                 )
               : null,
         ),
-        child: _coverImage == null
-            ? Center(
-                child: Column(
-                  mainAxisAlignment: MainAxisAlignment.center,
-                  children: [
-                    Icon(
-                      Icons.add_photo_alternate,
-                      size: 40,
-                      color: thmode.darkMode
-                          ? Colors.grey.shade400
-                          : Colors.grey.shade600,
-                    ),
-                    const SizedBox(height: 8),
-                    Text(
-                      'Adicionar Foto de Capa',
-                      style: TextStyle(
-                        color: textColor.withValues(alpha: 0.6),
-                        fontSize: 12,
-                      ),
-                    ),
-                  ],
-                ),
-              )
-            : null,
       ),
     );
   }
@@ -713,11 +749,85 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
     );
   }
 
+  String _getCategoryLabel(BuildContext context, String cat) {
+    switch (cat) {
+      case 'Pet Shop':
+        return context.tr('corp_create.cat_pet_shop');
+      case 'Clínica Veterinária':
+        return context.tr('corp_create.cat_vet_clinic');
+      case 'Hospital Veterinário':
+        return context.tr('corp_create.cat_vet_hospital');
+      case 'Hotel para Pets':
+        return context.tr('corp_create.cat_pet_hotel');
+      case 'Adestramento':
+        return context.tr('corp_create.cat_training');
+      case 'Banho e Tosa':
+        return context.tr('corp_create.cat_grooming');
+      case 'Passeador de Cães':
+        return context.tr('corp_create.cat_dog_walker');
+      case 'Loja Especializada':
+        return context.tr('corp_create.cat_specialty_store');
+      case 'Fabricante/Marca':
+        return context.tr('corp_create.cat_manufacturer');
+      case 'Outro':
+        return context.tr('corp_create.cat_other');
+      default:
+        return cat;
+    }
+  }
+
+  String _getServiceLabel(BuildContext context, String service) {
+    switch (service) {
+      case 'Consultas':
+        return context.tr('corp_create.srv_consultations');
+      case 'Vacinas':
+        return context.tr('corp_create.srv_vaccines');
+      case 'Cirurgias':
+        return context.tr('corp_create.srv_surgeries');
+      case 'Exames':
+        return context.tr('corp_create.srv_exams');
+      case 'Banho':
+        return context.tr('corp_create.srv_bath');
+      case 'Tosa':
+        return context.tr('corp_create.srv_grooming');
+      case 'Hospedagem':
+        return context.tr('corp_create.srv_boarding');
+      case 'Adestramento':
+        return context.tr('corp_create.srv_training');
+      case 'Venda de Produtos':
+        return context.tr('corp_create.srv_products');
+      case 'Delivery':
+        return context.tr('corp_create.srv_delivery');
+      default:
+        return service;
+    }
+  }
+
+  String _getPaymentMethodLabel(BuildContext context, String method) {
+    switch (method) {
+      case 'Dinheiro':
+        return context.tr('corp_create.pay_cash');
+      case 'PIX':
+        return context.tr('corp_create.pay_pix');
+      case 'Cartão de Crédito':
+        return context.tr('corp_create.pay_credit');
+      case 'Cartão de Débito':
+        return context.tr('corp_create.pay_debit');
+      case 'Boleto':
+        return context.tr('corp_create.pay_bank_slip');
+      case 'Transferência':
+        return context.tr('corp_create.pay_transfer');
+      default:
+        return method;
+    }
+  }
+
   Widget _buildSelectionChips({
     required List<String> items,
     required List<String> selectedItems,
     required Color cardColor,
     required Color textColor,
+    String Function(String)? labelBuilder,
   }) {
     final thmode = Provider.of<DarkMode>(context);
     final isDark = thmode.darkMode;
@@ -727,8 +837,9 @@ class CreateCorpProfilePageState extends State<CreateCorpProfilePage> {
       runSpacing: 8,
       children: items.map((item) {
         final isSelected = selectedItems.contains(item);
+        final label = labelBuilder != null ? labelBuilder(item) : item;
         return FilterChip(
-          label: Text(item),
+          label: Text(label),
           selected: isSelected,
           onSelected: (selected) {
             setState(() {

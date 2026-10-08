@@ -12,6 +12,7 @@ import 'package:patas_web_app/src/features/pets/pets_create/widgets/species_sele
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:provider/provider.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class EditPetPage extends StatefulWidget {
   final Pet pet;
@@ -124,7 +125,7 @@ class EditPetPageState extends State<EditPetPage> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Galeria'),
+              title: Text(context.tr('story.gallery')),
               onTap: () {
                 _pickImage(ImageSource.gallery);
                 Navigator.of(context).pop();
@@ -132,7 +133,7 @@ class EditPetPageState extends State<EditPetPage> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Câmera'),
+              title: Text(context.tr('story.camera')),
               onTap: () {
                 _pickImage(ImageSource.camera);
                 Navigator.of(context).pop();
@@ -167,9 +168,8 @@ class EditPetPageState extends State<EditPetPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Campos Obrigatórios'),
-          content: const Text(
-              'Por favor, preencha todos os campos com * para continuar.'),
+          title: Text(context.tr('profile.required_fields_title')),
+          content: Text(context.tr('profile.required_fields_desc')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
@@ -198,7 +198,7 @@ class EditPetPageState extends State<EditPetPage> {
         } catch (e) {
           if (!mounted) return;
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro no upload da imagem: $e')),
+            SnackBar(content: Text(context.tr('profile.upload_image_error', {'error': '$e'}))),
           );
           setState(() {
             _isLoading = false;
@@ -250,13 +250,13 @@ class EditPetPageState extends State<EditPetPage> {
         await _petService.updatePet(updatedPet);
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Pet atualizado com sucesso!')),
+          SnackBar(content: Text(context.tr('profile.pet_updated_success'))),
         );
         Navigator.of(context).pop(true);
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao atualizar o pet: $e')),
+          SnackBar(content: Text(context.tr('profile.pet_update_error', {'error': '$e'}))),
         );
       } finally {
         if (mounted) {
@@ -305,8 +305,8 @@ class EditPetPageState extends State<EditPetPage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
       appBar: PatasEssencialAppBar(
-        title: 'Editar Perfil',
-        subtitle: 'Atualize os dados de ${widget.pet.name}',
+        title: context.tr('profile.edit_pet_title'),
+        subtitle: context.tr('profile.edit_pet_subtitle', {'name': widget.pet.name}),
         leadingIcon: const Icon(
           Icons.pets_rounded,
           color: AppColors.patasColor,
@@ -328,7 +328,7 @@ class EditPetPageState extends State<EditPetPage> {
                     Center(
                       child: Semantics(
                         button: true,
-                        label: 'Adicionar ou alterar foto de perfil do pet',
+                        label: context.tr('profile.change_pet_photo_semantic'),
                         child: GestureDetector(
                           onTap: _showImageSourceActionSheet,
                           child: CircleAvatar(
@@ -349,19 +349,19 @@ class EditPetPageState extends State<EditPetPage> {
                       ),
                     ),
                     const SizedBox(height: 24),
-                    _buildLabel('Nome*', textColor),
+                    _buildLabel(context.tr('profile.pet_name_label'), textColor),
                     const SizedBox(height: 8),
                     TextFormField(
                       style: TextStyle(color: textColor),
                       controller: _nameController,
                       decoration: _buildInputDecoration(
-                        hint: 'Nome do pet',
+                        hint: context.tr('profile.pet_name_hint'),
                         cardColor: cardColor,
                         textColor: textColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o nome do pet.';
+                          return context.tr('profile.pet_name_required');
                         }
                         return null;
                       },
@@ -372,11 +372,11 @@ class EditPetPageState extends State<EditPetPage> {
                     _buildDynamicFields(textColor, cardColor, thmode),
 
                     const SizedBox(height: 24),
-                    _buildLabel('Data de Nascimento*', textColor),
+                    _buildLabel(context.tr('profile.pet_birthdate_label'), textColor),
                     const SizedBox(height: 8),
                     Semantics(
                       button: true,
-                      label: 'Selecionar data de nascimento',
+                      label: context.tr('profile.select_birthdate_semantic'),
                       child: InkWell(
                         onTap: () async {
                           final pickedDate = await showDatePicker(
@@ -403,7 +403,7 @@ class EditPetPageState extends State<EditPetPage> {
                             children: [
                               Text(
                                 _birthDate == null
-                                    ? 'Clique para selecionar'
+                                    ? context.tr('profile.click_to_select')
                                     : '${_birthDate!.day}/${_birthDate!.month}/${_birthDate!.year}',
                                 style: TextStyle(
                                   color: _birthDate == null
@@ -430,8 +430,8 @@ class EditPetPageState extends State<EditPetPage> {
                               ),
                             ),
                             onPressed: _submitForm,
-                            child: const Text('Salvar Alterações',
-                                style: TextStyle(fontSize: 16, color: Colors.white)),
+                            child: Text(context.tr('common.save_changes'),
+                                style: const TextStyle(fontSize: 16, color: Colors.white)),
                           ),
                   ],
                 ),
@@ -469,12 +469,12 @@ class EditPetPageState extends State<EditPetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Gênero*', textColor),
+        _buildLabel(context.tr('profile.gender_label'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedGender,
           decoration: _buildInputDecoration(
-            hint: 'Selecione o gênero',
+            hint: context.tr('profile.select_gender'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -482,12 +482,16 @@ class EditPetPageState extends State<EditPetPage> {
               thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
           style: TextStyle(
               color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Macho', 'Fêmea'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+          items: [
+            DropdownMenuItem(
+              value: 'Macho',
+              child: Text(context.tr('profile.male')),
+            ),
+            DropdownMenuItem(
+              value: 'Fêmea',
+              child: Text(context.tr('profile.female')),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedGender = newValue;
@@ -495,12 +499,12 @@ class EditPetPageState extends State<EditPetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Porte*', textColor),
+        _buildLabel(context.tr('profile.size_label'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedSize,
           decoration: _buildInputDecoration(
-            hint: 'Selecione o porte',
+            hint: context.tr('profile.select_size'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -508,12 +512,20 @@ class EditPetPageState extends State<EditPetPage> {
               thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
           style: TextStyle(
               color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Pequeno', 'Médio', 'Grande'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+          items: [
+            DropdownMenuItem(
+              value: 'Pequeno',
+              child: Text(context.tr('profile.size_small')),
+            ),
+            DropdownMenuItem(
+              value: 'Médio',
+              child: Text(context.tr('profile.size_medium')),
+            ),
+            DropdownMenuItem(
+              value: 'Grande',
+              child: Text(context.tr('profile.size_large')),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedSize = newValue;
@@ -521,7 +533,7 @@ class EditPetPageState extends State<EditPetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Raça', textColor),
+        _buildLabel(context.tr('profile.breed'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -543,7 +555,7 @@ class EditPetPageState extends State<EditPetPage> {
             }
           },
           decoration: _buildInputDecoration(
-            hint: 'Toque para selecionar a raça',
+            hint: context.tr('profile.tap_to_select_breed'),
             cardColor: cardColor,
             textColor: textColor,
           ).copyWith(
@@ -552,37 +564,37 @@ class EditPetPageState extends State<EditPetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Local de nascimento', textColor),
+        _buildLabel(context.tr('profile.birth_place_label'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _birthPlaceController,
           decoration: _buildInputDecoration(
-            hint: 'Onde nasceu',
+            hint: context.tr('profile.birth_place_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Vive em:', textColor),
+        _buildLabel(context.tr('profile.lives_in_label'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _currentCityController,
           decoration: _buildInputDecoration(
-            hint: 'Cidade atual',
+            hint: context.tr('profile.lives_in_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Cor*', textColor),
+        _buildLabel(context.tr('profile.color_label'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _colorController,
           decoration: _buildInputDecoration(
-            hint: 'Cor predominante',
+            hint: context.tr('profile.color_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -594,7 +606,7 @@ class EditPetPageState extends State<EditPetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Peso (kg)', textColor),
+                  _buildLabel(context.tr('profile.weight_kg_label'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
@@ -615,7 +627,7 @@ class EditPetPageState extends State<EditPetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Tipo Sanguíneo', textColor),
+                  _buildLabel(context.tr('profile.blood_type_label'), textColor),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     initialValue: (_bloodTypeController.text.isEmpty ||
@@ -624,7 +636,7 @@ class EditPetPageState extends State<EditPetPage> {
                         ? 'Desconhecido'
                         : _bloodTypeController.text,
                     decoration: _buildInputDecoration(
-                      hint: 'Tipo',
+                      hint: context.tr('profile.blood_type_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),
@@ -638,7 +650,7 @@ class EditPetPageState extends State<EditPetPage> {
                     items: _getBloodTypeOptions().map((String value) {
                       return DropdownMenuItem<String>(
                         value: value,
-                        child: Text(value),
+                        child: Text(value == 'Desconhecido' ? context.tr('profile.unknown') : value),
                       );
                     }).toList(),
                     onChanged: (newValue) {

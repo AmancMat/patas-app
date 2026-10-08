@@ -8,6 +8,7 @@ import 'package:share_plus/share_plus.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/home/timeline/models/post_model.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class ShareService {
   static const String baseWebUrl = 'https://patas.online/post';
@@ -63,14 +64,14 @@ class ShareService {
     ScaffoldMessenger.of(context).hideCurrentSnackBar();
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Row(
+        content: Row(
           children: [
-            Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Link da publicação copiado com sucesso!',
-                style: TextStyle(
+                context.tr('feed.link_copied_success'),
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontWeight: FontWeight.w600,
                   color: Colors.white,
@@ -127,7 +128,7 @@ class ShareService {
                     const Icon(Icons.share_rounded, color: AppColors.patasColor, size: 22),
                     const SizedBox(width: 10),
                     Text(
-                      'Compartilhar Publicação',
+                      context.tr('feed.share_modal_title'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontWeight: FontWeight.bold,
@@ -151,7 +152,7 @@ class ShareService {
                     child: const Icon(Icons.send_rounded, color: AppColors.patasColor, size: 20),
                   ),
                   title: Text(
-                    'Compartilhar em outros apps',
+                    context.tr('feed.share_other_apps'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.w600,
@@ -160,7 +161,7 @@ class ShareService {
                     ),
                   ),
                   subtitle: Text(
-                    'WhatsApp, Instagram, Telegram ou Mensagens',
+                    context.tr('feed.share_other_apps_desc'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 12,
@@ -187,7 +188,7 @@ class ShareService {
                     child: const Icon(Icons.link_rounded, color: Colors.blue, size: 20),
                   ),
                   title: Text(
-                    'Copiar link da publicação',
+                    context.tr('feed.copy_post_link'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.w600,
@@ -196,7 +197,7 @@ class ShareService {
                     ),
                   ),
                   subtitle: Text(
-                    'Cole o link em qualquer lugar',
+                    context.tr('feed.copy_post_link_desc'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 12,
@@ -223,7 +224,7 @@ class ShareService {
                     child: const Icon(Icons.public_rounded, color: AppColors.patasColor, size: 20),
                   ),
                   title: Text(
-                    'Acessar Patas Web',
+                    context.tr('feed.access_patas_web'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontWeight: FontWeight.w600,
@@ -232,7 +233,7 @@ class ShareService {
                     ),
                   ),
                   subtitle: Text(
-                    'patas.online • Rede social completa no navegador',
+                    context.tr('feed.patas_web_desc'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 12,

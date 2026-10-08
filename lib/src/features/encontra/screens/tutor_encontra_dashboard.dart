@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/features/encontra/screens/ativar_tag_screen.dart';
 import 'package:patas_web_app/src/features/encontra/screens/historico_avistamentos_screen.dart';
 import 'package:patas_web_app/src/features/encontra/screens/subscription_dashboard_page.dart';
@@ -116,14 +117,14 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(24),
         ),
-        title: const Row(
+        title: Row(
           children: [
-            Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
-            SizedBox(width: 12),
+            const Icon(Icons.warning_amber_rounded, color: Colors.orange, size: 28),
+            const SizedBox(width: 12),
             Expanded(
               child: Text(
-                'Desvincular Tag?',
-                style: TextStyle(
+                context.tr('encontra.unlink_dialog_title'),
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   fontWeight: FontWeight.bold,
                 ),
@@ -132,16 +133,13 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           ],
         ),
         content: Text(
-          'Tem certeza de que deseja desvincular a tag inteligente do pet ${pet.name}?\n\n'
-          '• A tag física atual deixará de funcionar para este pet.\n'
-          '• A sua assinatura de proteção continuará ativa.\n'
-          '• Você poderá vincular uma nova tag a este pet quando quiser.',
+          context.tr('encontra.unlink_dialog_desc', {'name': pet.name}),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(),
             child: Text(
-              'Cancelar',
+              context.tr('encontra.unlink_cancel'),
               style: TextStyle(color: Colors.grey.shade600, fontWeight: FontWeight.bold),
             ),
           ),
@@ -156,9 +154,9 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                 borderRadius: BorderRadius.circular(12),
               ),
             ),
-            child: const Text(
-              'Desvincular',
-              style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
+            child: Text(
+              context.tr('encontra.unlink_confirm'),
+              style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold),
             ),
           ),
         ],
@@ -177,7 +175,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
       if (result['success'] == true) {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result['message'] ?? 'Tag desvinculada com sucesso!'),
+            content: Text(result['message'] ?? context.tr('encontra.unlink_success')),
             backgroundColor: Colors.green,
           ),
         );
@@ -185,7 +183,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text(result['message'] ?? 'Erro ao desvincular a tag.'),
+            content: Text(result['message'] ?? context.tr('encontra.unlink_error')),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -202,8 +200,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
     Widget mainContent = Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Patas Encontra',
-        subtitle: 'Proteção, medalha QR e geolocalização',
+        title: context.tr('encontra.title'),
+        subtitle: context.tr('encontra.subtitle'),
         showBackButton: true,
         leadingIcon: const Icon(
           Icons.radar_rounded,
@@ -214,7 +212,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           if (Provider.of<UserRoleProvider>(context, listen: true).role == UserRole.admin)
             IconButton(
               icon: const Icon(Icons.admin_panel_settings_outlined, color: AppColors.patasColor),
-              tooltip: 'Gerador de Lotes QR',
+              tooltip: context.tr('encontra.admin_qr_tooltip'),
               onPressed: () {
                 Navigator.pushNamed(context, NamedRoute.adminQrGenerator);
               },
@@ -260,7 +258,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
       children: [
         _buildIntroBanner(isDark),
         const SizedBox(height: 24),
-        _buildSectionTitle(isDark, 'Meus Pets e Tags'),
+        _buildSectionTitle(isDark, context.tr('encontra.my_pets_and_tags')),
         const SizedBox(height: 12),
         if (_pets.isEmpty)
           _buildEmptyPetsState(isDark)
@@ -290,7 +288,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
             children: [
               _buildIntroBanner(isDark),
               const SizedBox(height: 24),
-              _buildSectionTitle(isDark, 'Meus Pets e Tags'),
+              _buildSectionTitle(isDark, context.tr('encontra.my_pets_and_tags')),
               const SizedBox(height: 12),
               if (_pets.isEmpty)
                 _buildEmptyPetsState(isDark)
@@ -308,7 +306,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
-              _buildSectionTitle(isDark, 'Status da Busca'),
+              _buildSectionTitle(isDark, context.tr('encontra.search_status')),
               const SizedBox(height: 12),
               Container(
                 padding: const EdgeInsets.all(24),
@@ -331,7 +329,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                     ),
                     const SizedBox(height: 16),
                     Text(
-                      'Monitoramento Ativo',
+                      context.tr('encontra.active_monitoring'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 16,
@@ -341,7 +339,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                     ),
                     const SizedBox(height: 8),
                     Text(
-                      'Suas tags inteligentes estão monitorando seus pets de forma passiva. Ative o "Modo Perdido" no card do animal se ele se perder.',
+                      context.tr('encontra.monitoring_desc'),
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.white60 : Colors.black54,
@@ -385,7 +383,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Como funciona?',
+                  context.tr('encontra.how_it_works'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 16,
@@ -395,7 +393,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                 ),
                 const SizedBox(height: 4),
                 Text(
-                  'Ative o "Modo Perdido" caso seu pet fuja. Quem escanear a tag enviará a localização dele de volta para você.',
+                  context.tr('encontra.how_it_works_desc'),
                   style: TextStyle(
                     fontSize: 12,
                     color: isDark ? Colors.white60 : Colors.black54,
@@ -436,7 +434,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           const Icon(Icons.pets_rounded, size: 48, color: Colors.grey),
           const SizedBox(height: 12),
           Text(
-            'Nenhum pet cadastrado',
+            context.tr('encontra.no_pets_registered'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 16,
@@ -446,7 +444,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           ),
           const SizedBox(height: 6),
           Text(
-            'Você precisa cadastrar seu cão ou gato no menu de perfil para poder ativá-lo nas tags inteligentes.',
+            context.tr('encontra.no_pets_desc'),
             style: TextStyle(fontSize: 12, color: isDark ? Colors.white38 : Colors.black38),
             textAlign: TextAlign.center,
           ),
@@ -478,7 +476,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
     final bool isLost = hasActiveProtection && tag['is_lost'] == true;
 
     // 2. Definir o status da Tag
-    String tagText = 'Sem Tag QR';
+    String tagText = context.tr('encontra.tag_none');
     Color tagBgColor = isDark ? Colors.white.withValues(alpha: 0.05) : Colors.grey.shade100;
     Color tagTextColor = isDark ? Colors.white60 : Colors.grey.shade600;
     IconData tagIcon = Icons.qr_code_2_outlined;
@@ -486,12 +484,12 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
     if (hasTag) {
       final status = tag['status'] ?? 'active';
       if (status == 'active') {
-        tagText = 'Tag Ativa';
+        tagText = context.tr('encontra.tag_active');
         tagBgColor = Colors.green.withValues(alpha: 0.12);
         tagTextColor = Colors.green;
         tagIcon = Icons.verified_outlined;
       } else {
-        tagText = 'Tag Suspensa';
+        tagText = context.tr('encontra.tag_suspended');
         tagBgColor = Colors.red.withValues(alpha: 0.12);
         tagTextColor = Colors.red;
         tagIcon = Icons.block_outlined;
@@ -499,7 +497,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
     }
 
     // 3. Definir o status da Proteção/Assinatura
-    String subText = 'Sem Cobertura';
+    String subText = context.tr('encontra.sub_none');
     Color subBgColor = Colors.red.withValues(alpha: 0.12);
     Color subTextColor = Colors.red;
     IconData subIcon = Icons.shield_outlined;
@@ -510,12 +508,12 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
         final trialEndsStr = subscription['trial_ends_at'];
         final trialEnds = trialEndsStr != null ? DateTime.tryParse(trialEndsStr) : null;
         final daysLeft = trialEnds != null ? trialEnds.difference(DateTime.now()).inDays : 0;
-        subText = 'Testes ($daysLeft dias)';
+        subText = context.tr('encontra.sub_trial', {'days': '$daysLeft'});
         subBgColor = Colors.orange.withValues(alpha: 0.12);
         subTextColor = Colors.orange;
         subIcon = Icons.timer_outlined;
       } else if (status == 'active') {
-        subText = 'Proteção Ativa';
+        subText = context.tr('encontra.sub_active');
         subBgColor = AppColors.patasColor.withValues(alpha: 0.12);
         subTextColor = AppColors.patasColor;
         subIcon = Icons.shield_rounded;
@@ -523,17 +521,17 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
         final graceEndsStr = subscription['grace_period_ends_at'];
         final graceEnds = graceEndsStr != null ? DateTime.tryParse(graceEndsStr) : null;
         final daysLeft = graceEnds != null ? graceEnds.difference(DateTime.now()).inDays : 0;
-        subText = 'Aguardando Pix ($daysLeft dias)';
+        subText = context.tr('encontra.sub_grace', {'days': '$daysLeft'});
         subBgColor = Colors.orange.withValues(alpha: 0.12);
         subTextColor = Colors.orange;
         subIcon = Icons.warning_amber_rounded;
       } else if (status == 'past_due' || status == 'inactive') {
-        subText = 'Proteção Suspensa';
+        subText = context.tr('encontra.sub_suspended');
         subBgColor = Colors.red.withValues(alpha: 0.12);
         subTextColor = Colors.red;
         subIcon = Icons.error_outline_rounded;
       } else if (status == 'canceled') {
-        subText = 'Proteção Cancelada';
+        subText = context.tr('encontra.sub_canceled');
         subBgColor = Colors.red.withValues(alpha: 0.12);
         subTextColor = Colors.red;
         subIcon = Icons.cancel_outlined;
@@ -659,7 +657,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                         crossAxisAlignment: CrossAxisAlignment.center,
                         children: [
                           Text(
-                            'Modo Perdido',
+                            context.tr('encontra.lost_mode'),
                             style: TextStyle(
                               fontSize: 10,
                               fontWeight: FontWeight.bold,
@@ -716,8 +714,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                             padding: const EdgeInsets.symmetric(vertical: 12),
                           ),
                           icon: const Icon(Icons.qr_code_scanner, size: 16),
-                          label: const Text(
-                            'Vincular Tag Inteligente',
+                          label: Text(
+                            context.tr('encontra.link_smart_tag'),
                             style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
@@ -744,8 +742,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                           padding: const EdgeInsets.symmetric(vertical: 12),
                         ),
                         icon: const Icon(Icons.shield_outlined, size: 16),
-                        label: const Text(
-                          'Ativar Proteção do Pet',
+                        label: Text(
+                          context.tr('encontra.activate_protection'),
                           style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -757,8 +755,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                           child: TextButton.icon(
                             onPressed: () => _confirmarDesvinculacao(pet, tag['id'] as String),
                             icon: const Icon(Icons.link_off, size: 13, color: Colors.redAccent),
-                            label: const Text(
-                              'Desvincular Tag',
+                            label: Text(
+                              context.tr('encontra.unlink_tag_btn'),
                               style: TextStyle(fontSize: 11, fontWeight: FontWeight.w600, color: Colors.redAccent),
                             ),
                             style: TextButton.styleFrom(
@@ -801,8 +799,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               icon: const Icon(Icons.receipt_long_outlined, size: 13),
-                              label: const Text(
-                                'Gerenciar Assinatura',
+                              label: Text(
+                                context.tr('encontra.manage_subscription'),
                                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -819,8 +817,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                                 tapTargetSize: MaterialTapTargetSize.shrinkWrap,
                               ),
                               icon: const Icon(Icons.map_outlined, size: 13),
-                              label: const Text(
-                                'Visualizar no Mapa',
+                              label: Text(
+                                context.tr('encontra.view_on_map'),
                                 style: TextStyle(fontSize: 11, fontWeight: FontWeight.bold),
                               ),
                             ),
@@ -830,7 +828,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                       const Spacer(),
                       // 3. Desvincular Tag — alinhado à direita e na base (ao lado de Visualizar no Mapa)
                       Tooltip(
-                        message: isLost ? 'Desative o Modo Perdido antes de desvincular' : '',
+                        message: isLost ? context.tr('encontra.unlink_disabled_tooltip') : '',
                         child: TextButton.icon(
                           onPressed: isLost ? null : () => _confirmarDesvinculacao(pet, tag['id'] as String),
                           icon: Icon(
@@ -839,7 +837,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                             color: isLost ? Colors.grey.shade400 : Colors.redAccent,
                           ),
                           label: Text(
-                            'Desvincular Tag',
+                            context.tr('encontra.unlink_tag_btn'),
                             style: TextStyle(
                               fontSize: 11,
                               fontWeight: FontWeight.w600,
@@ -866,7 +864,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                     crossAxisAlignment: CrossAxisAlignment.stretch,
                     children: [
                       Text(
-                        'Avistamentos Recentes',
+                        context.tr('encontra.recent_sightings'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 14,
@@ -895,7 +893,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
       return Padding(
         padding: const EdgeInsets.symmetric(vertical: 12),
         child: Text(
-          'Nenhum avistamento registrado para este pet ainda. As tags inteligentes estão aguardando leitura.',
+          context.tr('encontra.no_sightings_yet'),
           style: TextStyle(
             fontSize: 12,
             color: isDark ? Colors.white38 : Colors.black38,
@@ -915,7 +913,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
             ? address
             : (lat != null && lng != null
                 ? 'Lat: ${lat.toStringAsFixed(4)}, Lng: ${lng.toStringAsFixed(4)}'
-                : 'Localização desconhecida');
+                : context.tr('encontra.unknown_location'));
         final seenAt = s['seen_at'] as String?;
         final message = s['message'] as String?;
         final finderName = s['finder_name'] as String?;
@@ -927,11 +925,11 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
           if (seen != null) {
             final diff = DateTime.now().difference(seen);
             if (diff.inMinutes < 60) {
-              timeAgo = 'Há ${diff.inMinutes}min';
+              timeAgo = context.tr('encontra.time_min', {'min': '${diff.inMinutes}'});
             } else if (diff.inHours < 24) {
-              timeAgo = 'Há ${diff.inHours}h';
+              timeAgo = context.tr('encontra.time_hour', {'hour': '${diff.inHours}'});
             } else {
-              timeAgo = 'Há ${diff.inDays}d';
+              timeAgo = context.tr('encontra.time_day', {'day': '${diff.inDays}'});
             }
 
             final hour = seen.hour.toString().padLeft(2, '0');
@@ -944,11 +942,11 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
 
         final displayMessage = message != null && message.isNotEmpty
             ? '"$message"'
-            : '"Sem comentário do avistador"';
+            : context.tr('encontra.no_comment');
 
         final displayFinder = finderName != null && finderName.isNotEmpty
             ? finderName
-            : 'Avistador desconhecido';
+            : context.tr('encontra.unknown_finder');
 
         return Container(
           margin: const EdgeInsets.only(bottom: 8),
@@ -988,7 +986,7 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      'Por: $displayFinder · $timeStr ($timeAgo)',
+                      context.tr('encontra.sighted_by', {'finder': displayFinder, 'time': timeStr, 'timeAgo': timeAgo}),
                       style: TextStyle(
                         fontSize: 10,
                         color: isDark ? Colors.white30 : Colors.black38,
@@ -1009,8 +1007,8 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
     final snackBar = SnackBar(
       content: Text(
         isLost
-            ? '🚨 Alerta: Modo Perdido ATIVADO para $petName!'
-            : '✅ Modo Perdido desativado para $petName.',
+            ? context.tr('encontra.alert_lost_mode_on', {'name': petName})
+            : context.tr('encontra.alert_lost_mode_off', {'name': petName}),
         style: const TextStyle(fontWeight: FontWeight.bold),
       ),
       backgroundColor: isLost ? Colors.redAccent : Colors.green,
@@ -1022,15 +1020,15 @@ class _TutorEncontraDashboardState extends State<TutorEncontraDashboard> {
   void _showHelpDialog() {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Sobre o Patas Encontra'),
-        content: const Text(
-          'As tags físicas do Patas possuem um QR Code exclusivo. Quando alguém escaneia a tag, o sistema pode enviar a geolocalização do localizador diretamente para você caso seu pet esteja marcado no "Modo Perdido".\n\nQualquer dúvida, entre em contato com o suporte do app.',
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(dialogCtx.tr('encontra.about_title')),
+        content: Text(
+          dialogCtx.tr('encontra.about_desc'),
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context),
-            child: const Text('Fechar'),
+            onPressed: () => Navigator.pop(dialogCtx),
+            child: Text(dialogCtx.tr('common_close')),
           ),
         ],
       ),
@@ -1118,15 +1116,15 @@ class _AnimatedMapButtonState extends State<_AnimatedMapButton>
               child: InkWell(
                 borderRadius: BorderRadius.circular(16),
                 onTap: widget.onPressed,
-                child: const Padding(
-                  padding: EdgeInsets.symmetric(vertical: 20, horizontal: 24),
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 24),
                   child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
                       Icon(Icons.map_outlined, size: 20, color: Colors.white),
                       SizedBox(width: 10),
                       Text(
-                        'VISUALIZAR TODOS NO MAPA',
+                        context.tr('encontra.view_all_on_map'),
                         style: TextStyle(
                           fontSize: 14,
                           fontWeight: FontWeight.bold,

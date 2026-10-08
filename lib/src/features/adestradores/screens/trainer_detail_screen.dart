@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import '../models/trainer_profile_model.dart';
@@ -70,7 +71,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
         title: trainer.fullName,
-        subtitle: 'Perfil do Especialista em Comportamento',
+        subtitle: context.tr('trainers.profile_subtitle'),
         leadingIcon: const Icon(
           Icons.sports_score_rounded,
           color: AppColors.patasColor,
@@ -116,8 +117,8 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                     ),
                   ),
                   icon: const Icon(Icons.calendar_month_rounded, size: 20),
-                  label: const Text(
-                    'Solicitar Treino / Avaliação',
+                  label: Text(
+                    context.tr('trainers.request_session_btn'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 15,
@@ -299,7 +300,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                         icon: Icons.star_rounded,
                         iconColor: Colors.amber,
                         value: trainer.rating.toStringAsFixed(1),
-                        label: '${trainer.reviewCount} avaliações',
+                        label: context.tr('trainers.reviews_count', {'count': trainer.reviewCount.toString()}),
                         isDark: isDark,
                       ),
                       Container(
@@ -312,7 +313,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                         icon: Icons.radar_rounded,
                         iconColor: Colors.teal,
                         value: '${trainer.serviceRadiusKm} km',
-                        label: 'Raio de Atend.',
+                        label: context.tr('trainers.metric_radius'),
                         isDark: isDark,
                       ),
                       Container(
@@ -325,7 +326,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                         icon: Icons.school_outlined,
                         iconColor: Colors.indigoAccent,
                         value: '${trainer.specialties.length}',
-                        label: 'Especialidades',
+                        label: context.tr('trainers.specialties_title'),
                         isDark: isDark,
                       ),
                     ],
@@ -398,7 +399,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Sobre o Especialista',
+            context.tr('trainers.about_title'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 17,
@@ -417,7 +418,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           ),
           const SizedBox(height: 16),
           Text(
-            'Especialidades',
+            context.tr('trainers.specialties_title'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 15,
@@ -458,7 +459,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           if (trainer.certifications.isNotEmpty) ...[
             const SizedBox(height: 16),
             Text(
-              'Certificações & Formação',
+              context.tr('trainers.certs_title'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 15,
@@ -514,7 +515,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
-            'Formas de Atendimento',
+            context.tr('trainers.attendance_ways'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 16,
@@ -529,8 +530,8 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                 Expanded(
                   child: _buildAttendancePill(
                     icon: Icons.home_rounded,
-                    label: 'A Domicílio',
-                    sublabel: 'No conforto do seu pet',
+                    label: context.tr('trainers.at_home'),
+                    sublabel: context.tr('trainers.at_home_sub'),
                     color: Colors.teal,
                     isDark: isDark,
                   ),
@@ -541,8 +542,8 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                 Expanded(
                   child: _buildAttendancePill(
                     icon: Icons.videocam_rounded,
-                    label: 'Consultoria Online',
-                    sublabel: 'Videoconferência ao vivo',
+                    label: context.tr('trainers.online_consulting'),
+                    sublabel: context.tr('trainers.online_sub'),
                     color: Colors.blueAccent,
                     isDark: isDark,
                   ),
@@ -620,7 +621,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               Text(
-                'Serviços & Pacotes',
+                context.tr('trainers.services_packages'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 17,
@@ -642,7 +643,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           const SizedBox(height: 14),
           if (!_isLoading && _services.isEmpty)
             Text(
-              'Nenhum pacote cadastrado no momento.',
+              context.tr('trainers.no_services_yet'),
               style: TextStyle(
                 fontSize: 12,
                 color: isDark ? Colors.white54 : Colors.grey.shade600,
@@ -698,7 +699,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                                     ),
                                     const SizedBox(width: 4),
                                     Text(
-                                      '${s.durationMinutes} minutos',
+                                      context.tr('trainers.minutes', {'minutes': s.durationMinutes.toString()}),
                                       style: TextStyle(
                                         fontSize: 11,
                                         color: isDark
@@ -764,8 +765,8 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
                             ),
                           ),
                           icon: const Icon(Icons.check_circle_outline, size: 16),
-                          label: const Text(
-                            'Escolher este serviço',
+                          label: Text(
+                            context.tr('trainers.choose_service_btn'),
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 12,
@@ -801,7 +802,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           Row(
             children: [
               Text(
-                'Avaliações',
+                context.tr('trainers.reviews_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 17,
@@ -836,7 +837,7 @@ class _TrainerDetailScreenState extends State<TrainerDetailScreen> {
           const SizedBox(height: 14),
           if (!_isLoading && _reviews.isEmpty)
             Text(
-              'Nenhuma avaliação registrada ainda.',
+              context.tr('trainers.no_reviews_registered'),
               style: TextStyle(
                 fontSize: 12,
                 color: isDark ? Colors.white54 : Colors.grey.shade600,

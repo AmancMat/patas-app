@@ -22,6 +22,7 @@ import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class FullScreenStory extends StatefulWidget {
   final List<Story> stories;
@@ -677,7 +678,7 @@ class _FullScreenStoryState extends State<FullScreenStory>
                     shape: BoxShape.circle,
                   ),
                   child: IconButton(
-                    tooltip: 'Fechar story',
+                    tooltip: context.tr('story.close_tooltip'),
                     icon: const Icon(Icons.close, color: Colors.white),
                     onPressed: () => Navigator.pop(context),
                   ),
@@ -701,9 +702,8 @@ class _FullScreenStoryState extends State<FullScreenStory>
                       _progressController.stop();
                       try {
                         await SharePlus.instance.share(ShareParams(
-                          text: 'Confira este story no Patas!',
-                          subject:
-                              'Story de ${story.pet?.name ?? story.userName}',
+                          text: context.tr('story.share_text'),
+                          subject: context.tr('story.share_subject', {'name': story.pet?.name ?? story.userName ?? ''}),
                         ));
                       } finally {
                         if (mounted) {
@@ -721,7 +721,7 @@ class _FullScreenStoryState extends State<FullScreenStory>
               top: context.isWide ? 32 : 56.h,
               right: context.isWide ? 80 : 8.w,
               child: IconButton(
-                tooltip: 'Opções do story',
+                tooltip: context.tr('story.options_tooltip'),
                 icon: Icon(
                   Icons.more_horiz,
                   color: Colors.white,
@@ -820,7 +820,9 @@ class _FullScreenStoryState extends State<FullScreenStory>
 
     return Semantics(
       button: true,
-      label: isLiked ? 'Descurtir story' : 'Curtir story',
+      label: isLiked
+          ? context.tr('story.unlike_semantic')
+          : context.tr('story.like_semantic'),
       child: GestureDetector(
         onTap: () async {
         if (story.id.startsWith('fake')) return;
@@ -882,11 +884,15 @@ class _FullScreenStoryState extends State<FullScreenStory>
                   return ScaleTransition(scale: animation, child: child);
                 },
                 child: isLiked
-                    ? Icon(
-                        Icons.favorite,
+                    ? SvgPicture.asset(
+                        'assets/icons/heart_filled.svg',
                         key: const ValueKey('liked'),
-                        color: Colors.red,
-                        size: context.isWide ? 24 : 28.r,
+                        height: context.isWide ? 24 : 28.r,
+                        width: context.isWide ? 24 : 28.r,
+                        colorFilter: const ColorFilter.mode(
+                          Colors.red,
+                          BlendMode.srcIn,
+                        ),
                       )
                     : SvgPicture.asset(
                         'assets/icons/heart.svg',

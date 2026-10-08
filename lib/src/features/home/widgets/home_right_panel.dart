@@ -5,6 +5,7 @@ import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/models/active_account_model.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/utils/to_publish_page.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import 'package:patas_web_app/app.dart';
 
 /// Painel lateral direito exibido exclusivamente em desktop (≥ 1024 px).
@@ -64,7 +65,7 @@ class HomeRightPanel extends StatelessWidget {
                     );
                   },
                   icon: const Icon(Icons.add, size: 18),
-                  label: const Text('Novo Post'),
+                  label: Text(context.tr('home.new_post_btn')),
                   style: ElevatedButton.styleFrom(
                     backgroundColor: AppColors.patasColor,
                     foregroundColor: Colors.white,
@@ -172,7 +173,7 @@ class _ActiveAccountCard extends StatelessWidget {
                     ),
                     const SizedBox(height: 2),
                     Text(
-                      _labelFor(account.type),
+                      _labelFor(context, account.type),
                       style: TextStyle(
                         color: subTextColor,
                         fontSize: 12,
@@ -200,16 +201,16 @@ class _ActiveAccountCard extends StatelessWidget {
     }
   }
 
-  String _labelFor(AccountType type) {
+  String _labelFor(BuildContext context, AccountType type) {
     switch (type) {
       case AccountType.user:
-        return 'Perfil Pessoal';
+        return context.tr('home.account_personal');
       case AccountType.pet:
-        return 'Pet';
+        return context.tr('home.account_pet');
       case AccountType.ong:
-        return 'ONG / Instituição';
+        return context.tr('home.account_ong');
       case AccountType.company:
-        return 'Empresa';
+        return context.tr('home.account_corp');
     }
   }
 }
@@ -234,7 +235,7 @@ class _QuickTip extends StatelessWidget {
                 size: 16, color: AppColors.patasColor),
             const SizedBox(width: 6),
             Text(
-              'Dica Patas',
+              context.tr('home.patas_tip_title'),
               style: TextStyle(
                 color: textColor,
                 fontWeight: FontWeight.bold,
@@ -245,7 +246,7 @@ class _QuickTip extends StatelessWidget {
         ),
         const SizedBox(height: 8),
         Text(
-          'Compartilhe momentos do seu pet para inspirar outros tutores da comunidade! 🐾',
+          context.tr('home.patas_tip_desc'),
           style: TextStyle(
             color: subTextColor,
             fontSize: 12,

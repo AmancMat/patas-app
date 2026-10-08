@@ -13,6 +13,7 @@ import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/add_canine_race_page.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/add_feline_race_page.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/widgets/species_selector_dialog.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:provider/provider.dart';
@@ -98,7 +99,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           children: <Widget>[
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Galeria'),
+              title: Text(context.tr('pet_create.gallery')),
               onTap: () {
                 _pickImage(ImageSource.gallery, isProfileImage);
                 Navigator.of(context).pop();
@@ -106,7 +107,7 @@ class CreatePetPageState extends State<CreatePetPage> {
             ),
             ListTile(
               leading: const Icon(Icons.photo_camera),
-              title: const Text('Câmera'),
+              title: Text(context.tr('pet_create.camera')),
               onTap: () {
                 _pickImage(ImageSource.camera, isProfileImage);
                 Navigator.of(context).pop();
@@ -133,13 +134,12 @@ class CreatePetPageState extends State<CreatePetPage> {
       showDialog(
         context: context,
         builder: (context) => AlertDialog(
-          title: const Text('Campos Obrigatórios'),
-          content: const Text(
-              'Por favor, preencha todos os campos com * para continuar.'),
+          title: Text(context.tr('pet_create.required_fields_title')),
+          content: Text(context.tr('pet_create.required_fields_desc')),
           actions: [
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
-              child: const Text('OK'),
+              child: Text(context.tr('common.confirm')),
             ),
           ],
         ),
@@ -160,9 +160,8 @@ class CreatePetPageState extends State<CreatePetPage> {
       if (user == null) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text(
-                  'Erro: Usuário não identificado. Tente fazer login novamente.')),
+          SnackBar(
+              content: Text(context.tr('pet_create.user_not_identified'))),
         );
         setState(() {
           _isLoading = false;
@@ -183,7 +182,7 @@ class CreatePetPageState extends State<CreatePetPage> {
       } catch (e) {
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro no upload das imagens: $e')),
+          SnackBar(content: Text(context.tr('pet_create.upload_error', {'error': e.toString()}))),
         );
         setState(() {
           _isLoading = false;
@@ -271,38 +270,140 @@ class CreatePetPageState extends State<CreatePetPage> {
     }
   }
 
-  String _getAppBarTitle() {
+  String _getAppBarTitle(BuildContext context) {
     switch (widget.species) {
       case 'canino':
-        return 'Criar Perfil de Cachorro';
+        return context.tr('pet_create.title_dog');
       case 'felino':
-        return 'Criar Perfil de Gato';
+        return context.tr('pet_create.title_cat');
       case 'ave':
-        return 'Criar Perfil de Ave';
+        return context.tr('pet_create.title_bird');
       case 'roedor':
-        return 'Criar Perfil de Roedor';
+        return context.tr('pet_create.title_rodent');
       case 'exotico':
-        return 'Criar Perfil de Exótico';
+        return context.tr('pet_create.title_exotic');
       default:
-        return 'Criar Perfil de Pet';
+        return context.tr('pet_create.title');
     }
   }
 
-  List<String> _getBloodTypeOptions() {
+  List<Map<String, String>> _getBloodTypeOptions(BuildContext context) {
     if (widget.species == 'canino') {
       return [
-        'Desconhecido',
-        'DEA 1.1 (+)',
-        'DEA 1.1 (-)',
-        'DEA 3',
-        'DEA 4',
-        'DEA 5',
-        'DEA 7',
-        'Dal'
+        {'id': 'unknown', 'label': context.tr('pet_create.blood_unknown')},
+        {'id': 'DEA 1.1 (+)', 'label': 'DEA 1.1 (+)'},
+        {'id': 'DEA 1.1 (-)', 'label': 'DEA 1.1 (-)'},
+        {'id': 'DEA 3', 'label': 'DEA 3'},
+        {'id': 'DEA 4', 'label': 'DEA 4'},
+        {'id': 'DEA 5', 'label': 'DEA 5'},
+        {'id': 'DEA 7', 'label': 'DEA 7'},
+        {'id': 'Dal', 'label': 'Dal'},
       ];
     } else {
-      return ['Desconhecido', 'Tipo A', 'Tipo B', 'Tipo AB'];
+      return [
+        {'id': 'unknown', 'label': context.tr('pet_create.blood_unknown')},
+        {'id': 'Tipo A', 'label': context.tr('pet_create.blood_type_a')},
+        {'id': 'Tipo B', 'label': context.tr('pet_create.blood_type_b')},
+        {'id': 'Tipo AB', 'label': context.tr('pet_create.blood_type_ab')},
+      ];
     }
+  }
+
+  Widget _buildSelectedItem(String label, Color textColor) {
+    return Align(
+      alignment: Alignment.centerLeft,
+      child: Text(
+        label,
+        style: TextStyle(
+          color: textColor,
+          fontSize: 14,
+          fontWeight: FontWeight.w500,
+        ),
+      ),
+    );
+  }
+
+  List<String> _getBirdSpeciesList(BuildContext context) {
+    if (context.isEn) {
+      return const [
+        'Cockatiel',
+        'Canary',
+        'Parrot',
+        'Parakeet / Budgie',
+        'Monk Parakeet',
+        'Lovebird',
+        'Zebra Finch',
+        'Java Sparrow',
+        'Chestnut-bellied Seed-Finch',
+        'Double-collared Seedeater',
+        'Cockatoo',
+        'Green-winged Saltator',
+      ];
+    }
+    return const [
+      'Calopsita',
+      'Canário',
+      'Papagaio',
+      'Periquito',
+      'Caturrita',
+      'Agapornis',
+      'Mandarim',
+      'Calafate',
+      'Curió',
+      'Coleiro',
+      'Cacatua',
+      'Trinca-ferro',
+    ];
+  }
+
+  List<String> _getRodentSpeciesList(BuildContext context) {
+    if (context.isEn) {
+      return const [
+        'Syrian Hamster',
+        'Russian Dwarf Hamster',
+        'Guinea Pig',
+        'Chinchilla',
+        'Rabbit (Lagomorph)',
+        'Fancy Rat / Twister',
+        'Mongolian Gerbil',
+      ];
+    }
+    return const [
+      'Hamster Sírio',
+      'Hamster Anão Russo',
+      'Porquinho da Índia',
+      'Chinchila',
+      'Coelho (Lagomorfo)',
+      'Twister / Rato',
+      'Gerbil / Esquilo da Mongólia',
+    ];
+  }
+
+  List<String> _getExoticSpeciesList(BuildContext context) {
+    if (context.isEn) {
+      return const [
+        'Red-footed Tortoise',
+        'Red-eared Slider (Turtle)',
+        'Green Iguana',
+        'Bearded Dragon',
+        'Boa Constrictor',
+        'Corn Snake',
+        'Leopard Gecko',
+        'Ferret',
+        'Mini Pig',
+      ];
+    }
+    return const [
+      'Jabuti',
+      'Tigre d\'Água (Tartaruga)',
+      'Iguana Verde',
+      'Dragão Barbudo (Pogona)',
+      'Jiboia',
+      'Cobra Corn Snake',
+      'Geco (Gecko Leopard)',
+      'Furão (Ferret)',
+      'Mini Pig',
+    ];
   }
 
   @override
@@ -315,8 +416,8 @@ class CreatePetPageState extends State<CreatePetPage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
       appBar: PatasEssencialAppBar(
-        title: _getAppBarTitle(),
-        subtitle: 'Preencha os dados do pet para criar o perfil',
+        title: _getAppBarTitle(context),
+        subtitle: context.tr('pet_create.subtitle'),
         leadingIcon: const Icon(
           Icons.pets_rounded,
           color: AppColors.patasColor,
@@ -369,7 +470,7 @@ class CreatePetPageState extends State<CreatePetPage> {
                                       ),
                                       const SizedBox(height: 8),
                                       Text(
-                                        'Adicionar Foto de Capa',
+                                        context.tr('pet_create.cover_photo'),
                                         style: TextStyle(
                                           color: textColor.withValues(alpha: 0.6),
                                           fontSize: 12,
@@ -415,7 +516,7 @@ class CreatePetPageState extends State<CreatePetPage> {
                     const SizedBox(height: 8),
                     Center(
                       child: Text(
-                        'Foto de Perfil*',
+                        context.tr('pet_create.profile_photo'),
                         style: TextStyle(
                           color: textColor.withValues(alpha: 0.6),
                           fontSize: 12,
@@ -424,19 +525,19 @@ class CreatePetPageState extends State<CreatePetPage> {
                     ),
                     const SizedBox(height: 24),
 
-                    _buildLabel('Nome*', textColor),
+                    _buildLabel(context.tr('pet_create.name'), textColor),
                     const SizedBox(height: 8),
                     TextFormField(
                       style: TextStyle(color: textColor),
                       controller: _nameController,
                       decoration: _buildInputDecoration(
-                        hint: 'Nome do pet',
+                        hint: context.tr('pet_create.name_hint'),
                         cardColor: cardColor,
                         textColor: textColor,
                       ),
                       validator: (value) {
                         if (value == null || value.isEmpty) {
-                          return 'Por favor, insira o nome do pet.';
+                          return context.tr('pet_create.name_error');
                         }
                         return null;
                       },
@@ -447,11 +548,11 @@ class CreatePetPageState extends State<CreatePetPage> {
                     _buildDynamicFields(textColor, cardColor, thmode),
 
                     const SizedBox(height: 24),
-                    _buildLabel('Data de Nascimento*', textColor),
+                    _buildLabel(context.tr('pet_create.birth_date'), textColor),
                     const SizedBox(height: 8),
                     Semantics(
                       button: true,
-                      label: 'Selecionar data de nascimento',
+                      label: context.tr('pet_create.birth_date'),
                       child: InkWell(
                         onTap: () async {
                           final pickedDate = await showDatePicker(
@@ -478,7 +579,7 @@ class CreatePetPageState extends State<CreatePetPage> {
                             children: [
                               Text(
                                 _birthDate == null
-                                    ? 'Clique para selecionar'
+                                    ? context.tr('pet_create.click_to_select')
                                     : '${_birthDate!.day}/${_birthDate!.month}/${_birthDate!.year}',
                                 style: TextStyle(
                                   color: _birthDate == null
@@ -505,8 +606,8 @@ class CreatePetPageState extends State<CreatePetPage> {
                               ),
                             ),
                             onPressed: _submitForm,
-                            child: const Text('Salvar Perfil',
-                                style: TextStyle(fontSize: 16, color: Colors.white)),
+                            child: Text(context.tr('pet_create.save_profile'),
+                                style: const TextStyle(fontSize: 16, color: Colors.white)),
                           ),
                   ],
                 ),
@@ -540,25 +641,46 @@ class CreatePetPageState extends State<CreatePetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Gênero*', textColor),
+        _buildLabel(context.tr('pet_create.gender'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedGender,
+          hint: Text(
+            context.tr('pet_create.gender_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o gênero',
+            hint: context.tr('pet_create.gender_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Macho', 'Fêmea'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.gender_male'), textColor),
+            _buildSelectedItem(context.tr('pet_create.gender_female'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Macho',
+              child: Text(
+                context.tr('pet_create.gender_male'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Fêmea',
+              child: Text(
+                context.tr('pet_create.gender_female'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedGender = newValue;
@@ -566,25 +688,54 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Porte*', textColor),
+        _buildLabel(context.tr('pet_create.size'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedSize,
+          hint: Text(
+            context.tr('pet_create.size_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o porte',
+            hint: context.tr('pet_create.size_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Pequeno', 'Médio', 'Grande'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.size_small'), textColor),
+            _buildSelectedItem(context.tr('pet_create.size_medium'), textColor),
+            _buildSelectedItem(context.tr('pet_create.size_large'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Pequeno',
+              child: Text(
+                context.tr('pet_create.size_small'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Médio',
+              child: Text(
+                context.tr('pet_create.size_medium'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Grande',
+              child: Text(
+                context.tr('pet_create.size_large'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedSize = newValue;
@@ -592,7 +743,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Raça', textColor),
+        _buildLabel(context.tr('pet_create.breed'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -614,7 +765,7 @@ class CreatePetPageState extends State<CreatePetPage> {
             }
           },
           decoration: _buildInputDecoration(
-            hint: 'Toque para selecionar a raça',
+            hint: context.tr('pet_create.breed_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ).copyWith(
@@ -623,37 +774,37 @@ class CreatePetPageState extends State<CreatePetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Local de nascimento', textColor),
+        _buildLabel(context.tr('pet_create.birth_place'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _birthPlaceController,
           decoration: _buildInputDecoration(
-            hint: 'Onde nasceu',
+            hint: context.tr('pet_create.birth_place_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Vive em:', textColor),
+        _buildLabel(context.tr('pet_create.current_city'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _currentCityController,
           decoration: _buildInputDecoration(
-            hint: 'Cidade atual',
+            hint: context.tr('pet_create.current_city_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Cor*', textColor),
+        _buildLabel(context.tr('pet_create.color'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _colorController,
           decoration: _buildInputDecoration(
-            hint: 'Cor predominante',
+            hint: context.tr('pet_create.color_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -665,7 +816,7 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Peso (kg)', textColor),
+                  _buildLabel(context.tr('pet_create.weight'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
@@ -673,7 +824,7 @@ class CreatePetPageState extends State<CreatePetPage> {
                     keyboardType: const TextInputType.numberWithOptions(
                         decimal: true),
                     decoration: _buildInputDecoration(
-                      hint: '0.0',
+                      hint: context.tr('pet_create.weight_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),
@@ -686,35 +837,52 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Tipo Sanguíneo', textColor),
+                  _buildLabel(context.tr('pet_create.blood_type'), textColor),
                   const SizedBox(height: 8),
                   DropdownButtonFormField<String>(
                     initialValue: (_bloodTypeController.text.isEmpty ||
-                            !_getBloodTypeOptions()
-                                .contains(_bloodTypeController.text))
-                        ? 'Desconhecido'
+                            _bloodTypeController.text == 'Desconhecido' ||
+                            _bloodTypeController.text == 'Unknown' ||
+                            _bloodTypeController.text == 'unknown')
+                        ? 'unknown'
                         : _bloodTypeController.text,
+                    hint: Text(
+                      context.tr('pet_create.blood_type_hint'),
+                      style: TextStyle(
+                          color: textColor.withValues(alpha: 0.5), fontSize: 14),
+                    ),
                     decoration: _buildInputDecoration(
-                      hint: 'Tipo',
+                      hint: context.tr('pet_create.blood_type_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),
                     dropdownColor: thmode.darkMode
-                        ? AppColors.darkBG
-                        : AppColors.bodyLight,
-                    style: TextStyle(
-                        color: thmode.darkMode
-                            ? Colors.white
-                            : Colors.black),
-                    items: _getBloodTypeOptions().map((String value) {
+                        ? const Color(0xFF1E293B)
+                        : Colors.white,
+                    icon: Icon(
+                      Icons.keyboard_arrow_down_rounded,
+                      color: textColor.withValues(alpha: 0.7),
+                    ),
+                    style: TextStyle(color: textColor, fontSize: 14),
+                    selectedItemBuilder: (context) {
+                      return _getBloodTypeOptions(context).map((opt) {
+                        return _buildSelectedItem(opt['label']!, textColor);
+                      }).toList();
+                    },
+                    items: _getBloodTypeOptions(context).map((opt) {
                       return DropdownMenuItem<String>(
-                        value: value,
-                        child: Text(value),
+                        value: opt['id'],
+                        child: Text(
+                          opt['label']!,
+                          style: TextStyle(color: textColor, fontSize: 14),
+                        ),
                       );
                     }).toList(),
                     onChanged: (newValue) {
                       setState(() {
-                        _bloodTypeController.text = newValue!;
+                        _bloodTypeController.text = (newValue == 'unknown')
+                            ? 'Desconhecido'
+                            : (newValue ?? '');
                       });
                     },
                   ),
@@ -732,25 +900,54 @@ class CreatePetPageState extends State<CreatePetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Gênero*', textColor),
+        _buildLabel(context.tr('pet_create.gender'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedGender,
+          hint: Text(
+            context.tr('pet_create.gender_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o gênero',
+            hint: context.tr('pet_create.gender_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Macho', 'Fêmea', 'Pendente (Não sexado/DNA)'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.gender_male'), textColor),
+            _buildSelectedItem(context.tr('pet_create.gender_female'), textColor),
+            _buildSelectedItem(context.tr('pet_create.gender_pending'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Macho',
+              child: Text(
+                context.tr('pet_create.gender_male'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Fêmea',
+              child: Text(
+                context.tr('pet_create.gender_female'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Pendente (Não sexado/DNA)',
+              child: Text(
+                context.tr('pet_create.gender_pending'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedGender = newValue;
@@ -758,7 +955,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Espécie de Ave*', textColor),
+        _buildLabel(context.tr('pet_create.species_bird'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -767,22 +964,10 @@ class CreatePetPageState extends State<CreatePetPage> {
           onTap: () async {
             final String? selected = await showDialog<String>(
               context: context,
-              builder: (context) => const SpeciesSelectorDialog(
-                title: 'Espécie da Ave',
-                popularSpecies: [
-                  'Calopsita',
-                  'Canário',
-                  'Papagaio',
-                  'Periquito',
-                  'Caturrita',
-                  'Agapornis',
-                  'Mandarim',
-                  'Calafate',
-                  'Curió',
-                  'Coleiro',
-                  'Cacatua',
-                  'Trinca-ferro',
-                ],
+              builder: (context) => SpeciesSelectorDialog(
+                title: context.tr('pet_create.species_bird').replaceAll('*', '').trim(),
+                popularSpecies: _getBirdSpeciesList(context),
+                itemIcon: Icons.flutter_dash,
               ),
             );
             if (selected != null) {
@@ -792,7 +977,7 @@ class CreatePetPageState extends State<CreatePetPage> {
             }
           },
           decoration: _buildInputDecoration(
-            hint: 'Toque para selecionar a espécie',
+            hint: context.tr('pet_create.touch_select_species'),
             cardColor: cardColor,
             textColor: textColor,
           ).copyWith(
@@ -801,7 +986,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Número da Anilha (Identificação)', textColor),
+        _buildLabel(context.tr('pet_create.bird_ring'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -813,13 +998,13 @@ class CreatePetPageState extends State<CreatePetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Cor Predominante*', textColor),
+        _buildLabel(context.tr('pet_create.color'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _colorController,
           decoration: _buildInputDecoration(
-            hint: 'Ex: Amarelo, Verde, Cinza',
+            hint: context.tr('pet_create.color_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -831,7 +1016,7 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Peso (g)', textColor),
+                  _buildLabel(context.tr('pet_create.weight_g'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
@@ -852,13 +1037,13 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Vive em:', textColor),
+                  _buildLabel(context.tr('pet_create.current_city'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
                     controller: _currentCityController,
                     decoration: _buildInputDecoration(
-                      hint: 'Cidade atual',
+                      hint: context.tr('pet_create.current_city_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),
@@ -877,25 +1062,46 @@ class CreatePetPageState extends State<CreatePetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Gênero*', textColor),
+        _buildLabel(context.tr('pet_create.gender'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedGender,
+          hint: Text(
+            context.tr('pet_create.gender_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o gênero',
+            hint: context.tr('pet_create.gender_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Macho', 'Fêmea'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.gender_male'), textColor),
+            _buildSelectedItem(context.tr('pet_create.gender_female'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Macho',
+              child: Text(
+                context.tr('pet_create.gender_male'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Fêmea',
+              child: Text(
+                context.tr('pet_create.gender_female'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedGender = newValue;
@@ -903,7 +1109,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Espécie do Roedor*', textColor),
+        _buildLabel(context.tr('pet_create.species_rodent'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -912,17 +1118,10 @@ class CreatePetPageState extends State<CreatePetPage> {
           onTap: () async {
             final String? selected = await showDialog<String>(
               context: context,
-              builder: (context) => const SpeciesSelectorDialog(
-                title: 'Espécie do Roedor',
-                popularSpecies: [
-                  'Hamster Sírio',
-                  'Hamster Anão Russo',
-                  'Porquinho da Índia',
-                  'Chinchila',
-                  'Coelho (Lagomorfo)',
-                  'Twister / Rato',
-                  'Gerbil / Esquilo da Mongólia',
-                ],
+              builder: (context) => SpeciesSelectorDialog(
+                title: context.tr('pet_create.species_rodent').replaceAll('*', '').trim(),
+                popularSpecies: _getRodentSpeciesList(context),
+                itemIcon: Icons.pets,
               ),
             );
             if (selected != null) {
@@ -932,7 +1131,7 @@ class CreatePetPageState extends State<CreatePetPage> {
             }
           },
           decoration: _buildInputDecoration(
-            hint: 'Toque para selecionar a espécie',
+            hint: context.tr('pet_create.touch_select_species'),
             cardColor: cardColor,
             textColor: textColor,
           ).copyWith(
@@ -941,13 +1140,13 @@ class CreatePetPageState extends State<CreatePetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Cor Predominante*', textColor),
+        _buildLabel(context.tr('pet_create.color'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _colorController,
           decoration: _buildInputDecoration(
-            hint: 'Ex: Dourado, Branco, Cinza',
+            hint: context.tr('pet_create.color_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
@@ -959,7 +1158,7 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Peso (g)', textColor),
+                  _buildLabel(context.tr('pet_create.weight_g'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
@@ -980,13 +1179,13 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Vive em:', textColor),
+                  _buildLabel(context.tr('pet_create.current_city'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
                     controller: _currentCityController,
                     decoration: _buildInputDecoration(
-                      hint: 'Cidade atual',
+                      hint: context.tr('pet_create.current_city_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),
@@ -1005,25 +1204,46 @@ class CreatePetPageState extends State<CreatePetPage> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        _buildLabel('Gênero*', textColor),
+        _buildLabel(context.tr('pet_create.gender'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedGender,
+          hint: Text(
+            context.tr('pet_create.gender_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o gênero',
+            hint: context.tr('pet_create.gender_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Macho', 'Fêmea'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.gender_male'), textColor),
+            _buildSelectedItem(context.tr('pet_create.gender_female'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Macho',
+              child: Text(
+                context.tr('pet_create.gender_male'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Fêmea',
+              child: Text(
+                context.tr('pet_create.gender_female'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedGender = newValue;
@@ -1031,7 +1251,7 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Espécie*', textColor),
+        _buildLabel(context.tr('pet_create.species_exotic'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
@@ -1040,19 +1260,10 @@ class CreatePetPageState extends State<CreatePetPage> {
           onTap: () async {
             final String? selected = await showDialog<String>(
               context: context,
-              builder: (context) => const SpeciesSelectorDialog(
-                title: 'Espécie Exótica / Réptil',
-                popularSpecies: [
-                  'Jabuti',
-                  'Tigre d\'Água (Tartaruga)',
-                  'Iguana Verde',
-                  'Dragão Barbudo (Pogona)',
-                  'Jiboia',
-                  'Cobra Corn Snake',
-                  'Geco (Gecko Leopard)',
-                  'Furão (Ferret)',
-                  'Mini Pig',
-                ],
+              builder: (context) => SpeciesSelectorDialog(
+                title: context.tr('pet_create.species_exotic').replaceAll('*', '').trim(),
+                popularSpecies: _getExoticSpeciesList(context),
+                itemIcon: Icons.pets,
               ),
             );
             if (selected != null) {
@@ -1062,7 +1273,7 @@ class CreatePetPageState extends State<CreatePetPage> {
             }
           },
           decoration: _buildInputDecoration(
-            hint: 'Toque para selecionar a espécie',
+            hint: context.tr('pet_create.touch_select_species'),
             cardColor: cardColor,
             textColor: textColor,
           ).copyWith(
@@ -1071,37 +1282,82 @@ class CreatePetPageState extends State<CreatePetPage> {
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Autorização / Registro (IBAMA/SISMA)', textColor),
+        _buildLabel(context.tr('pet_create.bird_ibama'), textColor),
         const SizedBox(height: 8),
         TextFormField(
           style: TextStyle(color: textColor),
           controller: _ibamaController,
           decoration: _buildInputDecoration(
-            hint: 'Número do registro de origem legal',
+            hint: context.tr('pet_create.ibama_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
         ),
         const SizedBox(height: 24),
-        _buildLabel('Alimentação / Dieta', textColor),
+        _buildLabel(context.tr('pet_create.diet'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedDiet,
+          hint: Text(
+            context.tr('pet_create.diet_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione a dieta',
+            hint: context.tr('pet_create.diet_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Herbívoro', 'Carnívoro', 'Onívoro', 'Insetívoro', 'Outra'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.herbivore'), textColor),
+            _buildSelectedItem(context.tr('pet_create.carnivore'), textColor),
+            _buildSelectedItem(context.tr('pet_create.omnivore'), textColor),
+            _buildSelectedItem(context.tr('pet_create.insectivore'), textColor),
+            _buildSelectedItem(context.tr('pet_create.diet_other'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Herbívoro',
+              child: Text(
+                context.tr('pet_create.herbivore'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Carnívoro',
+              child: Text(
+                context.tr('pet_create.carnivore'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Onívoro',
+              child: Text(
+                context.tr('pet_create.omnivore'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Insetívoro',
+              child: Text(
+                context.tr('pet_create.insectivore'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Outra',
+              child: Text(
+                context.tr('pet_create.diet_other'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedDiet = newValue;
@@ -1109,25 +1365,54 @@ class CreatePetPageState extends State<CreatePetPage> {
           },
         ),
         const SizedBox(height: 24),
-        _buildLabel('Porte', textColor),
+        _buildLabel(context.tr('pet_create.size'), textColor),
         const SizedBox(height: 8),
         DropdownButtonFormField<String>(
           initialValue: _selectedSize,
+          hint: Text(
+            context.tr('pet_create.size_hint'),
+            style: TextStyle(color: textColor.withValues(alpha: 0.5), fontSize: 14),
+          ),
           decoration: _buildInputDecoration(
-            hint: 'Selecione o porte',
+            hint: context.tr('pet_create.size_hint'),
             cardColor: cardColor,
             textColor: textColor,
           ),
           dropdownColor:
-              thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-          style: TextStyle(
-              color: thmode.darkMode ? Colors.white : Colors.black),
-          items: ['Pequeno', 'Médio', 'Grande'].map((String value) {
-            return DropdownMenuItem<String>(
-              value: value,
-              child: Text(value),
-            );
-          }).toList(),
+              thmode.darkMode ? const Color(0xFF1E293B) : Colors.white,
+          icon: Icon(
+            Icons.keyboard_arrow_down_rounded,
+            color: textColor.withValues(alpha: 0.7),
+          ),
+          style: TextStyle(color: textColor, fontSize: 14),
+          selectedItemBuilder: (context) => [
+            _buildSelectedItem(context.tr('pet_create.size_small'), textColor),
+            _buildSelectedItem(context.tr('pet_create.size_medium'), textColor),
+            _buildSelectedItem(context.tr('pet_create.size_large'), textColor),
+          ],
+          items: [
+            DropdownMenuItem<String>(
+              value: 'Pequeno',
+              child: Text(
+                context.tr('pet_create.size_small'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Médio',
+              child: Text(
+                context.tr('pet_create.size_medium'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+            DropdownMenuItem<String>(
+              value: 'Grande',
+              child: Text(
+                context.tr('pet_create.size_large'),
+                style: TextStyle(color: textColor, fontSize: 14),
+              ),
+            ),
+          ],
           onChanged: (newValue) {
             setState(() {
               _selectedSize = newValue;
@@ -1141,7 +1426,7 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Peso (kg/g)', textColor),
+                  _buildLabel(context.tr('pet_create.weight'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
@@ -1162,13 +1447,13 @@ class CreatePetPageState extends State<CreatePetPage> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  _buildLabel('Vive em:', textColor),
+                  _buildLabel(context.tr('pet_create.current_city'), textColor),
                   const SizedBox(height: 8),
                   TextFormField(
                     style: TextStyle(color: textColor),
                     controller: _currentCityController,
                     decoration: _buildInputDecoration(
-                      hint: 'Cidade atual',
+                      hint: context.tr('pet_create.current_city_hint'),
                       cardColor: cardColor,
                       textColor: textColor,
                     ),

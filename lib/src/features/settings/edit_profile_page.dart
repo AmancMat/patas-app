@@ -9,6 +9,8 @@ import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import '../../../../app.dart';
 import '../../../../main.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 class EditProfilePage extends StatefulWidget {
   final bool isDialog;
   const EditProfilePage({super.key, this.isDialog = false});
@@ -129,7 +131,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Perfil atualizado com sucesso!')),
+          SnackBar(content: Text(context.tr('profile.tutor_updated_success'))),
         );
         Navigator.pop(context, true);
       }
@@ -137,7 +139,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
       debugPrint('Error saving profile: $e');
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao salvar: $e')),
+          SnackBar(content: Text(context.tr('profile.tutor_save_error', {'error': '$e'}))),
         );
       }
     } finally {
@@ -169,7 +171,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
             automaticallyImplyLeading: false,
             centerTitle: true,
             title: Text(
-              'Dados Pessoais',
+              context.tr('profile.personal_data'),
               style: TextStyle(
                 color: textColor,
                 fontSize: 20,
@@ -196,7 +198,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               onPressed: () => Navigator.pop(context),
             ),
         title: Text(
-          'Dados Pessoais',
+          context.tr('profile.personal_data'),
           style: TextStyle(
             color: textColor,
             fontSize: 20,
@@ -218,8 +220,8 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 ))
               : TextButton(
                   onPressed: _saveProfile,
-                  child: const Text('Salvar',
-                      style: TextStyle(
+                  child: Text(context.tr('common.save'),
+                      style: const TextStyle(
                           color: AppColors.patasColor,
                           fontWeight: FontWeight.bold)),
                 ),
@@ -235,7 +237,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
               // Avatar
               Semantics(
                 button: true,
-                label: 'Alterar foto de perfil',
+                label: context.tr('profile.change_photo_semantic'),
                 child: GestureDetector(
                   onTap: _pickImage,
                 child: Stack(
@@ -282,7 +284,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
                   Text(
-                    'Como você gostaria de ser chamado?',
+                    context.tr('profile.name_call_hint'),
                     style: TextStyle(
                         color: textColor.withValues(alpha: 0.6), fontSize: 13),
                   ),
@@ -291,12 +293,12 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     controller: _nameController,
                     style: TextStyle(color: textColor),
                     validator: (value) => value == null || value.isEmpty
-                        ? 'Por favor, informe seu nome'
+                        ? context.tr('profile.name_required_error')
                         : null,
                     decoration: InputDecoration(
                       filled: true,
                       fillColor: cardColor,
-                      hintText: 'Nome',
+                      hintText: context.tr('profile.name_hint'),
                       hintStyle:
                           TextStyle(color: textColor.withValues(alpha: 0.3)),
                       border: OutlineInputBorder(
@@ -326,7 +328,7 @@ class _EditProfilePageState extends State<EditProfilePage> {
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
-                        'Seu nome será visível para outros usuários quando você comentar ou postar histórias dos seus pets.',
+                        context.tr('profile.name_visibility_notice'),
                         style: TextStyle(
                             color: textColor.withValues(alpha: 0.6),
                             fontSize: 12),

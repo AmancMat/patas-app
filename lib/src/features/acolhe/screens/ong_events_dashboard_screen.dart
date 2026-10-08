@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:intl/intl.dart';
 import 'package:url_launcher/url_launcher.dart';
@@ -130,7 +131,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
             isDark ? const Color(0xFF1E293B) : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(16)),
         title: Text(
-          'Excluir Evento?',
+          context.tr('acolhe.delete_event'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 16,
@@ -139,7 +140,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
           ),
         ),
         content: Text(
-          'Tem certeza que deseja cancelar e excluir o evento "${event.title}"?',
+          context.tr('acolhe.delete_event_confirm', {'name': event.title}),
           style: TextStyle(
             fontSize: 13,
             color: isDark ? Colors.white70 : Colors.black87,
@@ -149,7 +150,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
             child: Text(
-              'Voltar',
+              context.tr('common.back'),
               style: TextStyle(
                 color: isDark ? Colors.white60 : Colors.black54,
               ),
@@ -164,7 +165,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
-            child: const Text('Excluir'),
+            child: Text(context.tr('acolhe.delete_event')),
           ),
         ],
       ),
@@ -223,10 +224,10 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
       backgroundColor:
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: isOng ? 'Eventos & Feiras' : 'Feirinhas de Adoção',
+        title: isOng ? context.tr('acolhe.events_title_ong') : context.tr('acolhe.events_title_tutor'),
         subtitle: isOng
-            ? 'Calendário de feiras e divulgação no feed social'
-            : 'Encontros e feiras presenciais perto de você',
+            ? context.tr('acolhe.events_sub_ong')
+            : context.tr('acolhe.events_sub_tutor'),
         showBackButton: true,
         leadingIcon: const Icon(
           Icons.campaign_rounded,
@@ -238,7 +239,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
             Padding(
               padding: const EdgeInsets.only(right: 12),
               child: IconButton(
-                tooltip: 'Novo Evento',
+                tooltip: context.tr('acolhe.new_event'),
                 icon: Container(
                   padding: const EdgeInsets.all(6),
                   decoration: BoxDecoration(
@@ -274,8 +275,8 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                 backgroundColor: Colors.deepPurpleAccent,
                 foregroundColor: Colors.white,
                 icon: const Icon(Icons.campaign_rounded),
-                label: const Text(
-                  'Publicar Evento',
+                label: Text(
+                  context.tr('acolhe.publish_event'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontWeight: FontWeight.bold,
@@ -444,8 +445,8 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
               children: [
                 Text(
                   isOng
-                      ? 'Feiras, Bazares e Eventos Sociais 📢'
-                      : 'Encontre Feiras de Adoção & Eventos 🐾',
+                      ? context.tr('acolhe.hero_events_ong')
+                      : context.tr('acolhe.hero_events_tutor'),
                   style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 16,
@@ -456,8 +457,8 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                 const SizedBox(height: 4),
                 Text(
                   isOng
-                      ? 'Cada feira cadastrada aqui é promovida diretamente no Feed Social para tutores e voluntários da sua região.'
-                      : 'Confirme sua presença nas feirinhas de adoção, conheça os acolhidos pessoalmente e apoie a causa pet.',
+                      ? context.tr('acolhe.hero_events_ong_desc')
+                      : context.tr('acolhe.hero_events_tutor_desc'),
                   style: const TextStyle(
                     fontSize: 12,
                     color: Colors.white70,
@@ -482,25 +483,25 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
   }) {
     final kpis = [
       _KpiData(
-        title: 'Próximos Eventos',
+        title: context.tr('acolhe.kpi_upcoming_events'),
         value: upcomingEvents.toString(),
         icon: Icons.calendar_month_rounded,
         color: Colors.deepPurpleAccent,
       ),
       _KpiData(
-        title: 'Feiras de Adoção',
+        title: context.tr('acolhe.kpi_adoption_fairs'),
         value: adocaoEvents.toString(),
         icon: Icons.volunteer_activism_rounded,
         color: const Color(0xFF7C3AED),
       ),
       _KpiData(
-        title: 'Presenças Confirmadas',
+        title: context.tr('acolhe.kpi_confirmed_rsvps'),
         value: totalAttendees.toString(),
         icon: Icons.people_alt_rounded,
         color: Colors.green,
       ),
       _KpiData(
-        title: 'Total Realizado',
+        title: context.tr('acolhe.kpi_total_completed'),
         value: totalEvents.toString(),
         icon: Icons.check_circle_outline_rounded,
         color: Colors.blueAccent,
@@ -661,13 +662,13 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
               Tab(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text('Próximos ($upcomingCount)'),
+                  child: Text(context.tr('acolhe.tab_upcoming', {'count': '$upcomingCount'})),
                 ),
               ),
               Tab(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 8),
-                  child: Text('Histórico de Feiras'),
+                  child: Text(context.tr('acolhe.tab_history')),
                 ),
               ),
             ],
@@ -680,15 +681,15 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
           scrollDirection: Axis.horizontal,
           child: Row(
             children: [
-              _buildFilterChip('todos', 'Todos', isDark),
+              _buildFilterChip('todos', context.tr('acolhe.filter_type_all'), isDark),
               const SizedBox(width: 6),
-              _buildFilterChip('adocao', 'Feiras de Adoção', isDark),
+              _buildFilterChip('adocao', context.tr('acolhe.filter_type_adocao'), isDark),
               const SizedBox(width: 6),
-              _buildFilterChip('bazar', 'Bazares', isDark),
+              _buildFilterChip('bazar', context.tr('acolhe.filter_type_bazar'), isDark),
               const SizedBox(width: 6),
-              _buildFilterChip('vacinacao', 'Mutirões Sanitários', isDark),
+              _buildFilterChip('vacinacao', context.tr('acolhe.filter_type_vacinacao'), isDark),
               const SizedBox(width: 6),
-              _buildFilterChip('encontro', 'Encontros', isDark),
+              _buildFilterChip('encontro', context.tr('acolhe.filter_type_encontro'), isDark),
             ],
           ),
         ),
@@ -824,7 +825,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                               size: 13, color: Colors.green),
                           const SizedBox(width: 4),
                           Text(
-                            '${event.attendeesCount} confirmados',
+                            context.tr('acolhe.confirmed_count', {'count': '${event.attendeesCount}'}),
                             style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 10,
@@ -866,7 +867,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                                 const Icon(Icons.edit_outlined, size: 18),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Editar Evento',
+                                  context.tr('acolhe.edit_event'),
                                   style: TextStyle(
                                     color: isDark
                                         ? Colors.white
@@ -878,14 +879,14 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                           ),
                           PopupMenuItem(
                             value: 'delete',
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.delete_outline_rounded,
+                                const Icon(Icons.delete_outline_rounded,
                                     size: 18, color: Colors.redAccent),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
-                                  'Excluir Evento',
-                                  style: TextStyle(color: Colors.redAccent),
+                                  context.tr('acolhe.delete_event'),
+                                  style: const TextStyle(color: Colors.redAccent),
                                 ),
                               ],
                             ),
@@ -980,8 +981,8 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                         ),
                         label: Text(
                           event.isUserAttending
-                              ? 'Presença Confirmada 🎉'
-                              : 'Vou Comparecer!',
+                              ? context.tr('acolhe.rsvp_attending')
+                              : context.tr('acolhe.rsvp_attend_btn'),
                           style: const TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 13,
@@ -1005,7 +1006,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
 
                     // Compartilhar WhatsApp
                     IconButton(
-                      tooltip: 'Compartilhar no WhatsApp',
+                      tooltip: context.tr('acolhe.share_whatsapp'),
                       onPressed: () => _shareEvent(event),
                       style: IconButton.styleFrom(
                         backgroundColor: isDark
@@ -1026,7 +1027,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
                         event.contactWhatsapp!.isNotEmpty) ...[
                       const SizedBox(width: 8),
                       IconButton(
-                        tooltip: 'Dúvidas no WhatsApp',
+                        tooltip: context.tr('acolhe.contact_whatsapp'),
                         onPressed: () =>
                             _openWhatsAppContact(event.contactWhatsapp!),
                         style: IconButton.styleFrom(
@@ -1076,7 +1077,7 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
             ),
             const SizedBox(height: 16),
             Text(
-              'Nenhum evento nesta categoria',
+              context.tr('acolhe.empty_events_title'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 16,
@@ -1087,8 +1088,8 @@ class _OngEventsDashboardScreenState extends State<OngEventsDashboardScreen>
             const SizedBox(height: 6),
             Text(
               isOng
-                  ? 'Toque no botão abaixo para agendar a primeira feira de adoção do abrigo.'
-                  : 'Fique de olho! Novas feiras de adoção e bazares serão divulgados em breve.',
+                  ? context.tr('acolhe.empty_events_ong')
+                  : context.tr('acolhe.empty_events_tutor'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,

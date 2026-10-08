@@ -13,6 +13,7 @@ import 'package:patas_web_app/src/providers/font_size_provider.dart';
 import 'package:patas_web_app/src/providers/accessibility_provider.dart';
 import 'package:patas_web_app/src/providers/connectivity_provider.dart';
 import 'package:patas_web_app/src/providers/story_publish_provider.dart';
+import 'package:patas_web_app/src/providers/locale_provider.dart';
 import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:intl/date_symbol_data_local.dart';
@@ -90,6 +91,7 @@ Future<void> main() async {
 
     final fontSizeProvider = await FontSizeProvider.load();
     final accessibilityProvider = await AccessibilityProvider.load();
+    final localeProvider = await LocaleProvider.load();
 
     runApp(
       MultiProvider(
@@ -106,6 +108,7 @@ Future<void> main() async {
           ChangeNotifierProvider(create: (context) => UserRoleProvider()),
           ChangeNotifierProvider.value(value: fontSizeProvider),
           ChangeNotifierProvider.value(value: accessibilityProvider),
+          ChangeNotifierProvider.value(value: localeProvider),
         ],
         child: const App(),
       ),
@@ -130,6 +133,9 @@ Future<void> main() async {
             create: (context) => FontSizeProvider(1.0, 'normal'),
           ),
           ChangeNotifierProvider(create: (context) => AccessibilityProvider()),
+          ChangeNotifierProvider(
+            create: (context) => LocaleProvider(const Locale('en', 'US')),
+          ),
         ],
         child: const App(),
       ),

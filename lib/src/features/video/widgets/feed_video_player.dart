@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 /// Player de vídeo exclusivo para Publicações do Feed.
 ///
@@ -210,7 +211,7 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
     final double targetRatio = videoAspect.clamp(0.8, 16 / 9);
 
     debugPrint('🎥 [FeedVideoPlayer REAL] url: ${widget.videoUrl}');
-    debugPrint('🎥 [FeedVideoPlayer REAL] size: ${videoWidth}x${videoHeight}, aspect: $videoAspect, targetRatio: $targetRatio');
+    debugPrint('🎥 [FeedVideoPlayer REAL] size: ${videoWidth}x$videoHeight, aspect: $videoAspect, targetRatio: $targetRatio');
 
     Widget videoContent = Stack(
       alignment: Alignment.center,
@@ -402,14 +403,14 @@ class _FeedVideoPlayerState extends State<FeedVideoPlayer> {
                   )
                 ],
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.replay_rounded, color: Colors.white, size: 24),
-                  SizedBox(width: 8),
+                  const Icon(Icons.replay_rounded, color: Colors.white, size: 24),
+                  const SizedBox(width: 8),
                   Text(
-                    'Assistir novamente',
-                    style: TextStyle(
+                    context.tr('feed.watch_again'),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

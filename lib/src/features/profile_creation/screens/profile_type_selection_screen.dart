@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/create_pet_page.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
@@ -66,7 +67,9 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
         elevation: 0,
         centerTitle: true,
         title: Text(
-          widget.isFirstProfile ? 'Criar Primeiro Perfil' : 'Novo Perfil',
+          widget.isFirstProfile
+              ? context.tr('first_profile.title')
+              : context.tr('first_profile.new_title'),
           style: TextStyle(
             color: textColor,
             fontSize: 20.0,
@@ -85,9 +88,18 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
                 children: [
                   // Título e descrição inicial
                   if (widget.isFirstProfile) ...[
-                    const Text(
-                      'Bem-vindo ao Patas! 🐾',
-                      style: TextStyle(
+                    Align(
+                      alignment: Alignment.centerLeft,
+                      child: Image.asset(
+                        'assets/logo.png',
+                        height: 44,
+                        fit: BoxFit.contain,
+                      ),
+                    ),
+                    const SizedBox(height: 16.0),
+                    Text(
+                      context.tr('first_profile.welcome'),
+                      style: const TextStyle(
                         fontSize: 28.0,
                         fontWeight: FontWeight.bold,
                         color: AppColors.patasColor,
@@ -96,7 +108,7 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
                     ),
                     const SizedBox(height: 12.0),
                     Text(
-                      'Crie o perfil do seu pet, instituição ou empresa para começar a compartilhar momentos especiais.',
+                      context.tr('first_profile.desc'),
                       style: TextStyle(
                         fontSize: 16.0,
                         color: subtitleColor,
@@ -106,7 +118,7 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
                     const SizedBox(height: 32.0),
                   ] else ...[
                     Text(
-                      'Que tipo de perfil deseja criar?',
+                      context.tr('first_profile.which_type'),
                       style: TextStyle(
                         fontSize: 24.0,
                         fontWeight: FontWeight.bold,
@@ -116,7 +128,7 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
                     ),
                     const SizedBox(height: 8.0),
                     Text(
-                      'Escolha uma das opções de seções abaixo para ver os detalhes',
+                      context.tr('first_profile.which_type_sub'),
                       style: TextStyle(
                         fontSize: 15.0,
                         color: isDark ? Colors.grey[400] : Colors.grey[600],
@@ -127,7 +139,8 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
 
                   // ACORDEÃO 1: Perfis de Pets
                   _buildAccordionHeader(
-                    title: 'Perfis de Pets 🐾',
+                    title: context.tr('first_profile.pets_section'),
+                    icon: Icons.pets_rounded,
                     isExpanded: _isPetsExpanded,
                     onTap: _togglePets,
                     isDark: isDark,
@@ -141,7 +154,8 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
 
                   // ACORDEÃO 2: Perfis de Organizações
                   _buildAccordionHeader(
-                    title: 'Perfis de Organizações 🏢',
+                    title: context.tr('first_profile.orgs_section'),
+                    icon: Icons.domain_rounded,
                     isExpanded: _isOrgsExpanded,
                     onTap: _toggleOrgs,
                     isDark: isDark,
@@ -164,6 +178,7 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
   // Widget para Cabeçalho do Acordeão
   Widget _buildAccordionHeader({
     required String title,
+    required IconData icon,
     required bool isExpanded,
     required VoidCallback onTap,
     required bool isDark,
@@ -193,15 +208,35 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
           ],
         ),
         child: Row(
-          mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Text(
-              title,
-              style: const TextStyle(
-                fontSize: 18.0,
-                fontWeight: FontWeight.bold,
-                color: AppColors.patasColor,
-                fontFamily: 'Fredoka',
+            Container(
+              padding: const EdgeInsets.all(8.0),
+              decoration: BoxDecoration(
+                color: isExpanded
+                    ? AppColors.patasColor.withValues(alpha: 0.15)
+                    : (isDark
+                        ? Colors.white.withValues(alpha: 0.05)
+                        : Colors.grey.withValues(alpha: 0.1)),
+                borderRadius: BorderRadius.circular(10),
+              ),
+              child: Icon(
+                icon,
+                color: isExpanded
+                    ? AppColors.patasColor
+                    : (isDark ? Colors.white70 : AppColors.darkBG),
+                size: 20,
+              ),
+            ),
+            const SizedBox(width: 12.0),
+            Expanded(
+              child: Text(
+                title,
+                style: const TextStyle(
+                  fontSize: 18.0,
+                  fontWeight: FontWeight.bold,
+                  color: AppColors.patasColor,
+                  fontFamily: 'Fredoka',
+                ),
               ),
             ),
             AnimatedRotation(
@@ -238,11 +273,11 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
   // Grade Compacta de Pets (5 espécies)
   Widget _buildPetsGrid(BuildContext context, bool isDark) {
     final List<Map<String, dynamic>> petOptions = [
-      {'label': 'Cachorro', 'icon': '🐶', 'species': 'canino'},
-      {'label': 'Gato', 'icon': '🐱', 'species': 'felino'},
-      {'label': 'Ave / Pássaro', 'icon': '🦜', 'species': 'ave'},
-      {'label': 'Roedor', 'icon': '🐹', 'species': 'roedor'},
-      {'label': 'Exótico / Réptil', 'icon': '🦎', 'species': 'exotico'},
+      {'label': context.tr('first_profile.pet_dog'), 'icon': '🐶', 'species': 'canino'},
+      {'label': context.tr('first_profile.pet_cat'), 'icon': '🐱', 'species': 'felino'},
+      {'label': context.tr('first_profile.pet_bird'), 'icon': '🦜', 'species': 'ave'},
+      {'label': context.tr('first_profile.pet_rodent'), 'icon': '🐹', 'species': 'roedor'},
+      {'label': context.tr('first_profile.pet_exotic'), 'icon': '🦎', 'species': 'exotico'},
     ];
 
     final width = MediaQuery.of(context).size.width;
@@ -331,16 +366,16 @@ class _ProfileTypeSelectionScreenState extends State<ProfileTypeSelectionScreen>
     return Column(
       children: [
         ProfileTypeCard(
-          title: 'ONGs e Abrigos',
-          subtitle: 'Instituições sem fins lucrativos',
+          title: context.tr('first_profile.org_shelter_title'),
+          subtitle: context.tr('first_profile.org_shelter_sub'),
           icon: Icons.favorite,
           iconColor: Colors.red[400],
           onTap: () => _navigateToOngCreation(context),
         ),
         const SizedBox(height: 12.0),
         ProfileTypeCard(
-          title: 'Empresas e Marcas',
-          subtitle: 'Negócios e serviços para pets',
+          title: context.tr('first_profile.org_corp_title'),
+          subtitle: context.tr('first_profile.org_corp_sub'),
           icon: Icons.business,
           iconColor: Colors.blue[400],
           onTap: () => _navigateToCompanyCreation(context),

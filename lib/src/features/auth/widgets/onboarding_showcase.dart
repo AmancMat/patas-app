@@ -4,6 +4,7 @@ import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class OnboardingShowcase extends StatefulWidget {
   const OnboardingShowcase({super.key});
@@ -16,10 +17,10 @@ class _OnboardingShowcaseState extends State<OnboardingShowcase> {
   int _currentSlideIndex = 0;
   Timer? _timer;
 
-  final List<String> _phrases = [
-    "Conecte-se com pessoas\napaixonadas por animais.",
-    "Acompanhe e cuide da saúde\ndo seu pet em um só lugar.",
-    "Descubra ONGs, adote, e ajude\na salvar vidas todos os dias.",
+  final List<String> _slideKeys = [
+    'onboarding.slide_1',
+    'onboarding.slide_2',
+    'onboarding.slide_3',
   ];
 
   final List<String> _images = [
@@ -38,7 +39,7 @@ class _OnboardingShowcaseState extends State<OnboardingShowcase> {
     _timer = Timer.periodic(const Duration(seconds: 5), (timer) {
       if (mounted) {
         setState(() {
-          _currentSlideIndex = (_currentSlideIndex + 1) % _phrases.length;
+          _currentSlideIndex = (_currentSlideIndex + 1) % _slideKeys.length;
         });
       }
     });
@@ -169,7 +170,7 @@ class _OnboardingShowcaseState extends State<OnboardingShowcase> {
           : _phraseTransitionBuilder,
       child: Text(
         key: ValueKey<int>(_currentSlideIndex),
-        _phrases[_currentSlideIndex],
+        context.tr(_slideKeys[_currentSlideIndex]),
         textAlign: TextAlign.center,
         style: TextStyle(
           fontFamily: 'Fredoka',
@@ -220,7 +221,7 @@ class _OnboardingShowcaseState extends State<OnboardingShowcase> {
                     ),
                   ],
                 )
-              // ── Mobile / Tablet: imagem + frase em coluna, com animação vertical
+              // ── Mobile / Tablet: imagem + frase em coluna, ocupando a área útil
               : Column(
                   mainAxisSize: MainAxisSize.min,
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -229,10 +230,10 @@ class _OnboardingShowcaseState extends State<OnboardingShowcase> {
                       width: double.infinity,
                       height: isMobile ? 200 : 280,
                     ),
-                    SizedBox(height: isMobile ? 20 : 28),
+                    SizedBox(height: isMobile ? 14 : 28),
                     _buildPhrase(
                       isDark: isDark,
-                      fontSize: isMobile ? 18 : 22,
+                      fontSize: isMobile ? 17 : 22,
                       isVertical: true,
                     ),
                   ],

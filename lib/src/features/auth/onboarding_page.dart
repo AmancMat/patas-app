@@ -13,6 +13,7 @@ import '../../../main.dart'; // import supabase
 import '../../utils/responsive_layout.dart';
 import '../../common_widgets/patas_button.dart';
 import '../../common_widgets/particles_background.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class OnboardingPage extends StatefulWidget {
   const OnboardingPage({super.key});
@@ -32,8 +33,12 @@ class _OnboardingPageState extends State<OnboardingPage> {
 
     _authSub = supabase.auth.onAuthStateChange.listen((data) {
       if (data.event == AuthChangeEvent.signedIn && mounted) {
-        debugPrint("=== OnboardingPage: Evento signedIn recebido! Redirecionando... ===");
-        _checkExistingSession();
+        // Só redireciona se a OnboardingPage for a tela atualmente visível no topo da pilha.
+        // Se o usuário navegou para SignInPage ou SignUpPage, aquela tela gerencia a própria navegação.
+        if (ModalRoute.of(context)?.isCurrent == true) {
+          debugPrint("=== OnboardingPage: Evento signedIn recebido na rota ativa! Redirecionando... ===");
+          _checkExistingSession();
+        }
       }
     });
   }
@@ -148,7 +153,9 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: Align(
               alignment: Alignment.centerRight,
               child: PatasButton(
-                text: isMobile ? 'Patas Vet' : 'Sou Patas Vet',
+                text: isMobile
+                    ? context.tr('onboarding.vet_button_mobile')
+                    : context.tr('onboarding.vet_button'),
                 onPressed: () {
                   Navigator.pushNamed(context, NamedRoute.professionalLogin);
                 },
@@ -168,7 +175,7 @@ class _OnboardingPageState extends State<OnboardingPage> {
             child: Align(
               alignment: Alignment.centerRight,
               child: PatasButton(
-                text: 'Iniciar',
+                text: context.tr('onboarding.start_button'),
                 onPressed: _showAuthOverlay,
                 size: PatasButtonSize.small,
                 variant: PatasButtonVariant.primary,

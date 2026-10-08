@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/services/supabase_notification_service.dart';
 import '../utils/web_notification_prompt_helper.dart'
@@ -79,14 +80,14 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
         SupabaseNotificationService().initWebRealtimeListener();
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: const Row(
+            content: Row(
               children: [
-                Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-                SizedBox(width: 10),
+                const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+                const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    '🔔 Notificações ativadas no navegador com sucesso!',
-                    style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
+                    context.tr('notifications.web_success'),
+                    style: const TextStyle(fontFamily: 'Fredoka', fontSize: 13),
                   ),
                 ),
               ],
@@ -172,8 +173,8 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
                         color: AppColors.patasColor.withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
-                        'NOVIDADE • NAVEGADOR WEB',
+                      child: Text(
+                        context.tr('notifications.web_badge'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 10,
@@ -185,7 +186,7 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Ative as Notificações',
+                      context.tr('notifications.web_title'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 18,
@@ -203,7 +204,7 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
 
           // Texto Explicativo
           Text(
-            'Mantenha-se informado em tempo real direto no seu navegador. As notificações são essenciais para:',
+            context.tr('notifications.web_desc'),
             style: TextStyle(
               fontSize: 13,
               color: isDark ? Colors.white70 : Colors.black87,
@@ -217,24 +218,24 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
           _buildFeatureRow(
             icon: Icons.volunteer_activism_rounded,
             color: const Color(0xFF10B981),
-            title: 'Doações e Arrecadações para ONGs',
-            description: 'Seja alertado no instante em que sua campanha receber novas doações via Solana Pay ou PIX.',
+            title: context.tr('notifications.web_donations_title'),
+            description: context.tr('notifications.web_donations_desc'),
             isDark: isDark,
           ),
           const SizedBox(height: 10),
           _buildFeatureRow(
             icon: Icons.security_rounded,
             color: const Color(0xFF38BDF8),
-            title: 'Confirmações de Pagamento e Repasses',
-            description: 'Receba recibos e comprovantes instantâneos de transações financeiras seguras.',
+            title: context.tr('notifications.web_payments_title'),
+            description: context.tr('notifications.web_payments_desc'),
             isDark: isDark,
           ),
           const SizedBox(height: 10),
           _buildFeatureRow(
             icon: Icons.pets_rounded,
             color: const Color(0xFF9945FF),
-            title: 'Saúde e Cuidados dos Pets',
-            description: 'Lembretes de vacinas, alertas de resgate e mensagens da comunidade em primeira mão.',
+            title: context.tr('notifications.web_health_title'),
+            description: context.tr('notifications.web_health_desc'),
             isDark: isDark,
           ),
 
@@ -261,7 +262,7 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
                 const SizedBox(width: 8),
                 Expanded(
                   child: Text(
-                    'Ao clicar em "Ativar Notificações", o seu navegador abrirá uma caixinha no topo da tela. Clique em "Permitir" para confirmar.',
+                    context.tr('notifications.web_browser_tip'),
                     style: TextStyle(
                       fontSize: 11.5,
                       color: isDark ? Colors.orange.shade200 : const Color(0xFF9A3412),
@@ -287,8 +288,8 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
             ElevatedButton.icon(
               onPressed: _handleAccept,
               icon: const Icon(Icons.notifications_active_rounded, size: 18),
-              label: const Text(
-                'Ativar Notificações no Navegador',
+              label: Text(
+                context.tr('notifications.web_enable_button'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 14,
@@ -307,7 +308,7 @@ class _WebNotificationPromptDialogState extends State<WebNotificationPromptDialo
             TextButton(
               onPressed: _handleDismiss,
               child: Text(
-                'Agora Não',
+                context.tr('notifications.web_not_now'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 13,

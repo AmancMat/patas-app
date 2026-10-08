@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
 import 'package:flutter_map_cancellable_tile_provider/flutter_map_cancellable_tile_provider.dart';
@@ -59,14 +60,14 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
     }
   }
 
-  String _getCategoryLabel(String type) {
+  String _getCategoryLabel(String type, BuildContext context) {
     switch (type.toLowerCase()) {
       case 'hospital_24h':
-        return 'Hospital 24h';
+        return context.tr('health.cat_hospital_24h');
       case 'clinic':
-        return 'Clínica Veterinária';
+        return context.tr('health.cat_clinic');
       default:
-        return 'Veterinário Autônomo';
+        return context.tr('health.cat_autonomous_vet');
     }
   }
 
@@ -128,7 +129,7 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${_getCategoryLabel(vet.type)} • CRMV ${vet.crmvUf} ${vet.crmvNumber}',
+                            '${_getCategoryLabel(vet.type, context)} • CRMV ${vet.crmvUf} ${vet.crmvNumber}',
                             style: const TextStyle(fontSize: 12, color: AppColors.patasColor, fontWeight: FontWeight.bold),
                           ),
                         ],
@@ -177,7 +178,7 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                     if (vet.acceptsClinicVisit)
                       Chip(
                         avatar: const Icon(Icons.medical_information_rounded, size: 14, color: Colors.white),
-                        label: const Text('Atende na Clínica', style: TextStyle(fontSize: 11, color: Colors.white)),
+                        label: Text(context.tr('health.badge_clinic_visit'), style: const TextStyle(fontSize: 11, color: Colors.white)),
                         backgroundColor: Colors.teal.shade700,
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -186,7 +187,7 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                     if (vet.acceptsHomeVisit)
                       Chip(
                         avatar: const Icon(Icons.home_work_rounded, size: 14, color: Colors.white),
-                        label: const Text('Atende a Domicílio', style: TextStyle(fontSize: 11, color: Colors.white)),
+                        label: Text(context.tr('health.badge_home_visit'), style: const TextStyle(fontSize: 11, color: Colors.white)),
                         backgroundColor: Colors.indigo.shade700,
                         visualDensity: VisualDensity.compact,
                         materialTapTargetSize: MaterialTapTargetSize.shrinkWrap,
@@ -202,8 +203,8 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                   icon: const Icon(Icons.calendar_month_rounded, color: Colors.white),
                   label: Text(
                     vet.consultationPrice > 0
-                        ? 'Agendar Consulta (R\$ ${vet.consultationPrice.toStringAsFixed(2)})'
-                        : 'Agendar Consulta',
+                        ? context.tr('health.book_consultation_price', {'price': vet.consultationPrice.toStringAsFixed(2)})
+                        : context.tr('health.book_consultation_free'),
                     style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold, fontSize: 15),
                   ),
                   onPressed: () {
@@ -239,8 +240,8 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
     final mainContent = Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Patas Saúde',
-        subtitle: 'Mapa de veterinários e clínicas 24h',
+        title: context.tr('health.vet_map_title'),
+        subtitle: context.tr('health.vet_map_subtitle'),
         bottomHeight: 88.0,
         bottomWidget: Center(
           child: Container(
@@ -258,7 +259,7 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                       color: isDark ? Colors.white : AppColors.darkBG,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Buscar por nome, especialidade ou endereço...',
+                      hintText: context.tr('health.vet_search_hint'),
                       hintStyle: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.white54 : Colors.grey.shade500,
@@ -288,10 +289,10 @@ class _TutorVetMapScreenState extends State<TutorVetMapScreen> {
                   scrollDirection: Axis.horizontal,
                   child: Row(
                     children: [
-                      _buildFilterChip('all', 'Todos', Icons.apps_rounded, isDark),
-                      _buildFilterChip('veterinarian', 'Veterinários', Icons.medical_services_rounded, isDark),
-                      _buildFilterChip('clinic', 'Clínicas', Icons.medical_information_rounded, isDark),
-                      _buildFilterChip('hospital_24h', 'Hospitais 24h', Icons.local_hospital_rounded, isDark),
+                      _buildFilterChip('all', context.tr('health.filter_all_vets'), Icons.apps_rounded, isDark),
+                      _buildFilterChip('veterinarian', context.tr('health.filter_vets'), Icons.medical_services_rounded, isDark),
+                      _buildFilterChip('clinic', context.tr('health.filter_clinics'), Icons.medical_information_rounded, isDark),
+                      _buildFilterChip('hospital_24h', context.tr('health.filter_hospitals'), Icons.local_hospital_rounded, isDark),
                     ],
                   ),
                 ),

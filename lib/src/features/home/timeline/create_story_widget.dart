@@ -19,6 +19,7 @@ import 'package:patas_web_app/src/features/video/services/video_compression_serv
 import 'package:patas_web_app/src/features/video/screens/camera_recording_screen.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/common_widgets/patas_button.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class CreateStoryWidget extends StatefulWidget {
   const CreateStoryWidget({super.key});
@@ -85,22 +86,20 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
       builder: (ctx) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
-          children: const [
-            Icon(Icons.timer_outlined, color: AppColors.patasColor, size: 26),
-            SizedBox(width: 8),
-            Text('Vídeo Longo', style: TextStyle(fontWeight: FontWeight.bold)),
+          children: [
+            const Icon(Icons.timer_outlined, color: AppColors.patasColor, size: 26),
+            const SizedBox(width: 8),
+            Text(context.tr('story.video_long_title'), style: const TextStyle(fontWeight: FontWeight.bold)),
           ],
         ),
         content: Text(
-          'O vídeo selecionado tem ${originalDuration}s.\n\n'
-          'Stories podem ter no máximo $maxStoryDuration segundos.\n'
-          'Deseja publicar apenas os primeiros $maxStoryDuration segundos do seu vídeo?',
+          context.tr('story.video_long_desc', {'seconds': '$originalDuration', 'max': '$maxStoryDuration'}),
           style: const TextStyle(fontSize: 14, height: 1.4),
         ),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx, false),
-            child: const Text('Cancelar', style: TextStyle(color: Colors.grey)),
+            child: Text(context.tr('common.cancel'), style: const TextStyle(color: Colors.grey)),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -108,7 +107,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
             onPressed: () => Navigator.pop(ctx, true),
-            child: const Text('Continuar com 30s', style: TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
+            child: Text(context.tr('story.video_long_btn', {'max': '$maxStoryDuration'}), style: const TextStyle(color: Colors.white, fontWeight: FontWeight.bold)),
           ),
         ],
       ),
@@ -126,13 +125,13 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
   Future<void> _publishStory() async {
     if (!isVideo && selectedImagePath.isEmpty) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione uma imagem ou vídeo primeiro!')),
+        SnackBar(content: Text(context.tr('story.select_image_or_video_error'))),
       );
       return;
     }
     if (isVideo && selectedVideoPath.isEmpty && _pickedVideoXFile == null) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Selecione um vídeo primeiro!')),
+        SnackBar(content: Text(context.tr('story.select_video_error'))),
       );
       return;
     }
@@ -242,7 +241,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                                       ),
                                       SizedBox(height: context.isWide ? 18 : 20.h),
                                       Text(
-                                        'Criar Story',
+                                        context.tr('story.create_title'),
                                         style: TextStyle(
                                           fontSize: context.isWide ? 22 : 22.sp,
                                           fontWeight: FontWeight.bold,
@@ -253,7 +252,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                                       ),
                                       SizedBox(height: context.isWide ? 8 : 8.h),
                                       Text(
-                                        'Compartilhe fotos e vídeos rápidos dos seus pets com seus amigos',
+                                        context.tr('story.create_subtitle'),
                                         textAlign: TextAlign.center,
                                         style: TextStyle(
                                           fontSize: context.isWide ? 13 : 13.sp,
@@ -351,7 +350,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                             const Spacer(),
                             if (selectedImagePath.isNotEmpty || (isVideo && selectedVideoPath.isNotEmpty))
                               PatasButton(
-                                text: 'Publicar',
+                                text: context.tr('feed.publish'),
                                 onPressed: _publishStory,
                                 isLoading: false,
                                 variant: PatasButtonVariant.primary,
@@ -380,7 +379,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                             children: [
                               _buildDockButton(
                                 icon: Icons.photo_library_outlined,
-                                label: 'Galeria',
+                                label: context.tr('story.dock_gallery'),
                                 onTap: () async {
                                   final path = await selectImageFromGallery();
                                   if (path.isNotEmpty) {
@@ -391,7 +390,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                               SizedBox(width: 8.w),
                               _buildDockButton(
                                 icon: Icons.camera_alt_outlined,
-                                label: 'Câmera',
+                                label: context.tr('story.dock_camera'),
                                 onTap: () async {
                                   final path = await selectImageFromCamera();
                                   if (path.isNotEmpty) {
@@ -402,7 +401,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                               SizedBox(width: 8.w),
                               _buildDockButton(
                                 icon: Icons.videocam_outlined,
-                                label: 'Vídeo',
+                                label: context.tr('story.dock_video'),
                                 onTap: _showVideoSourceDialog,
                               ),
                             ],
@@ -475,7 +474,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
                                   const Icon(Icons.cached_rounded, color: Colors.white, size: 16),
                                   SizedBox(width: 5.w),
                                   Text(
-                                    'Trocar',
+                                    context.tr('story.change_media'),
                                     style: TextStyle(
                                       color: Colors.white,
                                       fontSize: context.isWide ? 13 : 13.sp,
@@ -617,7 +616,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Adicionar Foto ao Story',
+                context.tr('story.add_photo_title'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -628,8 +627,8 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               const SizedBox(height: 20),
               _buildSheetOption(
                 icon: Icons.photo_library_outlined,
-                title: 'Galeria',
-                subtitle: 'Escolha uma foto da galeria do seu aparelho',
+                title: context.tr('story.dock_gallery'),
+                subtitle: context.tr('story.photo_gallery_sub'),
                 onTap: () async {
                   Navigator.pop(ctx);
                   final path = await selectImageFromGallery();
@@ -642,8 +641,8 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               const SizedBox(height: 12),
               _buildSheetOption(
                 icon: Icons.camera_alt_outlined,
-                title: 'Câmera',
-                subtitle: 'Tire uma foto nova agora com a câmera',
+                title: context.tr('story.dock_camera'),
+                subtitle: context.tr('story.photo_camera_sub'),
                 onTap: () async {
                   Navigator.pop(ctx);
                   final path = await selectImageFromCamera();
@@ -689,7 +688,7 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               ),
               const SizedBox(height: 16),
               Text(
-                'Adicionar Vídeo ao Story',
+                context.tr('story.add_video_title'),
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
@@ -700,8 +699,8 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               const SizedBox(height: 20),
               _buildSheetOption(
                 icon: Icons.video_library_outlined,
-                title: 'Escolher da Galeria',
-                subtitle: 'Selecione um vídeo já gravado (máx. 30s)',
+                title: context.tr('story.choose_gallery'),
+                subtitle: context.tr('story.choose_gallery_sub'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _handleVideoSelection();
@@ -711,8 +710,8 @@ class _CreateStoryWidgetState extends State<CreateStoryWidget> {
               const SizedBox(height: 12),
               _buildSheetOption(
                 icon: Icons.videocam_outlined,
-                title: 'Gravar com a Câmera',
-                subtitle: 'Grave um novo vídeo agora com edição rápida',
+                title: context.tr('story.record_camera'),
+                subtitle: context.tr('story.record_camera_sub'),
                 onTap: () {
                   Navigator.pop(ctx);
                   _handleCameraRecording();

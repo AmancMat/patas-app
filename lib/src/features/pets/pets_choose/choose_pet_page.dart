@@ -4,6 +4,8 @@ import '../../../../app.dart';
 import '../../../constants/app_colors.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 class MyPets {
   final String imageMyPet;
   final String nameMyPet;
@@ -36,10 +38,10 @@ class _ChoosePetPageState extends State<ChoosePetPage> {
     return Scaffold(
       backgroundColor:
           thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
-      appBar: const PatasEssencialAppBar(
-        title: 'Meus Pets',
-        subtitle: 'Selecione o pet ativo',
-        leadingIcon: Icon(
+      appBar: PatasEssencialAppBar(
+        title: context.tr('profile.choose_pet_title'),
+        subtitle: context.tr('profile.choose_pet_subtitle'),
+        leadingIcon: const Icon(
           Icons.pets_rounded,
           color: AppColors.patasColor,
           size: 22,

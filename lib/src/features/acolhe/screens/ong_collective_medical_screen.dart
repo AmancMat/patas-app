@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
@@ -116,8 +117,8 @@ class _OngCollectiveMedicalScreenState
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Prontuário Coletivo',
-        subtitle: 'Controle sanitário dos acolhidos',
+        title: context.tr('acolhe.medical_title'),
+        subtitle: context.tr('acolhe.medical_subtitle'),
         showBackButton: true,
         leadingIcon: const Icon(
           Icons.assignment_turned_in_rounded,
@@ -129,8 +130,8 @@ class _OngCollectiveMedicalScreenState
             ElevatedButton.icon(
               onPressed: _animals.isEmpty ? null : _openBatchAction,
               icon: const Icon(Icons.flash_on_rounded, size: 18),
-              label: const Text(
-                'Ação em Lote Sanitária',
+              label: Text(
+                context.tr('acolhe.batch_action_btn'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 13,
@@ -150,7 +151,7 @@ class _OngCollectiveMedicalScreenState
           else
             IconButton(
               icon: const Icon(Icons.flash_on_rounded, color: Colors.orange, size: 24),
-              tooltip: 'Ação em Lote',
+              tooltip: context.tr('acolhe.batch_action_short'),
               onPressed: _animals.isEmpty ? null : _openBatchAction,
             ),
         ],
@@ -167,8 +168,8 @@ class _OngCollectiveMedicalScreenState
                 backgroundColor: Colors.teal,
                 foregroundColor: Colors.white,
                 icon: const Icon(Icons.flash_on_rounded),
-                label: const Text(
-                  'Ação em Lote',
+                label: Text(
+                  context.tr('acolhe.batch_action_short'),
                   style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
                 ),
               ),
@@ -208,7 +209,7 @@ class _OngCollectiveMedicalScreenState
                   child: TextField(
                     onChanged: (val) => setState(() => _searchQuery = val),
                     decoration: InputDecoration(
-                      hintText: 'Buscar acolhido por nome ou raça...',
+                      hintText: context.tr('acolhe.medical_search_hint'),
                       prefixIcon: const Icon(Icons.search, size: 20),
                       isDense: true,
                       fillColor: isDark ? const Color(0xFF1E293B) : Colors.white,
@@ -314,7 +315,7 @@ class _OngCollectiveMedicalScreenState
                               onChanged: (val) =>
                                   setState(() => _searchQuery = val),
                               decoration: InputDecoration(
-                                hintText: 'Buscar acolhido por nome ou raça...',
+                                hintText: context.tr('acolhe.medical_search_hint'),
                                 prefixIcon: const Icon(Icons.search, size: 20),
                                 isDense: true,
                                 fillColor: isDark
@@ -413,36 +414,36 @@ class _OngCollectiveMedicalScreenState
         total > 0 ? ((dewormedCount / total) * 100).toStringAsFixed(0) : '0';
 
     final cardCastrados = _buildKpiCard(
-      title: 'Castrados',
+      title: context.tr('acolhe.kpi_castrated'),
       value: '$castratedPct%',
-      subtitle: '$castratedCount de $total acolhidos',
+      subtitle: context.tr('acolhe.kpi_sub_sheltered', {'count': '$castratedCount', 'total': '$total'}),
       icon: Icons.medical_services_rounded,
       color: Colors.purpleAccent,
       isDark: isDark,
     );
 
     final cardVacinados = _buildKpiCard(
-      title: 'Vacinados',
+      title: context.tr('acolhe.kpi_vaccinated'),
       value: '$vaccinatedPct%',
-      subtitle: '$vaccinatedCount de $total em dia',
+      subtitle: context.tr('acolhe.kpi_sub_up_to_date', {'count': '$vaccinatedCount', 'total': '$total'}),
       icon: Icons.vaccines_rounded,
       color: Colors.teal,
       isDark: isDark,
     );
 
     final cardVermifugados = _buildKpiCard(
-      title: 'Vermifugados',
+      title: context.tr('acolhe.kpi_dewormed'),
       value: '$dewormedPct%',
-      subtitle: '$dewormedCount de $total em dia',
+      subtitle: context.tr('acolhe.kpi_sub_up_to_date', {'count': '$dewormedCount', 'total': '$total'}),
       icon: Icons.medication_rounded,
       color: Colors.orangeAccent,
       isDark: isDark,
     );
 
     final cardTratamento = _buildKpiCard(
-      title: 'Tratamento',
+      title: context.tr('acolhe.kpi_treatment'),
       value: '$inTreatmentCount',
-      subtitle: 'quarentena / cuidados',
+      subtitle: context.tr('acolhe.kpi_sub_quarantine'),
       icon: Icons.healing_rounded,
       color: Colors.redAccent,
       isDark: isDark,
@@ -567,11 +568,11 @@ class _OngCollectiveMedicalScreenState
 
   Widget _buildFilterPills(bool isDark) {
     final filters = [
-      {'key': 'todos', 'label': 'Todos (${_animals.length})'},
-      {'key': 'pendente_vacina', 'label': 'Pendente Vacina'},
-      {'key': 'pendente_vermifugo', 'label': 'Pendente Vermífugo'},
-      {'key': 'pendente_castracao', 'label': 'Não Castrado'},
-      {'key': 'em_tratamento', 'label': 'Em Tratamento'},
+      {'key': 'todos', 'label': context.tr('acolhe.filter_pill_all', {'count': '${_animals.length}'})},
+      {'key': 'pendente_vacina', 'label': context.tr('acolhe.filter_pill_pending_vac')},
+      {'key': 'pendente_vermifugo', 'label': context.tr('acolhe.filter_pill_pending_deworm')},
+      {'key': 'pendente_castracao', 'label': context.tr('acolhe.filter_pill_not_castrated')},
+      {'key': 'em_tratamento', 'label': context.tr('acolhe.filter_pill_in_treatment')},
     ];
 
     return SingleChildScrollView(
@@ -698,8 +699,8 @@ class _OngCollectiveMedicalScreenState
                             ),
                             child: Text(
                               animal.status == 'em_tratamento'
-                                  ? 'Em Tratamento'
-                                  : 'Acolhido',
+                                  ? context.tr('acolhe.status_in_treatment')
+                                  : context.tr('acolhe.status_sheltered'),
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
                                 fontSize: 10,
@@ -713,7 +714,7 @@ class _OngCollectiveMedicalScreenState
                         ],
                       ),
                       Text(
-                        '${animal.species == 'felino' ? 'Gato' : 'Cão'} · ${animal.breed} · ${animal.ageEstimate ?? "Idade N/I"}',
+                        '${animal.species == 'felino' ? context.tr('acolhe.cat_label') : context.tr('acolhe.dog_label')} · ${animal.breed} · ${animal.ageEstimate ?? "Idade N/I"}',
                         style: TextStyle(
                           fontSize: 11,
                           color: isDark ? Colors.white60 : Colors.black54,
@@ -729,17 +730,17 @@ class _OngCollectiveMedicalScreenState
                         runSpacing: 4,
                         children: [
                           _buildSanitaryBadge(
-                            label: animal.isCastrated ? 'Castrado' : 'Não Castrado',
+                            label: animal.isCastrated ? context.tr('acolhe.badge_castrated_ok') : context.tr('acolhe.badge_not_castrated'),
                             isOk: animal.isCastrated,
                             icon: Icons.medical_services_rounded,
                           ),
                           _buildSanitaryBadge(
-                            label: animal.isVaccinated ? 'Vacina OK' : 'Vacina Pendente',
+                            label: animal.isVaccinated ? context.tr('acolhe.badge_vac_ok') : context.tr('acolhe.badge_vac_pending'),
                             isOk: animal.isVaccinated,
                             icon: Icons.vaccines_rounded,
                           ),
                           _buildSanitaryBadge(
-                            label: animal.isDewormed ? 'Vermífugo OK' : 'Vermífugo Pend.',
+                            label: animal.isDewormed ? context.tr('acolhe.badge_deworm_ok') : context.tr('acolhe.badge_deworm_pending'),
                             isOk: animal.isDewormed,
                             icon: Icons.medication_rounded,
                           ),
@@ -805,7 +806,7 @@ class _OngCollectiveMedicalScreenState
             ),
             const SizedBox(height: 14),
             Text(
-              'Nenhum acolhido neste filtro.',
+              context.tr('acolhe.empty_medical_filter'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 16,
@@ -815,7 +816,7 @@ class _OngCollectiveMedicalScreenState
             ),
             const SizedBox(height: 6),
             Text(
-              'Alterne os filtros acima ou cadastre acolhidos na Central de Adoção.',
+              context.tr('acolhe.empty_medical_desc'),
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 12,

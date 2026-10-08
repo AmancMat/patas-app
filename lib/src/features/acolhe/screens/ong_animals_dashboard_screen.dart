@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
@@ -29,12 +30,12 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
   bool _isLoading = true;
   String _selectedStatusFilter = 'todos';
 
-  final List<Map<String, String>> _statusTabs = [
-    {'id': 'todos', 'label': 'Todos'},
-    {'id': 'disponivel', 'label': 'Adoção Aberta'},
-    {'id': 'em_tratamento', 'label': 'Em Tratamento'},
-    {'id': 'lar_temporario', 'label': 'Em LT'},
-    {'id': 'adotado', 'label': 'Adotados'},
+  List<Map<String, String>> _getStatusTabs(BuildContext context) => [
+    {'id': 'todos', 'label': context.tr('acolhe.status_tab_all')},
+    {'id': 'disponivel', 'label': context.tr('acolhe.status_tab_available')},
+    {'id': 'em_tratamento', 'label': context.tr('acolhe.status_tab_treatment')},
+    {'id': 'lar_temporario', 'label': context.tr('acolhe.status_tab_foster')},
+    {'id': 'adotado', 'label': context.tr('acolhe.status_tab_adopted')},
   ];
 
   @override
@@ -84,12 +85,12 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
     showDialog(
       context: context,
       builder: (ctx) => AlertDialog(
-        title: const Text('Remover animal?'),
-        content: Text('Deseja realmente remover "${animal.name}" do cadastro do abrigo?'),
+        title: Text(context.tr('acolhe.confirm_delete_title')),
+        content: Text(context.tr('acolhe.confirm_delete_content', {'name': animal.name})),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancelar'),
+            child: Text(context.tr('acolhe.cancel_btn')),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: Colors.redAccent),
@@ -98,7 +99,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
               await _service.deleteShelterAnimal(animal.id);
               _loadAnimals();
             },
-            child: const Text('Remover', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('acolhe.remove_btn'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -127,9 +128,9 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
     return Scaffold(
       backgroundColor:
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Central de Adoção',
-        subtitle: 'Gestão de animais e acolhimento',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('acolhe.dashboard_title'),
+        subtitle: context.tr('acolhe.dashboard_subtitle'),
         showBackButton: false,
         compactPetSelector: true,
         leadingIcon: Icon(
@@ -151,9 +152,9 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
           elevation: 4,
           onPressed: () => _openCreateSheet(),
           icon: const Icon(Icons.add_rounded),
-          label: const Text(
-            'Novo Acolhido',
-            style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
+          label: Text(
+            context.tr('acolhe.new_animal'),
+            style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
           ),
         ),
       ),
@@ -174,7 +175,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                   child: Row(
                     children: [
                       _buildSummaryCard(
-                        title: 'Total Acolhidos',
+                        title: context.tr('acolhe.total_sheltered'),
                         value: '$totalAcolhidos',
                         icon: Icons.pets_rounded,
                         color: Colors.purpleAccent,
@@ -182,7 +183,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                       ),
                       const SizedBox(width: 10),
                       _buildSummaryCard(
-                        title: 'Para Adoção',
+                        title: context.tr('acolhe.for_adoption'),
                         value: '$totalDisponiveis',
                         icon: Icons.favorite_rounded,
                         color: Colors.greenAccent.shade700,
@@ -190,7 +191,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                       ),
                       const SizedBox(width: 10),
                       _buildSummaryCard(
-                        title: 'Tratamento',
+                        title: context.tr('acolhe.in_treatment'),
                         value: '$totalTratamento',
                         icon: Icons.medical_services_outlined,
                         color: Colors.orangeAccent,
@@ -259,7 +260,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                                 crossAxisAlignment: CrossAxisAlignment.start,
                                 children: [
                                   Text(
-                                    'Fichas de Interessados',
+                                    context.tr('acolhe.applications_card_title'),
                                     style: TextStyle(
                                       fontFamily: 'Fredoka',
                                       fontSize: 14,
@@ -269,7 +270,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                                   ),
                                   const SizedBox(height: 2),
                                   Text(
-                                    'Gerencie questionários de adoção recebidos',
+                                    context.tr('acolhe.applications_card_desc'),
                                     style: TextStyle(
                                       fontSize: 11.5,
                                       color: isDark ? Colors.white60 : Colors.black54,
@@ -284,12 +285,12 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                                 color: Colors.purpleAccent,
                                 borderRadius: BorderRadius.circular(20),
                               ),
-                              child: const Row(
+                              child: Row(
                                 mainAxisSize: MainAxisSize.min,
                                 children: [
                                   Text(
-                                    'Acessar',
-                                    style: TextStyle(
+                                    context.tr('acolhe.access_btn'),
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontSize: 11.5,
                                       fontWeight: FontWeight.bold,
@@ -316,10 +317,10 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                   child: ListView.separated(
                     padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                     scrollDirection: Axis.horizontal,
-                    itemCount: _statusTabs.length,
+                    itemCount: _getStatusTabs(context).length,
                     separatorBuilder: (_, __) => const SizedBox(width: 8),
                     itemBuilder: (context, index) {
-                      final tab = _statusTabs[index];
+                      final tab = _getStatusTabs(context)[index];
                       final isSelected = tab['id'] == _selectedStatusFilter;
 
                       return InkWell(
@@ -382,7 +383,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                         ),
                         const SizedBox(height: 12),
                         Text(
-                          'Nenhum animal nesta categoria.',
+                          context.tr('acolhe.no_animals_in_category'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 16,
@@ -498,7 +499,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                                 ),
                                 const SizedBox(width: 12),
                                 Text(
-                                  'Central de Adoção',
+                                  context.tr('acolhe.dashboard_title'),
                                   style: TextStyle(
                                     fontFamily: 'Fredoka',
                                     fontSize: 28,
@@ -510,7 +511,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                             ),
                             const SizedBox(height: 6),
                             Text(
-                              'Gestão de acolhidos, fichas de adoção e processos do abrigo',
+                              context.tr('acolhe.dashboard_subtitle'),
                               style: TextStyle(
                                 fontSize: 14,
                                 color: isDark ? Colors.white60 : Colors.black54,
@@ -522,9 +523,9 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                         ElevatedButton.icon(
                           onPressed: () => _openCreateSheet(),
                           icon: const Icon(Icons.add_rounded, color: Colors.white, size: 20),
-                          label: const Text(
-                            'Novo Acolhido',
-                            style: TextStyle(
+                          label: Text(
+                            context.tr('acolhe.new_animal'),
+                            style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontWeight: FontWeight.bold,
                               fontSize: 14,
@@ -550,8 +551,8 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                     Row(
                       children: [
                         _buildDesktopSummaryCard(
-                          title: 'Total Acolhidos',
-                          subtitle: 'Animais no abrigo',
+                          title: context.tr('acolhe.total_sheltered'),
+                          subtitle: context.tr('acolhe.sub_animals_in_shelter'),
                           value: '$totalAcolhidos',
                           icon: Icons.pets_rounded,
                           color: Colors.purpleAccent,
@@ -559,8 +560,8 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                         ),
                         const SizedBox(width: 14),
                         _buildDesktopSummaryCard(
-                          title: 'Para Adoção',
-                          subtitle: 'Disponíveis no app',
+                          title: context.tr('acolhe.for_adoption'),
+                          subtitle: context.tr('acolhe.sub_available_in_app'),
                           value: '$totalDisponiveis',
                           icon: Icons.favorite_rounded,
                           color: Colors.greenAccent.shade700,
@@ -569,7 +570,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                         const SizedBox(width: 14),
                         _buildDesktopSummaryCard(
                           title: 'Em Tratamento',
-                          subtitle: 'Cuidados de saúde',
+                          subtitle: context.tr('acolhe.sub_health_care'),
                           value: '$totalTratamento',
                           icon: Icons.medical_services_outlined,
                           color: Colors.orangeAccent,
@@ -587,7 +588,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
                         Row(
-                          children: _statusTabs.map((tab) {
+                          children: _getStatusTabs(context).map((tab) {
                             final isSelected = tab['id'] == _selectedStatusFilter;
                             return Padding(
                               padding: const EdgeInsets.only(right: 10),
@@ -637,7 +638,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                           }).toList(),
                         ),
                         Text(
-                          '${_animals.length} animal${_animals.length == 1 ? '' : 'is'} listado${_animals.length == 1 ? '' : 's'}',
+                          (_animals.length == 1 ? context.tr('acolhe.animal_count_singular') : context.tr('acolhe.animal_count_plural', {'count': '${_animals.length}'})),
                           style: TextStyle(
                             fontSize: 13,
                             fontWeight: FontWeight.w500,
@@ -671,7 +672,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                               ),
                               const SizedBox(height: 12),
                               Text(
-                                'Nenhum animal nesta categoria.',
+                                context.tr('acolhe.no_animals_in_category'),
                                 style: TextStyle(
                                   fontFamily: 'Fredoka',
                                   fontSize: 16,
@@ -859,12 +860,12 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                         color: Colors.purpleAccent,
                         borderRadius: BorderRadius.circular(20),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
                           Text(
-                            'Acessar',
-                            style: TextStyle(
+                            context.tr('acolhe.access_btn'),
+                            style: const TextStyle(
                               color: Colors.white,
                               fontSize: 11,
                               fontWeight: FontWeight.bold,
@@ -880,7 +881,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  'Fichas de Adoção',
+                  context.tr('acolhe.applications_badge'),
                   style: TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 14,
@@ -890,7 +891,7 @@ class _OngAnimalsDashboardScreenState extends State<OngAnimalsDashboardScreen> {
                 ),
                 const SizedBox(height: 2),
                 Text(
-                  'Ver questionários',
+                  context.tr('acolhe.applications_card_sub_desktop'),
                   style: TextStyle(
                     fontSize: 11.5,
                     color: isDark ? Colors.white54 : Colors.black54,
@@ -974,7 +975,7 @@ class _ShelterAnimalCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final statusBadge = _getStatusBadge(animal.status);
+    final statusBadge = _getStatusBadge(context, animal.status);
 
     return Container(
       decoration: BoxDecoration(
@@ -1056,7 +1057,7 @@ class _ShelterAnimalCard extends StatelessWidget {
                         ),
                       ),
                       PopupMenuButton<String>(
-                        tooltip: 'Opções do animal',
+                        tooltip: context.tr('acolhe.animal_options_tooltip'),
                         icon: SettingsLinesIcon(
                           color: isDark ? Colors.white70 : Colors.black54,
                           size: 18,
@@ -1080,7 +1081,7 @@ class _ShelterAnimalCard extends StatelessWidget {
                                 const Icon(Icons.edit_rounded, size: 16, color: Colors.purpleAccent),
                                 const SizedBox(width: 8),
                                 Text(
-                                  'Editar',
+                                  context.tr('acolhe.edit_animal'),
                                   style: TextStyle(
                                     color: isDark ? Colors.white : AppColors.darkBG,
                                     fontSize: 13,
@@ -1091,14 +1092,14 @@ class _ShelterAnimalCard extends StatelessWidget {
                           ),
                           PopupMenuItem(
                             value: 'delete',
-                            child: const Row(
+                            child: Row(
                               children: [
-                                Icon(Icons.delete_outline_rounded,
+                                const Icon(Icons.delete_outline_rounded,
                                     size: 16, color: Colors.redAccent),
-                                SizedBox(width: 8),
+                                const SizedBox(width: 8),
                                 Text(
-                                  'Excluir',
-                                  style: TextStyle(color: Colors.redAccent, fontSize: 13),
+                                  context.tr('acolhe.delete_animal'),
+                                  style: const TextStyle(color: Colors.redAccent, fontSize: 13),
                                 ),
                               ],
                             ),
@@ -1141,10 +1142,10 @@ class _ShelterAnimalCard extends StatelessWidget {
                   Row(
                     children: [
                       if (animal.isCastrated)
-                        _buildHealthPill('Castrado', Colors.teal, isDark),
+                        _buildHealthPill(context.tr('acolhe.castrated'), Colors.teal, isDark),
                       if (animal.isVaccinated) ...[
                         const SizedBox(width: 4),
-                        _buildHealthPill('Vacinado', Colors.blue, isDark),
+                        _buildHealthPill(context.tr('acolhe.vaccinated'), Colors.blue, isDark),
                       ],
                       const Spacer(),
                       if (animal.isPublicAdoption)
@@ -1188,18 +1189,18 @@ class _ShelterAnimalCard extends StatelessWidget {
     );
   }
 
-  _StatusBadgeInfo _getStatusBadge(String status) {
+  _StatusBadgeInfo _getStatusBadge(BuildContext context, String status) {
     switch (status) {
       case 'disponivel':
-        return _StatusBadgeInfo('Disponível', Colors.green);
+        return _StatusBadgeInfo(context.tr('acolhe.status_available'), Colors.green);
       case 'em_tratamento':
-        return _StatusBadgeInfo('Em Tratamento', Colors.orangeAccent);
+        return _StatusBadgeInfo(context.tr('acolhe.status_in_treatment'), Colors.orangeAccent);
       case 'lar_temporario':
-        return _StatusBadgeInfo('Lar Temporário', Colors.indigoAccent);
+        return _StatusBadgeInfo(context.tr('acolhe.status_foster_home'), Colors.indigoAccent);
       case 'adotado':
-        return _StatusBadgeInfo('Adotado 🎉', Colors.purpleAccent);
+        return _StatusBadgeInfo(context.tr('acolhe.status_adopted_celebrate'), Colors.purpleAccent);
       default:
-        return _StatusBadgeInfo('Cadastrado', Colors.grey);
+        return _StatusBadgeInfo(context.tr('acolhe.status_registered'), Colors.grey);
     }
   }
 }

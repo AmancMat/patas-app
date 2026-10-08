@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../../../app.dart';
 import '../../../constants/app_colors.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 
@@ -119,8 +120,8 @@ class _AddFelineRacePageState extends State<AddFelineRacePage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.darkBG : AppColors.bodyLight,
       appBar: PatasEssencialAppBar(
-        title: 'Raças de Gatos',
-        subtitle: 'Escolha a raça do seu gato',
+        title: context.tr('pet_create.cat_breeds_title'),
+        subtitle: context.tr('pet_create.cat_breeds_subtitle'),
         leadingIcon: const Icon(
           Icons.pets_rounded,
           color: AppColors.patasColor,
@@ -136,7 +137,7 @@ class _AddFelineRacePageState extends State<AddFelineRacePage> {
             style: TextStyle(
                 color: thmode.darkMode ? Colors.white : AppColors.darkBG),
             decoration: InputDecoration(
-              hintText: 'Pesquisar raças...',
+              hintText: context.tr('pet_create.search_breeds_hint'),
               hintStyle: TextStyle(
                   color: thmode.darkMode ? Colors.white70 : Colors.black54),
               prefixIcon:
@@ -163,12 +164,15 @@ class _AddFelineRacePageState extends State<AddFelineRacePage> {
           if (_searchController.text.isEmpty ||
               _srdOption.name
                   .toLowerCase()
+                  .contains(_searchController.text.toLowerCase()) ||
+              context.tr('pet_create.srd_option')
+                  .toLowerCase()
                   .contains(_searchController.text.toLowerCase()))
             SliverToBoxAdapter(
               child: Padding(
                 padding: const EdgeInsets.all(16.0),
                 child: GestureDetector(
-                  onTap: () => Navigator.pop(context, _srdOption.name),
+                  onTap: () => Navigator.pop(context, context.tr('pet_create.srd_option')),
                   child: Container(
                     padding: const EdgeInsets.all(16),
                     decoration: BoxDecoration(
@@ -184,7 +188,7 @@ class _AddFelineRacePageState extends State<AddFelineRacePage> {
                         const Icon(Icons.pets, color: AppColors.patasColor),
                         const SizedBox(width: 16),
                         Text(
-                          _srdOption.name,
+                          context.tr('pet_create.srd_option'),
                           style: TextStyle(
                               color: thmode.darkMode
                                   ? Colors.white

@@ -4,6 +4,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:visibility_detector/visibility_detector.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class VideoPlayerWidget extends StatefulWidget {
   final String videoUrl;
@@ -449,14 +450,14 @@ class _VideoPlayerWidgetState extends State<VideoPlayerWidget> {
                   )
                 ],
               ),
-              child: const Row(
+              child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  Icon(Icons.replay_rounded, color: Colors.white, size: 24),
-                  SizedBox(width: 8),
+                  const Icon(Icons.replay_rounded, color: Colors.white, size: 24),
+                  const SizedBox(width: 8),
                   Text(
-                    'Assistir novamente',
-                    style: TextStyle(
+                    context.tr('feed.watch_again'),
+                    style: const TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
                       fontSize: 14,

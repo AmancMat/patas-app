@@ -32,6 +32,8 @@ import 'package:patas_web_app/src/features/home/timeline/screens/public_post_pag
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:patas_web_app/src/providers/font_size_provider.dart';
 import 'package:patas_web_app/src/providers/accessibility_provider.dart';
+import 'package:patas_web_app/src/providers/locale_provider.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/common_widgets/connectivity_banner.dart';
 import 'package:patas_web_app/src/common_widgets/story_publish_banner.dart';
 import 'package:provider/provider.dart';
@@ -86,6 +88,7 @@ class _AppState extends State<App> {
     final accProvider = Provider.of<AccessibilityProvider>(context);
     final reduceMotion = accProvider.reduceMotion;
     final colorFilter = accProvider.currentColorFilter;
+    final localeProvider = Provider.of<LocaleProvider>(context);
 
     return ScreenUtilInit(
       designSize: const Size(430, 932), // Tamanho base (ex: iPhone 14 Pro Max)
@@ -106,12 +109,25 @@ class _AppState extends State<App> {
               PointerDeviceKind.stylus,
             },
           ),
+          locale: localeProvider.locale,
           localizationsDelegates: const [
+            AppLocalizations.delegate,
             GlobalMaterialLocalizations.delegate,
             GlobalCupertinoLocalizations.delegate,
             GlobalWidgetsLocalizations.delegate,
           ],
-          supportedLocales: const [Locale('pt', 'BR')],
+          supportedLocales: AppLocalizations.supportedLocales,
+          localeResolutionCallback: (deviceLocale, supportedLocales) {
+            // Regra de Fallback Inteligente Internacional:
+            // 1. Se o dispositivo estiver em Português ('pt'), renderiza em Português.
+            // 2. Se estiver em QUALQUER OUTRO idioma (Inglês, Italiano, Espanhol, Francês, etc.),
+            //    renderiza obrigatoriamente em INGLÊS por padrão mundial!
+            if (deviceLocale != null &&
+                deviceLocale.languageCode.toLowerCase() == 'pt') {
+              return const Locale('pt', 'BR');
+            }
+            return const Locale('en', 'US');
+          },
           initialRoute: NamedRoute.splash,
           builder: (context, widget) {
             Widget rootWidget = ResponsiveAppWrapper(

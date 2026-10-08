@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/features/health/dicas/texto_dicas_page.dart';
 import 'package:patas_web_app/src/features/health/dicas/video_dicas_page.dart';
@@ -60,6 +61,24 @@ class DicasPage extends StatefulWidget {
 }
 
 class _DicasPageState extends State<DicasPage> {
+
+  String _getCategoryLabel(String cat, BuildContext context) {
+    switch (cat) {
+      case 'Todos':
+        return context.tr('health.cat_all');
+      case 'Alimentação':
+        return context.tr('health.cat_nutrition');
+      case 'Comportamento':
+        return context.tr('health.cat_behavior');
+      case 'Saúde & Prevenção':
+        return context.tr('health.cat_health_prevention');
+      case 'Filhotes':
+        return context.tr('health.cat_puppies');
+      default:
+        return cat;
+    }
+  }
+
   DicasSubView _currentView = DicasSubView.main;
   String _selectedCategory = 'Todos';
 
@@ -271,9 +290,9 @@ class _DicasPageState extends State<DicasPage> {
 
     return Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Dicas Pet',
-        subtitle: 'Vídeos, artigos e guias de cuidados para seu pet',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('health.tips_page_title'),
+        subtitle: context.tr('health.tips_page_subtitle'),
       ),
       body: ListView(
         padding: const EdgeInsets.symmetric(vertical: 16),
@@ -329,9 +348,9 @@ class _DicasPageState extends State<DicasPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: const PatasEssencialAppBar(
-        title: 'Dicas Pet',
-        subtitle: 'Vídeos, artigos e guias de cuidados para seu pet',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('health.tips_page_title'),
+        subtitle: context.tr('health.tips_page_subtitle'),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -420,7 +439,7 @@ class _DicasPageState extends State<DicasPage> {
                     : null,
               ),
               child: Text(
-                cat,
+                _getCategoryLabel(cat, context),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 12.5,
@@ -891,8 +910,8 @@ class _DicasPageState extends State<DicasPage> {
   // ─── Atalhos dos Hubs Completos ───────────────────────────────────────────
   Widget _buildHubShortcuts(bool isDark, {required bool isDesktop}) {
     final card1 = _buildHubCard(
-      title: 'Canais do YouTube',
-      subtitle: 'Acesse listas de reprodução e tutoriais completos',
+      title: context.tr('health.youtube_channels_hub'),
+      subtitle: context.tr('health.youtube_channels_sub'),
       icon: Icons.ondemand_video_rounded,
       iconColor: Colors.redAccent,
       countLabel: '${_allVideos.length}+ vídeos',
@@ -901,8 +920,8 @@ class _DicasPageState extends State<DicasPage> {
     );
 
     final card2 = _buildHubCard(
-      title: 'Biblioteca de Artigos',
-      subtitle: 'Explore guias completos sobre patologias e cuidados',
+      title: context.tr('health.articles_library_hub'),
+      subtitle: context.tr('health.articles_library_sub'),
       icon: Icons.library_books_rounded,
       iconColor: AppColors.patasColor,
       countLabel: '${_allArticles.length}+ artigos',

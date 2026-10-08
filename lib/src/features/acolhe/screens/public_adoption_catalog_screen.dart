@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
@@ -28,17 +29,17 @@ class _PublicAdoptionCatalogScreenState
   String _selectedSpecies = 'todos';
   String _selectedSize = 'todos';
 
-  final List<Map<String, String>> _speciesFilters = [
-    {'id': 'todos', 'label': 'Todos'},
-    {'id': 'canino', 'label': '🐶 Cães'},
-    {'id': 'felino', 'label': '🐱 Gatos'},
+  List<Map<String, String>> _getSpeciesFilters(BuildContext context) => [
+    {'id': 'todos', 'label': context.tr('acolhe.status_tab_all')},
+    {'id': 'canino', 'label': context.tr('acolhe.filter_dogs')},
+    {'id': 'felino', 'label': context.tr('acolhe.filter_cats')},
   ];
 
-  final List<Map<String, String>> _sizeFilters = [
-    {'id': 'todos', 'label': 'Qualquer Porte'},
-    {'id': 'pequeno', 'label': 'Pequeno'},
-    {'id': 'medio', 'label': 'Médio'},
-    {'id': 'grande', 'label': 'Grande'},
+  List<Map<String, String>> _getSizeFilters(BuildContext context) => [
+    {'id': 'todos', 'label': context.tr('acolhe.filter_any_size')},
+    {'id': 'pequeno', 'label': context.tr('acolhe.filter_size_small')},
+    {'id': 'medio', 'label': context.tr('acolhe.filter_size_medium')},
+    {'id': 'grande', 'label': context.tr('acolhe.filter_size_large')},
   ];
 
   @override
@@ -77,9 +78,9 @@ class _PublicAdoptionCatalogScreenState
     return Scaffold(
       backgroundColor:
           isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: const PatasEssencialAppBar(
-        title: 'Adote um Amigo',
-        subtitle: 'Animais acolhidos por ONGs parceiras',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('acolhe.catalog_title'),
+        subtitle: context.tr('acolhe.catalog_subtitle'),
         leadingIcon: Icon(
           Icons.favorite_rounded,
           color: Colors.purpleAccent,
@@ -127,7 +128,7 @@ class _PublicAdoptionCatalogScreenState
                               controller: _searchController,
                               onChanged: (_) => _loadAnimals(),
                               decoration: InputDecoration(
-                                hintText: 'Buscar por nome ou raça...',
+                                hintText: context.tr('acolhe.search_animal_hint'),
                                 hintStyle: TextStyle(
                                   fontSize: 13,
                                   color: isDark ? Colors.white54 : Colors.black45,
@@ -164,11 +165,11 @@ class _PublicAdoptionCatalogScreenState
                                   height: 38,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: _speciesFilters.length,
+                                    itemCount: _getSpeciesFilters(context).length,
                                     separatorBuilder: (_, __) =>
                                         const SizedBox(width: 8),
                                     itemBuilder: (context, index) {
-                                      final s = _speciesFilters[index];
+                                      final s = _getSpeciesFilters(context)[index];
                                       final isSelected =
                                           s['id'] == _selectedSpecies;
 
@@ -235,11 +236,11 @@ class _PublicAdoptionCatalogScreenState
                                   height: 34,
                                   child: ListView.separated(
                                     scrollDirection: Axis.horizontal,
-                                    itemCount: _sizeFilters.length,
+                                    itemCount: _getSizeFilters(context).length,
                                     separatorBuilder: (_, __) =>
                                         const SizedBox(width: 8),
                                     itemBuilder: (context, index) {
-                                      final sz = _sizeFilters[index];
+                                      final sz = _getSizeFilters(context)[index];
                                       final isSelected =
                                           sz['id'] == _selectedSize;
 
@@ -323,7 +324,7 @@ class _PublicAdoptionCatalogScreenState
                             ),
                             const SizedBox(height: 12),
                             Text(
-                              'Nenhum pet encontrado para adoção.',
+                              context.tr('acolhe.no_adoption_pets_found'),
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
                                 fontSize: 16,
@@ -483,7 +484,7 @@ class _AdoptionPetCard extends StatelessWidget {
                               borderRadius: BorderRadius.circular(10),
                             ),
                             child: Text(
-                              animal.species == 'felino' ? '🐱 Gato' : '🐶 Cão',
+                              animal.species == 'felino' ? context.tr('acolhe.cat_label') : context.tr('acolhe.dog_label'),
                               style: const TextStyle(
                                 fontSize: 10,
                                 fontWeight: FontWeight.bold,
@@ -520,9 +521,9 @@ class _AdoptionPetCard extends StatelessWidget {
                         spacing: 4,
                         children: [
                           if (animal.isCastrated)
-                            _buildMiniBadge('Castrado', Colors.teal, isDark),
+                            _buildMiniBadge(context.tr('acolhe.castrated'), Colors.teal, isDark),
                           if (animal.isVaccinated)
-                            _buildMiniBadge('Vacinado', Colors.blue, isDark),
+                            _buildMiniBadge(context.tr('acolhe.vaccinated'), Colors.blue, isDark),
                         ],
                       ),
 
@@ -533,7 +534,7 @@ class _AdoptionPetCard extends StatelessWidget {
                         children: [
                           Expanded(
                             child: Text(
-                              animal.ongName ?? 'ONG Parceira',
+                              animal.ongName ?? context.tr('acolhe.partner_shelter'),
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,

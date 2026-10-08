@@ -4,6 +4,8 @@ import 'package:provider/provider.dart';
 import '../../../../app.dart';
 import '../../../constants/app_colors.dart';
 
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 class PhotoGalleryPage extends StatelessWidget {
   final String title;
   final List<String> imageUrls;
@@ -55,7 +57,7 @@ class PhotoGalleryPage extends StatelessWidget {
                       size: 64, color: Colors.grey),
                   const SizedBox(height: 16),
                   Text(
-                    'Nenhuma foto encontrada.',
+                    context.tr('profile.no_photos_found'),
                     style: TextStyle(
                       color: textColor.withValues(alpha: 0.6),
                       fontSize: 16,

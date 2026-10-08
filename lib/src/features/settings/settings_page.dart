@@ -21,6 +21,9 @@ import 'package:patas_web_app/src/features/legal/legal_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../app.dart';
+import 'package:patas_web_app/src/providers/locale_provider.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+
 import 'package:package_info_plus/package_info_plus.dart';
 
 class SettingsPage extends StatefulWidget {
@@ -40,6 +43,7 @@ class _SettingsPageState extends State<SettingsPage> {
   bool _isExpanded7 = false;
   bool _isExpandedAccessibility = false;
   bool _isExpandedLegal = false;
+  bool _isExpandedLanguage = false;
 
   // Novos estados para configurações
   bool _loginAlerts = false;
@@ -102,6 +106,7 @@ class _SettingsPageState extends State<SettingsPage> {
   @override
   Widget build(BuildContext context) {
     final thmode = Provider.of<DarkMode>(context);
+    final localeProvider = Provider.of<LocaleProvider>(context);
     return Scaffold(
       backgroundColor:
           thmode.darkMode ? AppColors.bodygray : Colors.grey.shade300,
@@ -111,9 +116,9 @@ class _SettingsPageState extends State<SettingsPage> {
         elevation: 0,
         automaticallyImplyLeading: false,
         centerTitle: true,
-        title: const Text(
-          'Configurações',
-          style: TextStyle(
+        title: Text(
+          context.tr('settings.title'),
+          style: const TextStyle(
             fontFamily: 'Fredoka',
             color: AppColors.patasColor,
             fontSize: 30,
@@ -312,6 +317,148 @@ class _SettingsPageState extends State<SettingsPage> {
                               ],
                             ),
                           ),
+                        ],
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              // ─── Seção 1.5: Idioma e Região (i18n) ──────────────────────────
+              Container(
+                clipBehavior: Clip.antiAlias,
+                margin: const EdgeInsets.only(
+                    top: 16, bottom: 16, left: 16, right: 32),
+                decoration: BoxDecoration(
+                    color: thmode.darkMode
+                        ? AppColors.darkBG
+                        : AppColors.bodyLight,
+                    borderRadius: BorderRadius.circular(20.0),
+                    boxShadow: [
+                      BoxShadow(
+                          color: Colors.black.withAlpha(70),
+                          offset: const Offset(3.0, 10.0),
+                          blurRadius: 15.0)
+                    ]),
+                child: ExpansionTile(
+                  clipBehavior: Clip.antiAlias,
+                  shape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide.none,
+                  ),
+                  collapsedShape: RoundedRectangleBorder(
+                    borderRadius: BorderRadius.circular(20.0),
+                    side: BorderSide.none,
+                  ),
+                  textColor: AppColors.patasColor,
+                  trailing: AnimatedRotation(
+                    duration: const Duration(milliseconds: 200),
+                    turns: _isExpandedLanguage ? 0.25 : 0,
+                    child: Icon(
+                      Icons.play_arrow_rounded,
+                      color: thmode.darkMode ? Colors.white : AppColors.darkBG,
+                    ),
+                  ),
+                  onExpansionChanged: (value) {
+                    setState(() {
+                      _isExpandedLanguage = value;
+                    });
+                  },
+                  title: Text(
+                    context.tr('settings.language_section_title'),
+                    style: TextStyle(
+                        color:
+                            thmode.darkMode ? Colors.white : AppColors.darkBG,
+                        fontSize: 16,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    localeProvider.isPortuguese
+                        ? '🇧🇷 ${context.tr('settings.portuguese_label')} (${context.tr('settings.active_badge')})'
+                        : '🇺🇸 ${context.tr('settings.english_label')} (${context.tr('settings.active_badge')})',
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white54 : Colors.grey.shade600,
+                    ),
+                  ),
+                  leading: const Icon(
+                    Icons.language_rounded,
+                    color: AppColors.patasColor,
+                  ),
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 12.0),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Text(
+                            context.tr('settings.language_section_desc'),
+                            style: TextStyle(
+                              color: thmode.darkMode
+                                  ? Colors.white70
+                                  : Colors.black87,
+                              fontSize: 13,
+                              height: 1.4,
+                            ),
+                          ),
+                          const SizedBox(height: 16),
+                          // Opção 1: Português (Brasil)
+                          _buildLanguageOptionCard(
+                            context: context,
+                            title: context.tr('settings.portuguese_label'),
+                            subtitle: context.tr('settings.portuguese_sub'),
+                            flag: '🇧🇷',
+                            isSelected: localeProvider.isPortuguese,
+                            thmode: thmode,
+                            onTap: () async {
+                              await localeProvider.setPortuguese();
+                            },
+                          ),
+                          const SizedBox(height: 10),
+                          // Opção 2: Inglês (EUA / Global)
+                          _buildLanguageOptionCard(
+                            context: context,
+                            title: context.tr('settings.english_label'),
+                            subtitle: context.tr('settings.english_sub'),
+                            flag: '🇺🇸',
+                            isSelected: localeProvider.isEnglish,
+                            thmode: thmode,
+                            onTap: () async {
+                              await localeProvider.setEnglish();
+                            },
+                          ),
+                          const SizedBox(height: 14),
+                          Container(
+                            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: AppColors.patasColor.withValues(alpha: 0.08),
+                              borderRadius: BorderRadius.circular(12),
+                              border: Border.all(
+                                color: AppColors.patasColor.withValues(alpha: 0.2),
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                const Icon(
+                                  Icons.info_outline_rounded,
+                                  size: 16,
+                                  color: AppColors.patasColor,
+                                ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    context.tr('settings.language_hint'),
+                                    style: TextStyle(
+                                      fontSize: 11,
+                                      color: thmode.darkMode
+                                          ? Colors.white70
+                                          : AppColors.darkBG,
+                                    ),
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          const SizedBox(height: 8),
                         ],
                       ),
                     ),
@@ -1612,6 +1759,104 @@ class _SettingsPageState extends State<SettingsPage> {
             child: const Text('Confirmar Exclusão'),
           ),
         ],
+      ),
+    );
+  }
+
+  Widget _buildLanguageOptionCard({
+    required BuildContext context,
+    required String title,
+    required String subtitle,
+    required String flag,
+    required bool isSelected,
+    required DarkMode thmode,
+    required VoidCallback onTap,
+  }) {
+    final borderColor = isSelected
+        ? AppColors.patasColor
+        : (thmode.darkMode ? Colors.white12 : Colors.grey.shade300);
+    final cardBg = isSelected
+        ? AppColors.patasColor.withValues(alpha: 0.1)
+        : (thmode.darkMode ? Colors.white.withValues(alpha: 0.03) : Colors.white);
+
+    return InkWell(
+      onTap: onTap,
+      borderRadius: BorderRadius.circular(16),
+      child: AnimatedContainer(
+        duration: const Duration(milliseconds: 200),
+        padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 14),
+        decoration: BoxDecoration(
+          color: cardBg,
+          borderRadius: BorderRadius.circular(16),
+          border: Border.all(color: borderColor, width: isSelected ? 2 : 1),
+          boxShadow: isSelected
+              ? [
+                  BoxShadow(
+                    color: AppColors.patasColor.withValues(alpha: 0.15),
+                    blurRadius: 8,
+                    offset: const Offset(0, 2),
+                  )
+                ]
+              : null,
+        ),
+        child: Row(
+          children: [
+            Text(flag, style: const TextStyle(fontSize: 26)),
+            const SizedBox(width: 14),
+            Expanded(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    title,
+                    style: TextStyle(
+                      fontSize: 15,
+                      fontWeight: FontWeight.bold,
+                      color: thmode.darkMode ? Colors.white : AppColors.darkBG,
+                    ),
+                  ),
+                  const SizedBox(height: 2),
+                  Text(
+                    subtitle,
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                  ),
+                ],
+              ),
+            ),
+            if (isSelected)
+              Container(
+                padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
+                decoration: BoxDecoration(
+                  color: AppColors.patasColor,
+                  borderRadius: BorderRadius.circular(20),
+                ),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: [
+                    const Icon(Icons.check, size: 14, color: Colors.white),
+                    const SizedBox(width: 4),
+                    Text(
+                      context.tr('settings.active_badge'),
+                      style: const TextStyle(
+                        fontSize: 11,
+                        color: Colors.white,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  ],
+                ),
+              )
+            else
+              Icon(
+                Icons.radio_button_unchecked,
+                size: 20,
+                color: thmode.darkMode ? Colors.white38 : Colors.grey.shade400,
+              ),
+          ],
+        ),
       ),
     );
   }

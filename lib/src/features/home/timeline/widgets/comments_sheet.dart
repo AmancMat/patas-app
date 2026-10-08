@@ -9,6 +9,7 @@ import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/models/active_account_model.dart';
 import 'package:provider/provider.dart';
 import '../../../../../app.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class CommentsSheet extends StatefulWidget {
   final Post post;
@@ -82,7 +83,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
     } catch (e) {
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('Erro ao comentar: $e')),
+          SnackBar(content: Text(context.tr('feed.comment_error', {'error': e.toString()}))),
         );
       }
     } finally {
@@ -138,7 +139,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
           Padding(
             padding: const EdgeInsets.only(bottom: 12),
             child: Text(
-              'Comentários',
+              context.tr('feed.comments'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 16,
@@ -164,7 +165,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                 : _comments.isEmpty
                     ? Center(
                         child: Text(
-                          'Seja o primeiro a comentar!',
+                          context.tr('feed.no_comments'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 14,
@@ -282,7 +283,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                       color: isDark ? Colors.white : AppColors.darkBG,
                     ),
                     decoration: InputDecoration(
-                      hintText: 'Adicione um comentário...',
+                      hintText: context.tr('feed.write_comment'),
                       hintStyle: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 14,
@@ -318,7 +319,7 @@ class _CommentsSheetState extends State<CommentsSheet> {
                         ),
                       )
                     : IconButton(
-                        tooltip: 'Enviar comentário',
+                        tooltip: context.tr('feed.send_comment_tooltip'),
                         onPressed: _addComment,
                         icon: const Icon(
                           Icons.send_rounded,

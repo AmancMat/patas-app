@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/localizations_ext.dart';
 import 'package:geolocator/geolocator.dart';
 import 'package:flutter_map/flutter_map.dart';
 import 'package:latlong2/latlong.dart';
@@ -367,7 +368,7 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                     ),
                     const SizedBox(width: 8),
                     Text(
-                      'Sugerido por ',
+                      context.tr('friendly.suggested_by'),
                       style: TextStyle(
                         fontSize: 12,
                         color: isDark ? Colors.white54 : Colors.black45,
@@ -404,8 +405,8 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                       borderRadius: BorderRadius.circular(16),
                     ),
                   ),
-                  child: const Text(
-                    'Conhecer Local',
+                  child: Text(
+                    context.tr('friendly.explore_place_btn'),
                     style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.bold,
@@ -435,13 +436,13 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
     Widget mainContent = Scaffold(
       backgroundColor: isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Patas Friendly',
-        subtitle: 'Guia de locais pet friendly próximos',
+        title: context.tr('friendly.title'),
+        subtitle: context.tr('friendly.subtitle'),
         actions: [
           IconButton(
             icon: const Icon(Icons.refresh_rounded, color: AppColors.patasColor),
             onPressed: _loadPlaces,
-            tooltip: 'Atualizar locais',
+            tooltip: context.tr('friendly.refresh_tooltip'),
           ),
         ],
       ),
@@ -453,7 +454,7 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                   const CircularProgressIndicator(color: AppColors.patasColor),
                   const SizedBox(height: 16),
                   Text(
-                    'Buscando sua localização...',
+                    context.tr('friendly.locating'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 16,
@@ -498,7 +499,7 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                               });
                             },
                             decoration: InputDecoration(
-                              hintText: 'Pesquisar local pet friendly...',
+                              hintText: context.tr('friendly.search_hint'),
                               prefixIcon: const Icon(Icons.search_rounded, color: AppColors.patasColor),
                               suffixIcon: _searchQuery.isNotEmpty
                                   ? IconButton(
@@ -523,12 +524,12 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                           child: ListView(
                             scrollDirection: Axis.horizontal,
                             children: [
-                              _buildCategoryChip('all', 'Todos', Icons.map_rounded, isDark),
-                              _buildCategoryChip('restaurant', 'Restaurantes', Icons.restaurant_rounded, isDark),
-                              _buildCategoryChip('hotel', 'Hospedagem', Icons.hotel_rounded, isDark),
-                              _buildCategoryChip('park', 'Parques', Icons.park_rounded, isDark),
-                              _buildCategoryChip('cafe', 'Cafés', Icons.local_cafe_rounded, isDark),
-                              _buildCategoryChip('shopping', 'Shopping', Icons.local_mall_rounded, isDark),
+                              _buildCategoryChip('all', context.tr('friendly.cat_all'), Icons.map_rounded, isDark),
+                              _buildCategoryChip('restaurant', context.tr('friendly.cat_restaurant'), Icons.restaurant_rounded, isDark),
+                              _buildCategoryChip('hotel', context.tr('friendly.cat_hotel'), Icons.hotel_rounded, isDark),
+                              _buildCategoryChip('park', context.tr('friendly.cat_park'), Icons.park_rounded, isDark),
+                              _buildCategoryChip('cafe', context.tr('friendly.cat_cafe'), Icons.local_cafe_rounded, isDark),
+                              _buildCategoryChip('shopping', context.tr('friendly.cat_shopping'), Icons.local_mall_rounded, isDark),
                             ],
                           ),
                         ),
@@ -612,18 +613,18 @@ class _FriendlyDashboardScreenState extends State<FriendlyDashboardScreen>
                             ),
                           ],
                         ),
-                        child: const Row(
+                        child: Row(
                           mainAxisSize: MainAxisSize.min,
                           children: [
-                            Icon(
+                            const Icon(
                               Icons.add_location_alt_rounded,
                               color: Colors.white,
                               size: 22,
                             ),
-                            SizedBox(width: 8),
+                            const SizedBox(width: 8),
                             Text(
-                              'Sugerir Local',
-                              style: TextStyle(
+                              context.tr('friendly.add_place_short'),
+                              style: const TextStyle(
                                 color: Colors.white,
                                 fontFamily: 'Fredoka',
                                 fontSize: 15,

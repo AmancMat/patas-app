@@ -28,6 +28,7 @@ import '../../constants/app_text_styles.dart';
 import '../../ui/components/atoms/custom_text_form_field.dart';
 import '../../utils/custom_bottom_sheet.dart';
 import '../../utils/auth_error_translator.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 
 class SignUpPage extends StatefulWidget {
   const SignUpPage({super.key});
@@ -60,9 +61,11 @@ class _SignUpPageState extends State<SignUpPage> {
   }
 
   void _closeLoadingDialog() {
-    if (_isLoadingDialogShowing && mounted) {
+    if (_isLoadingDialogShowing) {
       _isLoadingDialogShowing = false;
-      Navigator.of(context, rootNavigator: true).pop();
+      if (mounted && Navigator.of(context, rootNavigator: true).canPop()) {
+        Navigator.of(context, rootNavigator: true).pop();
+      }
     }
   }
 
@@ -115,7 +118,9 @@ class _SignUpPageState extends State<SignUpPage> {
         context: context,
         barrierDismissible: false,
         builder: (context) => const CustomCircularProgressIndicator(),
-      );
+      ).then((_) {
+        _isLoadingDialogShowing = false;
+      });
     }
     if (_controller.state is SignUpStateSuccess) {
       _closeLoadingDialog();
@@ -137,7 +142,7 @@ class _SignUpPageState extends State<SignUpPage> {
         customModalBottomSheet(
           context,
           content: AuthErrorTranslator.translate(error.message),
-          buttonText: "Tentar novamente",
+          buttonText: context.tr('common.try_again'),
         );
       }
     }
@@ -155,67 +160,109 @@ class _SignUpPageState extends State<SignUpPage> {
         particleCount: 70,
         child: LayoutBuilder(
           builder: (context, constraints) {
+            final isDesktop = constraints.maxWidth >= 600;
+
             return SingleChildScrollView(
               child: ConstrainedBox(
                 constraints: BoxConstraints(
                   minWidth: constraints.maxWidth,
                   minHeight: constraints.maxHeight,
                 ),
-                child: Center(
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(maxWidth: 480),
-                    child: Container(
-                      margin: const EdgeInsets.symmetric(
-                        horizontal: 24,
-                        vertical: 40,
-                      ),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(28),
-                        boxShadow: [
-                          BoxShadow(
-                            color: AppColors.patasColor.withValues(alpha: 0.18),
-                            blurRadius: 40,
-                            offset: const Offset(0, 16),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(28),
-                        child: BackdropFilter(
-                          filter: ImageFilter.blur(sigmaX: 14.0, sigmaY: 14.0),
+                child: isDesktop
+                    ? Center(
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(maxWidth: 480),
                           child: Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 36,
-                              vertical: 36,
+                            margin: const EdgeInsets.symmetric(
+                              horizontal: 24,
+                              vertical: 40,
                             ),
                             decoration: BoxDecoration(
-                              color: Colors.white.withValues(alpha: 0.10),
                               borderRadius: BorderRadius.circular(28),
-                              border: Border.all(
-                                color: Colors.white.withValues(alpha: 0.2),
-                                width: 1.5,
+                              boxShadow: [
+                                BoxShadow(
+                                  color: AppColors.patasColor.withValues(alpha: 0.18),
+                                  blurRadius: 40,
+                                  offset: const Offset(0, 16),
+                                ),
+                              ],
+                            ),
+                            child: ClipRRect(
+                              borderRadius: BorderRadius.circular(28),
+                              child: BackdropFilter(
+                                filter: ImageFilter.blur(sigmaX: 14.0, sigmaY: 14.0),
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 36,
+                                    vertical: 36,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: Colors.white.withValues(alpha: 0.10),
+                                    borderRadius: BorderRadius.circular(28),
+                                    border: Border.all(
+                                      color: Colors.white.withValues(alpha: 0.2),
+                                      width: 1.5,
+                                    ),
+                                  ),
+                                  child: Form(
+                                    key: _formKey,
+                                    child: _buildFormContent(context),
+                                  ),
+                                ),
                               ),
                             ),
-                            child: Form(
-                              key: _formKey,
-                              child: Column(
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  // Header
-                                  Row(
-                                    mainAxisAlignment: MainAxisAlignment.end,
-                                    children: [
-                                      SvgPicture.asset(
-                                        'assets/icons/patas.svg',
-                                        height: 36,
-                                        width: 36,
-                                      ),
-                                    ],
-                                  ),
+                          ),
+                        ),
+                      )
+                    : BackdropFilter(
+                        filter: ImageFilter.blur(sigmaX: 14.0, sigmaY: 14.0),
+                        child: Container(
+                          constraints: BoxConstraints(
+                            minWidth: constraints.maxWidth,
+                            minHeight: constraints.maxHeight,
+                          ),
+                          color: Colors.white.withValues(alpha: 0.10),
+                          child: SafeArea(
+                            child: Padding(
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 20,
+                                vertical: 24,
+                              ),
+                              child: Form(
+                                key: _formKey,
+                                child: _buildFormContent(context),
+                              ),
+                            ),
+                          ),
+                        ),
+                      ),
+              ),
+            );
+          },
+        ),
+      ),
+    );
+  }
+
+  Widget _buildFormContent(BuildContext context) {
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: [
+        // Header
+        Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            SvgPicture.asset(
+              'assets/icons/patas.svg',
+              height: 36,
+              width: 36,
+            ),
+          ],
+        ),
                                   const SizedBox(height: 20),
-                                  const Text(
-                                    'Criar Conta',
-                                    style: TextStyle(
+                                  Text(
+                                    context.tr('auth.create_account_title'),
+                                    style: const TextStyle(
                                       color: Colors.white,
                                       fontFamily: 'Fredoka',
                                       fontWeight: FontWeight.bold,
@@ -224,7 +271,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   ),
                                   const SizedBox(height: 6),
                                   Text(
-                                    'Junte-se à família Patas',
+                                    context.tr('auth.join_family'),
                                     style: TextStyle(
                                       color: Colors.white.withValues(alpha: 0.65),
                                       fontFamily: 'Roboto_flex',
@@ -237,8 +284,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   _buildField(
                                     controller: _nameController,
                                     icon: Icons.face_retouching_natural,
-                                    label: 'Primeiro nome',
-                                    hint: 'Seu nome aqui',
+                                    label: context.tr('auth.first_name'),
+                                    hint: context.tr('auth.first_name_hint'),
                                     textInputAction: TextInputAction.next,
                                     formatters: [UpperCaseTextInputFormatter()],
                                     validator: Validator.validateName,
@@ -247,8 +294,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   _buildField(
                                     controller: _emailController,
                                     icon: Icons.email_outlined,
-                                    label: 'Email',
-                                    hint: 'Seu email aqui',
+                                    label: context.tr('auth.email'),
+                                    hint: context.tr('auth.email_hint'),
                                     keyboardType: TextInputType.emailAddress,
                                     textInputAction: TextInputAction.next,
                                     validator: Validator.validateEmail,
@@ -256,7 +303,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   const SizedBox(height: 14),
                                   _buildPasswordField(
                                     controller: _passwordController,
-                                    label: 'Escolha sua senha',
+                                    label: context.tr('auth.choose_password'),
                                     hint: '**********',
                                     icon: Icons.lock_outline,
                                     textInputAction: TextInputAction.next,
@@ -266,7 +313,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   Align(
                                     alignment: Alignment.centerLeft,
                                     child: Text(
-                                      'Mínimo 8 caracteres, uma maiúscula e um número.',
+                                      context.tr('auth.password_rules'),
                                       style: TextStyle(
                                         color: Colors.white.withValues(alpha: 0.5),
                                         fontSize: 11,
@@ -275,7 +322,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                   ),
                                   const SizedBox(height: 14),
                                   _buildPasswordField(
-                                    label: 'Confirmar senha',
+                                    label: context.tr('auth.confirm_password'),
                                     hint: '**********',
                                     icon: Icons.lock_outline,
                                     textInputAction: TextInputAction.next,
@@ -289,8 +336,8 @@ class _SignUpPageState extends State<SignUpPage> {
                                   _buildField(
                                     controller: _referralController,
                                     icon: Icons.card_giftcard_rounded,
-                                    label: 'Código de Convite (Opcional)',
-                                    hint: 'Ex: 123A456B',
+                                    label: context.tr('auth.referral_code'),
+                                    hint: context.tr('auth.referral_hint'),
                                     textInputAction: TextInputAction.done,
                                     onFieldSubmitted: (_) => _doSignUp(),
                                     formatters: [UpperCaseTextInputFormatter()],
@@ -337,10 +384,10 @@ class _SignUpPageState extends State<SignUpPage> {
                                                 height: 1.4,
                                               ),
                                               children: [
-                                                const TextSpan(
-                                                    text: 'Li e concordo com os '),
                                                 TextSpan(
-                                                  text: 'Termos de Uso',
+                                                    text: context.tr('auth.terms_lead')),
+                                                TextSpan(
+                                                  text: context.tr('auth.terms_of_use'),
                                                   style: const TextStyle(
                                                     color: AppColors.patasColor,
                                                     fontWeight: FontWeight.bold,
@@ -354,9 +401,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                                       );
                                                     },
                                                 ),
-                                                const TextSpan(text: ' e a '),
+                                                TextSpan(text: context.tr('auth.and')),
                                                 TextSpan(
-                                                  text: 'Política de Privacidade',
+                                                  text: context.tr('auth.privacy_policy'),
                                                   style: const TextStyle(
                                                     color: AppColors.patasColor,
                                                     fontWeight: FontWeight.bold,
@@ -370,7 +417,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                                       );
                                                     },
                                                 ),
-                                                const TextSpan(text: ' do Patas.'),
+                                                TextSpan(text: context.tr('auth.terms_end')),
                                               ],
                                             ),
                                           ),
@@ -388,7 +435,9 @@ class _SignUpPageState extends State<SignUpPage> {
                                       onPressed: _doSignUp,
                                       style: ButtonStyle(
                                         backgroundColor: WidgetStateProperty.all(
-                                          AppColors.patasColor,
+                                          _acceptedTerms
+                                              ? AppColors.patasColor
+                                              : AppColors.patasColor.withValues(alpha: 0.35),
                                         ),
                                         shape: WidgetStateProperty.all(
                                           RoundedRectangleBorder(
@@ -396,10 +445,12 @@ class _SignUpPageState extends State<SignUpPage> {
                                           ),
                                         ),
                                       ),
-                                      child: const Text(
-                                        'Registrar',
+                                      child: Text(
+                                        context.tr('auth.register_action'),
                                         style: TextStyle(
-                                          color: Colors.white,
+                                          color: _acceptedTerms
+                                              ? Colors.white
+                                              : Colors.white.withValues(alpha: 0.5),
                                           fontFamily: 'Fredoka',
                                           fontSize: 20,
                                         ),
@@ -420,7 +471,7 @@ class _SignUpPageState extends State<SignUpPage> {
                                           horizontal: 12,
                                         ),
                                         child: Text(
-                                          'ou entre com',
+                                          context.tr('auth.or_continue_with'),
                                           style: TextStyle(
                                             color: Colors.white.withValues(alpha: 0.55),
                                             fontSize: 13,
@@ -442,23 +493,30 @@ class _SignUpPageState extends State<SignUpPage> {
                                     children: [
                                       _buildSocialButton(
                                         asset: 'assets/face_icon.svg',
-                                        semanticLabel: 'Registrar com Facebook',
-                                        onPressed: () =>
-                                            _controller.signInWithFacebook(),
+                                        semanticLabel: context.tr('auth.register_facebook'),
+                                        opacity: _acceptedTerms ? 1.0 : 0.65,
+                                        onPressed: () {
+                                          if (!_ensureTermsAccepted()) return;
+                                          _controller.signInWithFacebook();
+                                        },
                                       ),
                                       const SizedBox(width: 16),
                                       _buildSocialButton(
                                         asset: 'assets/apple_logo.svg',
-                                        semanticLabel: 'Registrar com Apple',
+                                        semanticLabel: context.tr('auth.register_apple'),
                                         showSoonBadge: true,
+                                        opacity: _acceptedTerms ? 1.0 : 0.65,
                                         onPressed: () {},
                                       ),
                                       const SizedBox(width: 16),
                                       _buildSocialButton(
                                         asset: 'assets/google_icon.svg',
-                                        semanticLabel: 'Registrar com Google',
-                                        onPressed: () =>
-                                            _controller.signInWithGoogle(),
+                                        semanticLabel: context.tr('auth.register_google'),
+                                        opacity: _acceptedTerms ? 1.0 : 0.65,
+                                        onPressed: () {
+                                          if (!_ensureTermsAccepted()) return;
+                                          _controller.signInWithGoogle();
+                                        },
                                       ),
                                     ],
                                   ),
@@ -471,14 +529,14 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ),
                                     children: [
                                       Text(
-                                        'Já tem uma conta? ',
+                                        context.tr('auth.already_have_account'),
                                         style: AppTextStyles.smallText.copyWith(
                                           color: Colors.white.withValues(alpha: 0.7),
                                         ),
                                       ),
-                                      const Text(
-                                        'Entrar',
-                                        style: TextStyle(
+                                      Text(
+                                        context.tr('auth.login'),
+                                        style: const TextStyle(
                                           fontFamily: 'Fredoka',
                                           color: AppColors.patasColor,
                                           fontWeight: FontWeight.bold,
@@ -488,32 +546,23 @@ class _SignUpPageState extends State<SignUpPage> {
                                     ],
                                   ),
                                 ],
-                              ),
-                            ),
-                          ),
-                        ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-            );
-          },
-        ),
-      ),
-    );
+                              );
   }
 
-  void _doSignUp() {
+  bool _ensureTermsAccepted() {
     if (!_acceptedTerms) {
       customModalBottomSheet(
         context,
-        content:
-            'Para criar uma conta, é necessário ler e aceitar os Termos de Uso e a Política de Privacidade do Patas.',
-        buttonText: 'Compreendi',
+        content: context.tr('auth.terms_required_error'),
+        buttonText: context.tr('auth.terms_understood_button'),
       );
-      return;
+      return false;
     }
+    return true;
+  }
+
+  void _doSignUp() {
+    if (!_ensureTermsAccepted()) return;
     final valid =
         _formKey.currentState != null && _formKey.currentState!.validate();
     if (valid) {
@@ -541,6 +590,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }) {
     return CustomTextFormField(
       controller: controller,
+      padding: EdgeInsets.zero,
       prefixIcon: Icon(icon, color: AppColors.patasColor, size: 20),
       labelText: label,
       hintText: hint,
@@ -563,6 +613,7 @@ class _SignUpPageState extends State<SignUpPage> {
   }) {
     return PasswordFormField(
       controller: controller,
+      padding: EdgeInsets.zero,
       prefixIcon: Icon(icon, color: AppColors.patasColor, size: 20),
       labelText: label,
       hintText: hint,
@@ -577,49 +628,54 @@ class _SignUpPageState extends State<SignUpPage> {
     required VoidCallback onPressed,
     required String semanticLabel,
     bool showSoonBadge = false,
+    double opacity = 1.0,
   }) {
     return Semantics(
       button: true,
       label: semanticLabel,
       child: Stack(
         children: [
-          InkWell(
-          onTap: onPressed,
-          borderRadius: BorderRadius.circular(30),
-          child: Container(
-            padding: const EdgeInsets.all(10),
-            decoration: BoxDecoration(
-              color: Colors.white.withValues(alpha: 0.12),
-              borderRadius: BorderRadius.circular(16),
-              border: Border.all(
-                color: Colors.white.withValues(alpha: 0.2),
-                width: 1,
+          AnimatedOpacity(
+            duration: const Duration(milliseconds: 200),
+            opacity: opacity,
+            child: InkWell(
+              onTap: onPressed,
+              borderRadius: BorderRadius.circular(30),
+              child: Container(
+                padding: const EdgeInsets.all(10),
+                decoration: BoxDecoration(
+                  color: Colors.white.withValues(alpha: 0.12),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: Colors.white.withValues(alpha: 0.2),
+                    width: 1,
+                  ),
+                ),
+                child: SvgPicture.asset(asset, width: 32, height: 32),
               ),
             ),
-            child: SvgPicture.asset(asset, width: 32, height: 32),
           ),
-        ),
-        if (showSoonBadge)
-          Positioned(
-            top: 0,
-            right: 0,
-            child: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
-              decoration: BoxDecoration(
-                color: AppColors.patasColor.withValues(alpha: 0.9),
-                borderRadius: BorderRadius.circular(8),
-              ),
-              child: const Text(
-                'Em breve',
-                style: TextStyle(
-                  color: Colors.white,
-                  fontSize: 7,
-                  fontWeight: FontWeight.bold,
-                  fontFamily: 'Fredoka',
+          if (showSoonBadge)
+            Positioned(
+              top: 0,
+              right: 0,
+              child: Container(
+                padding: const EdgeInsets.symmetric(horizontal: 5, vertical: 2),
+                decoration: BoxDecoration(
+                  color: AppColors.patasColor.withValues(alpha: 0.9),
+                  borderRadius: BorderRadius.circular(8),
+                ),
+                child: Text(
+                  context.tr('auth.soon'),
+                  style: const TextStyle(
+                    color: Colors.white,
+                    fontSize: 7,
+                    fontWeight: FontWeight.bold,
+                    fontFamily: 'Fredoka',
+                  ),
                 ),
               ),
             ),
-          ),
         ],
       ),
     );

@@ -8,6 +8,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:patas_web_app/src/features/home/rewards/services/gamification_service.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import '../../../../app.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 
 class LeaderboardPage extends StatefulWidget {
   const LeaderboardPage({super.key});
@@ -73,7 +74,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
           Positioned.fill(
             child: Semantics(
               button: true,
-              label: 'Fechar ranking global',
+              label: context.tr('leaderboard.close_tooltip'),
               child: GestureDetector(
                 onTap: () => Navigator.pop(context),
                 child: BackdropFilter(
@@ -131,7 +132,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     if (firstPlace == null && _userPoints > 0) {
       firstPlace = {
         'user_id': Supabase.instance.client.auth.currentUser?.id,
-        'pet_name': activePet?.name ?? 'Meu Pet',
+        'pet_name': activePet?.name ?? context.tr('rewards.my_pet'),
         'pet_photo_url': activePet?.photoUrl,
         'total_points': _userPoints,
         'rank': 1,
@@ -140,9 +141,9 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     return Scaffold(
       backgroundColor: bgColor,
-      appBar: const PatasEssencialAppBar(
-        title: 'Placar Global',
-        subtitle: 'Ranking dos pets e tutores mais engajados',
+      appBar: PatasEssencialAppBar(
+        title: context.tr('leaderboard.title'),
+        subtitle: context.tr('leaderboard.subtitle'),
         leadingIcon: Icon(
           Icons.military_tech_rounded,
           color: Colors.amber,
@@ -326,7 +327,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     final petProvider = Provider.of<ActivePetProvider>(context, listen: false);
     final activePet = petProvider.activePet;
 
-    String petName = data?['pet_name'] ?? 'Sem dados';
+    String petName = data?['pet_name'] ?? context.tr('leaderboard.no_data');
     String? photoUrl = data?['pet_photo_url'] as String?;
     final totalPoints = data != null
         ? (int.tryParse(data['total_points'].toString()) ?? 0)
@@ -337,7 +338,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         user != null &&
         data['user_id'] == user.id &&
         activePet != null) {
-      if (petName == 'Sem dados' || petName.trim().isEmpty) {
+      if (petName == 'Sem dados' || petName == context.tr('leaderboard.no_data') || petName.trim().isEmpty) {
         petName = activePet.name;
       }
       if (photoUrl == null || photoUrl.trim().isEmpty) {
@@ -492,7 +493,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Text(
-                  '$placeº lugar',
+                  context.tr('leaderboard.place_suffix', {'place': '$place'}),
                   style: TextStyle(
                     fontSize: 9,
                     fontWeight: FontWeight.bold,
@@ -519,7 +520,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     final petProvider = Provider.of<ActivePetProvider>(context, listen: false);
     final activePet = petProvider.activePet;
 
-    String petName = item['pet_name'] ?? 'Sem dados';
+    String petName = item['pet_name'] ?? context.tr('leaderboard.no_data');
     String? photoUrl = item['pet_photo_url'] as String?;
     final totalPoints = int.tryParse(item['total_points'].toString()) ?? 0;
 
@@ -592,7 +593,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
     required Color cardColor,
     required Color textColor,
   }) {
-    final petName = activePet?.name ?? 'Meu Pet';
+    final petName = activePet?.name ?? context.tr('rewards.my_pet');
     final photoUrl = activePet?.photoUrl as String?;
 
     final isUserInTop3 = _userRank > 0 && _userRank <= 3;
@@ -600,7 +601,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
 
     String subtitleText;
     if (isUserInTop3) {
-      subtitleText = 'Seu Pet está no Pódio! Parabéns! 🎉🏆';
+      subtitleText = context.tr('leaderboard.user_top3');
     } else if (inRanking) {
       // Calcula quantos pontos faltam para o top 3 se houver líder
       int pointsToPodium = 0;
@@ -615,10 +616,10 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
         }
       }
       subtitleText = pointsToPodium > 0
-          ? 'Faltam $pointsToPodium pts para alcançar o pódio! 🚀'
-          : 'Você está no Top 15! Continue engajando!';
+          ? context.tr('leaderboard.points_to_podium', {'points': '$pointsToPodium'})
+          : context.tr('leaderboard.top15');
     } else {
-      subtitleText = 'Interaja na timeline ou convide amigos para começar! 🐾';
+      subtitleText = context.tr('leaderboard.start_engaging');
     }
 
     return Container(
@@ -685,7 +686,7 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                           borderRadius: BorderRadius.circular(10),
                         ),
                         child: Text(
-                          inRanking ? '$_userRankº lugar' : 'Sem Rank',
+                          inRanking ? context.tr('leaderboard.place_suffix', {'place': '$_userRank'}) : context.tr('leaderboard.no_rank'),
                           style: const TextStyle(
                             fontSize: 10,
                             color: AppColors.patasColor,
@@ -716,8 +717,8 @@ class _LeaderboardPageState extends State<LeaderboardPage> {
                     color: textColor,
                   ),
                 ),
-                const Text(
-                  'meus pontos',
+                Text(
+                  context.tr('leaderboard.my_points'),
                   style: TextStyle(fontSize: 9, color: Colors.grey),
                 ),
               ],

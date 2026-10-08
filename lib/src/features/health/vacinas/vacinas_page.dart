@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
+import 'package:patas_web_app/core/localization/app_localizations.dart';
 import 'package:patas_web_app/src/features/health/models/vaccine_model.dart';
 import 'package:patas_web_app/src/features/health/services/health_service.dart';
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
@@ -78,15 +79,15 @@ class _VacinasPageState extends State<VacinasPage> {
     if (activePet == null) {
       return Scaffold(
         backgroundColor: thmode.darkMode ? AppColors.bodygray : const Color(0xFFF5F7FA),
-        appBar: const PatasEssencialAppBar(
-          title: 'Carteira de Vacinas',
-          subtitle: 'Selecione um pet na Home para ver o histórico',
+        appBar: PatasEssencialAppBar(
+          title: context.tr('health.vaccines_wallet_title'),
+          subtitle: context.tr('health.vaccines_sub_empty'),
         ),
-        body: const Padding(
+        body: Padding(
           padding: EdgeInsets.all(32.0),
           child: Center(
             child: Text(
-              'Selecione um pet na Home para ver o status de saúde.',
+              context.tr('health.vaccines_sub_empty'),
               textAlign: TextAlign.center,
             ),
           ),
@@ -97,8 +98,8 @@ class _VacinasPageState extends State<VacinasPage> {
     return Scaffold(
       backgroundColor: thmode.darkMode ? AppColors.bodygray : const Color(0xFFF5F7FA),
       appBar: PatasEssencialAppBar(
-        title: 'Carteira de Vacinas',
-        subtitle: 'Vacinas aplicadas e doses pendentes de ${activePet.name}',
+        title: context.tr('health.vaccines_wallet_title'),
+        subtitle: context.tr('health.vaccines_sub_pet', {'name': activePet.name}),
       ),
       body: SingleChildScrollView(
         child: Column(
@@ -126,12 +127,12 @@ class _VacinasPageState extends State<VacinasPage> {
     if (activePet == null) {
       return Scaffold(
         backgroundColor: bgColor,
-        appBar: const PatasEssencialAppBar(
-          title: 'Carteira de Vacinas',
-          subtitle: 'Selecione um pet na Home para ver o histórico',
+        appBar: PatasEssencialAppBar(
+          title: context.tr('health.vaccines_wallet_title'),
+          subtitle: context.tr('health.vaccines_sub_empty'),
         ),
-        body: const Center(
-          child: Text('Selecione um pet na Home para ver o status de vacinas.'),
+        body: Center(
+          child: Text(context.tr('health.vaccines_sub_empty')),
         ),
       );
     }
@@ -139,8 +140,8 @@ class _VacinasPageState extends State<VacinasPage> {
     final mainContent = Scaffold(
       backgroundColor: bgColor,
       appBar: PatasEssencialAppBar(
-        title: 'Carteira de Vacinas',
-        subtitle: 'Vacinas aplicadas e doses pendentes de ${activePet.name}',
+        title: context.tr('health.vaccines_wallet_title'),
+        subtitle: context.tr('health.vaccines_sub_pet', {'name': activePet.name}),
       ),
       body: Center(
         child: ConstrainedBox(
@@ -193,7 +194,7 @@ class _VacinasPageState extends State<VacinasPage> {
             right: isDesktop ? 0 : 16,
           ),
           child: Text(
-            'Status de vacina de ${pet.name}',
+            context.tr('health.vaccine_status_title', {'name': pet.name}),
             style: TextStyle(
                 color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                 fontWeight: FontWeight.bold,
@@ -259,20 +260,20 @@ class _VacinasPageState extends State<VacinasPage> {
                             padding: EdgeInsets.symmetric(vertical: 8.0),
                             child: Divider(height: 1),
                           ),
-                          _buildInfoRow('Raça:', pet.breed ?? 'N/I', thmode),
+                          _buildInfoRow(context.tr('health.breed_label'), pet.breed ?? 'N/I', thmode),
                           _buildInfoRow(
-                              'Idade:', _calculateAge(pet.birthDate), thmode),
+                              context.tr('health.age_label'), _calculateAge(pet.birthDate, context), thmode),
                           _buildInfoRow(
-                              'Nasc:',
+                              context.tr('health.birth_label'),
                               pet.birthDate != null
                                   ? DateFormat('dd/MM/yyyy')
                                       .format(pet.birthDate!)
                                   : '--/--/--',
                               thmode),
                           _buildInfoRow(
-                              'Sangue:', pet.bloodType ?? 'N/I', thmode),
+                              context.tr('health.blood_label'), pet.bloodType ?? 'N/I', thmode),
                           _buildInfoRow(
-                              'Peso:',
+                              context.tr('health.weight_label'),
                               pet.weight != null ? '${pet.weight} kg' : 'N/I',
                               thmode),
                         ],
@@ -294,8 +295,8 @@ class _VacinasPageState extends State<VacinasPage> {
                             children: [
                               Text(
                                 hasVax
-                                    ? 'Carteira Atualizada!'
-                                    : 'Nenhuma vacina salva',
+                                    ? context.tr('health.vaccine_status_updated')
+                                    : context.tr('health.no_vaccines_saved'),
                                 textAlign: TextAlign.center,
                                 style: TextStyle(
                                     color: thmode.darkMode
@@ -307,7 +308,7 @@ class _VacinasPageState extends State<VacinasPage> {
                               const SizedBox(height: 8),
                               if (hasVax) ...[
                                 Text(
-                                  'Última dose:',
+                                  context.tr('health.last_dose'),
                                   style: TextStyle(
                                       color: thmode.darkMode
                                           ? Colors.white60
@@ -338,7 +339,7 @@ class _VacinasPageState extends State<VacinasPage> {
                                     minWidth: 80,
                                     padding: const EdgeInsets.symmetric(
                                         horizontal: 8),
-                                    child: const Text('Lembretes',
+                                    child: Text(context.tr('health.reminders_btn'),
                                         style: TextStyle(
                                             color: Colors.white, fontSize: 10)),
                                   ),
@@ -353,7 +354,7 @@ class _VacinasPageState extends State<VacinasPage> {
                                           size: 18),
                                       padding: EdgeInsets.zero,
                                       color: AppColors.patasColor,
-                                      tooltip: 'Ver meus lembretes',
+                                      tooltip: context.tr('health.view_reminders_tooltip'),
                                     ),
                                   ),
                                 ],
@@ -400,7 +401,7 @@ class _VacinasPageState extends State<VacinasPage> {
     );
   }
 
-  String _calculateAge(DateTime? birthDate) {
+  String _calculateAge(DateTime? birthDate, BuildContext context) {
     if (birthDate == null) return 'N/A';
     final now = DateTime.now();
     int age = now.year - birthDate.year;
@@ -408,7 +409,9 @@ class _VacinasPageState extends State<VacinasPage> {
         (now.month == birthDate.month && now.day < birthDate.day)) {
       age--;
     }
-    return age <= 0 ? 'Filhote' : '$age anos';
+    return age <= 0
+        ? context.tr('health.puppy_label')
+        : context.tr('health.years_old', {'years': age.toString()});
   }
 
   Widget _buildSuggestedTable(Pet pet, DarkMode thmode, {bool isDesktop = false}) {
@@ -426,8 +429,8 @@ class _VacinasPageState extends State<VacinasPage> {
           ),
           child: Text(
             isDog
-                ? 'PROGRAMA SUGERIDO PARA CÃES'
-                : 'PROGRAMA SUGERIDO PARA GATOS',
+                ? context.tr('health.suggested_dog')
+                : context.tr('health.suggested_cat'),
             textAlign: isDesktop ? TextAlign.left : TextAlign.center,
             style: TextStyle(
                 color: thmode.darkMode ? Colors.white : AppColors.darkBG,
@@ -481,7 +484,7 @@ class _VacinasPageState extends State<VacinasPage> {
           height: 40,
           width: 120,
           alignment: Alignment.center,
-          child: Text('Vacinas',
+          child: Text(context.tr('health.vaccines_column_header'),
               style: TextStyle(
                   color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                   fontWeight: FontWeight.bold,
@@ -566,7 +569,7 @@ class _VacinasPageState extends State<VacinasPage> {
             left: isDesktop ? 0 : 23,
           ),
           child: Text(
-            'Carteira de Vacinação',
+            context.tr('health.vaccination_record_section'),
             textAlign: isDesktop ? TextAlign.left : TextAlign.center,
             style: TextStyle(
                 color: thmode.darkMode ? Colors.white : AppColors.darkBG,
@@ -614,7 +617,7 @@ class _VacinasPageState extends State<VacinasPage> {
                       return Padding(
                         padding: const EdgeInsets.all(32.0),
                         child: Text(
-                          'Nenhuma vacina aplicada ainda.',
+                          context.tr('health.no_vaccine_applied_yet'),
                           style: TextStyle(
                             color: thmode.darkMode
                                 ? Colors.white70
@@ -670,7 +673,7 @@ class _VacinasPageState extends State<VacinasPage> {
                     height: 50,
                     shape: RoundedRectangleBorder(
                         borderRadius: BorderRadius.circular(15)),
-                    child: const Text('Registrar Nova Dose',
+                    child: Text(context.tr('health.register_new_dose_btn'),
                         style: TextStyle(
                             color: Colors.white, fontWeight: FontWeight.bold)),
                   ),
@@ -777,20 +780,20 @@ class _VacinasPageState extends State<VacinasPage> {
       context: context,
       builder: (context) => StatefulBuilder(
         builder: (context, setDialogState) => AlertDialog(
-          title: const Text('Registrar Vacina'),
+          title: Text(context.tr('health.register_vaccine_dialog_title')),
           content: Column(
             mainAxisSize: MainAxisSize.min,
             children: [
               TextField(
                 controller: nameController,
-                decoration: const InputDecoration(
+                decoration: InputDecoration(
                   labelText: 'Nome da Vacina',
-                  hintText: 'Ex: Raiva, V10, Antigripal',
+                  hintText: context.tr('health.vaccine_name_hint'),
                 ),
               ),
               const SizedBox(height: 20),
               ListTile(
-                title: const Text('Data da Aplicação'),
+                title: Text(context.tr('health.application_date_label')),
                 subtitle: Text(DateFormat('dd/MM/yyyy').format(selectedDate)),
                 trailing: const Icon(Icons.calendar_today),
                 onTap: () async {
@@ -810,7 +813,7 @@ class _VacinasPageState extends State<VacinasPage> {
           actions: [
             TextButton(
                 onPressed: () => Navigator.pop(context),
-                child: const Text('Cancelar')),
+                child: Text(context.tr('common.cancel'))),
             ElevatedButton(
               onPressed: () async {
                 if (nameController.text.isEmpty) return;
@@ -859,7 +862,7 @@ class _VacinasPageState extends State<VacinasPage> {
               ? SizedBox(
                   height: 100,
                   child: Center(
-                    child: Text('Nenhum lembrete agendado.',
+                    child: Text(context.tr('health.no_reminders_scheduled'),
                         style: TextStyle(
                             color: thmode.darkMode
                                 ? Colors.white54
@@ -919,7 +922,7 @@ class _VacinasPageState extends State<VacinasPage> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(context),
-              child: const Text('Fechar'),
+              child: Text(context.tr('common.close')),
             ),
           ],
         );
@@ -937,7 +940,7 @@ class _VacinasPageState extends State<VacinasPage> {
         actions: [
           TextButton(
               onPressed: () => Navigator.pop(context, false),
-              child: const Text('Cancelar')),
+              child: Text(context.tr('common.cancel'))),
           TextButton(
               onPressed: () => Navigator.pop(context, true),
               child:
