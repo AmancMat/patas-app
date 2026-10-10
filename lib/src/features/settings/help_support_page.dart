@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:provider/provider.dart';
 import '../../../app.dart';
 
@@ -22,12 +24,13 @@ class HelpSupportPage extends StatelessWidget {
               elevation: 0,
               automaticallyImplyLeading: false,
               centerTitle: true,
-              title: const Text(
-                'Ajuda e Suporte',
-                style: TextStyle(
+              title: Text(
+                context.tr('help.title'),
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   color: AppColors.patasColor,
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
               actions: [
@@ -50,12 +53,13 @@ class HelpSupportPage extends StatelessWidget {
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
-              title: const Text(
-                'Ajuda e Suporte',
-                style: TextStyle(
+              title: Text(
+                context.tr('help.title'),
+                style: const TextStyle(
                   fontFamily: 'Fredoka',
                   color: AppColors.patasColor,
                   fontSize: 24,
+                  fontWeight: FontWeight.bold,
                 ),
               ),
             ),
@@ -64,40 +68,40 @@ class HelpSupportPage extends StatelessWidget {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            _buildSectionTitle('Perguntas Frequentes (FAQ)', textColor),
+            _buildSectionTitle(context.tr('help.faq_section'), textColor),
             const SizedBox(height: 16),
             _buildFAQItem(
-              'Como adiciono um novo pet?',
-              'Vá para a tela inicial, clique no botão "+" ou "Adicionar Pet" e preencha as informações básicas como nome, espécie e data de nascimento.',
+              context.tr('help.faq_q1'),
+              context.tr('help.faq_a1'),
               cardColor,
               textColor,
             ),
             _buildFAQItem(
-              'Como funcionam os lembretes de vacina?',
-              'Ao cadastrar uma vacina para o seu pet, você pode definir a data da próxima dose. O app enviará uma notificação automática para você não esquecer.',
+              context.tr('help.faq_q2'),
+              context.tr('help.faq_a2'),
               cardColor,
               textColor,
             ),
             _buildFAQItem(
-              'Minhas informações estão seguras?',
-              'Sim! Seus dados e os dados dos seus pets são armazenados de forma segura e não são compartilhados com terceiros sem sua permissão.',
+              context.tr('help.faq_q3'),
+              context.tr('help.faq_a3'),
               cardColor,
               textColor,
             ),
             _buildFAQItem(
-              'Esqueci minha senha, o que fazer?',
-              'Na tela de login, utilize a opção "Esqueci minha senha" para receber um link de redefinição no seu e-mail cadastrado.',
+              context.tr('help.faq_q4'),
+              context.tr('help.faq_a4'),
               cardColor,
               textColor,
             ),
             _buildFAQItem(
-              'Posso gerenciar mais de um pet?',
-              'Com certeza! O Patas permite que você tenha perfis individuais para todos os seus animais, de forma ilimitada.',
+              context.tr('help.faq_q5'),
+              context.tr('help.faq_a5'),
               cardColor,
               textColor,
             ),
             const SizedBox(height: 32),
-            _buildSectionTitle('Ainda precisa de ajuda?', textColor),
+            _buildSectionTitle(context.tr('help.need_more_help'), textColor),
             const SizedBox(height: 16),
             Container(
               width: double.infinity,
@@ -122,16 +126,17 @@ class HelpSupportPage extends StatelessWidget {
                   ),
                   const SizedBox(height: 16),
                   Text(
-                    'Fale com nosso Suporte',
+                    context.tr('help.support_card_title'),
                     style: TextStyle(
                       color: textColor,
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
+                      fontFamily: 'Fredoka',
                     ),
                   ),
                   const SizedBox(height: 8),
                   Text(
-                    'Estamos disponíveis para tirar dúvidas específicas via WhatsApp.',
+                    context.tr('help.support_card_desc'),
                     textAlign: TextAlign.center,
                     style: TextStyle(
                       color: textColor.withValues(alpha: 0.7),
@@ -142,15 +147,14 @@ class HelpSupportPage extends StatelessWidget {
                   ElevatedButton.icon(
                     onPressed: () {
                       ScaffoldMessenger.of(context).showSnackBar(
-                        const SnackBar(
-                          content: Text(
-                              'O suporte via WhatsApp está em desenvolvimento. Em breve você poderá falar conosco!'),
-                          duration: Duration(seconds: 3),
+                        SnackBar(
+                          content: Text(context.tr('help.whatsapp_dev_notice')),
+                          duration: const Duration(seconds: 3),
                         ),
                       );
                     },
                     icon: const Icon(Icons.chat_bubble_outline_rounded),
-                    label: const Text('Abrir WhatsApp'),
+                    label: Text(context.tr('help.whatsapp_btn')),
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.patasColor,
                       foregroundColor: Colors.white,
@@ -165,6 +169,7 @@ class HelpSupportPage extends StatelessWidget {
               ),
             ),
             const SizedBox(height: 40),
+            const MobileScrollPadding(),
           ],
         ),
       ),

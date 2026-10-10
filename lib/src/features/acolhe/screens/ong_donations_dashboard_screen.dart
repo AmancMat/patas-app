@@ -6,6 +6,9 @@ import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/providers/active_account_provider.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/src/models/active_account_model.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'public_donation_mural_screen.dart';
 import '../models/donation_campaign_model.dart';
 import '../services/shelter_service.dart';
 import 'ong_create_campaign_sheet.dart';
@@ -77,31 +80,39 @@ class _OngDonationsDashboardScreenState
     }
   }
 
-  void _openUpdateProgressDialog(DonationCampaign campaign, bool isDark) {
+  void _openAdjustGoalDialog(DonationCampaign campaign, bool isDark) async {
     final controller = TextEditingController(
-      text: campaign.currentAmount.toStringAsFixed(0),
+      text: campaign.targetAmount.toStringAsFixed(2).replaceAll('.', ','),
     );
 
-    showDialog(
+    final newTarget = await showDialog<double>(
       context: context,
       builder: (ctx) => AlertDialog(
         backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: Text(
-          'Atualizar Arrecadação',
-          style: TextStyle(
-            fontFamily: 'Fredoka',
-            fontSize: 18,
-            fontWeight: FontWeight.bold,
-            color: isDark ? Colors.white : AppColors.darkBG,
-          ),
+        title: Row(
+          children: [
+            const Icon(Icons.flag_rounded, color: Colors.pinkAccent, size: 22),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                context.t('donation.adjust_goal_title'),
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : AppColors.darkBG,
+                ),
+              ),
+            ),
+          ],
         ),
         content: Column(
           mainAxisSize: MainAxisSize.min,
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Informe o novo total arrecadado para "${campaign.title}":',
+              'Ajuste o valor da meta total para "${campaign.title}":',
               style: TextStyle(
                 fontSize: 13,
                 color: isDark ? Colors.white70 : Colors.black87,
@@ -110,21 +121,23 @@ class _OngDonationsDashboardScreenState
             const SizedBox(height: 12),
             TextField(
               controller: controller,
-              keyboardType: TextInputType.number,
+              keyboardType: const TextInputType.numberWithOptions(decimal: true),
               autofocus: true,
               style: TextStyle(
                 fontFamily: 'Fredoka',
-                fontSize: 16,
+                fontSize: 18,
                 fontWeight: FontWeight.bold,
-                color: isDark ? Colors.white : Colors.black87,
+                color: isDark ? Colors.white : AppColors.darkBG,
               ),
               decoration: InputDecoration(
                 prefixText: campaign.goalType == 'money' ? 'R\$ ' : null,
-                suffixText: campaign.goalType == 'items' ? campaign.unitLabel : null,
+                prefixStyle: const TextStyle(fontWeight: FontWeight.bold, color: Colors.pinkAccent),
                 filled: true,
-                fillColor: isDark ? const Color(0xFF0F172A) : Colors.grey.shade100,
-                border: OutlineInputBorder(
-                  borderRadius: BorderRadius.circular(12),
+                fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                focusedBorder: OutlineInputBorder(
+                  borderRadius: BorderRadius.circular(14),
+                  borderSide: const BorderSide(color: Colors.pinkAccent, width: 2),
                 ),
               ),
             ),
@@ -132,32 +145,204 @@ class _OngDonationsDashboardScreenState
         ),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(ctx),
-            child: const Text('Cancelar'),
+            onPressed: () => Navigator.pop(ctx, null),
+            child: Text(context.t('donation.cancel')),
           ),
           ElevatedButton(
-            onPressed: () async {
-              final newAmount = double.tryParse(controller.text.trim()) ??
-                  campaign.currentAmount;
-              Navigator.pop(ctx);
-              await _service.updateCampaignProgress(
-                campaignId: campaign.id,
-                newCurrentAmount: newAmount,
-              );
-              _loadCampaigns();
+            onPressed: () {
+              final raw = controller.text.replaceAll('.', '').replaceAll(',', '.').trim();
+              final parsed = double.tryParse(raw) ?? 0.0;
+              Navigator.pop(ctx, parsed > 0 ? parsed : null);
             },
             style: ElevatedButton.styleFrom(
               backgroundColor: Colors.pinkAccent,
               foregroundColor: Colors.white,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(12),
-              ),
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
             ),
-            child: const Text('Salvar'),
+            child: const Text('Salvar Meta'),
           ),
         ],
       ),
     );
+
+    if (newTarget != null && newTarget > 0 && mounted) {
+      final success = await _service.updateCampaignGoal(
+        campaignId: campaign.id,
+        newTargetAmount: newTarget,
+      );
+      if (success && mounted) {
+        _loadCampaigns();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.t('donation.adjust_goal_success'),
+              style: const TextStyle(fontFamily: 'Fredoka', color: Colors.white),
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      }
+    }
+  }
+
+  void _openAddExternalDonationDialog(DonationCampaign campaign, bool isDark) async {
+    final amountController = TextEditingController();
+    final donorController = TextEditingController();
+    final noteController = TextEditingController();
+
+    final result = await showDialog<bool>(
+      context: context,
+      builder: (ctx) => AlertDialog(
+        backgroundColor: isDark ? const Color(0xFF1E293B) : Colors.white,
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: Row(
+          children: [
+            const Icon(Icons.add_circle_outline_rounded, color: Color(0xFF10B981), size: 24),
+            const SizedBox(width: 8),
+            Expanded(
+              child: Text(
+                context.t('donation.add_external_donation_title'),
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 17,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : AppColors.darkBG,
+                ),
+              ),
+            ),
+          ],
+        ),
+        content: SingleChildScrollView(
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Text(
+                'Lançar arrecadação presencial para "${campaign.title}":',
+                style: TextStyle(fontSize: 12.5, color: isDark ? Colors.white70 : Colors.black87),
+              ),
+              const SizedBox(height: 14),
+              TextField(
+                controller: amountController,
+                keyboardType: const TextInputType.numberWithOptions(decimal: true),
+                autofocus: true,
+                style: TextStyle(
+                  fontFamily: 'Fredoka',
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                  color: isDark ? Colors.white : AppColors.darkBG,
+                ),
+                decoration: InputDecoration(
+                  labelText: 'Valor Recebido *',
+                  prefixText: 'R\$ ',
+                  prefixStyle: const TextStyle(fontWeight: FontWeight.bold, color: Color(0xFF10B981)),
+                  filled: true,
+                  fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: donorController,
+                style: TextStyle(fontFamily: 'Fredoka', color: isDark ? Colors.white : AppColors.darkBG),
+                decoration: InputDecoration(
+                  labelText: context.t('donation.add_external_donation_donor_name'),
+                  hintText: 'Ex: João Silva, Bazar Beneficente...',
+                  filled: true,
+                  fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+              const SizedBox(height: 12),
+              TextField(
+                controller: noteController,
+                maxLines: 2,
+                style: TextStyle(fontFamily: 'Fredoka', color: isDark ? Colors.white : AppColors.darkBG),
+                decoration: InputDecoration(
+                  labelText: context.t('donation.add_external_donation_note'),
+                  hintText: 'Ex: Doação entregue na feira...',
+                  filled: true,
+                  fillColor: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                  border: OutlineInputBorder(borderRadius: BorderRadius.circular(14)),
+                ),
+              ),
+            ],
+          ),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(ctx, false),
+            child: Text(context.t('donation.cancel')),
+          ),
+          ElevatedButton(
+            style: ElevatedButton.styleFrom(
+              backgroundColor: const Color(0xFF10B981),
+              foregroundColor: Colors.white,
+              shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+            ),
+            onPressed: () {
+              final raw = amountController.text.replaceAll('.', '').replaceAll(',', '.').trim();
+              final parsed = double.tryParse(raw) ?? 0.0;
+              if (parsed > 0) Navigator.pop(ctx, true);
+            },
+            child: const Text('Lançar Doação'),
+          ),
+        ],
+      ),
+    );
+
+    if (result == true && mounted) {
+      final raw = amountController.text.replaceAll('.', '').replaceAll(',', '.').trim();
+      final amount = double.tryParse(raw) ?? 0.0;
+      final donorName = donorController.text.trim().isNotEmpty ? donorController.text.trim() : null;
+      final note = noteController.text.trim().isNotEmpty ? noteController.text.trim() : null;
+
+      final success = await _service.addExternalDonation(
+        campaignId: campaign.id,
+        amount: amount,
+        donorName: donorName,
+        note: note,
+      );
+
+      if (success && mounted) {
+        _loadCampaigns();
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(
+            content: Text(
+              context.t('donation.add_external_donation_success', args: {'amount': amount.toStringAsFixed(2).replaceAll('.', ',')}),
+              style: const TextStyle(fontFamily: 'Fredoka', color: Colors.white),
+            ),
+            backgroundColor: const Color(0xFF10B981),
+            behavior: SnackBarBehavior.floating,
+            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+          ),
+        );
+      }
+    }
+  }
+
+  void _toggleCampaignStatus(DonationCampaign campaign) async {
+    final nextStatus = !campaign.isActive;
+    final success = await _service.toggleCampaignStatus(
+      campaignId: campaign.id,
+      isActive: nextStatus,
+    );
+    if (success && mounted) {
+      _loadCampaigns();
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Text(
+            nextStatus ? context.t('donation.status_active') : context.t('donation.status_paused'),
+            style: const TextStyle(fontFamily: 'Fredoka', color: Colors.white),
+          ),
+          backgroundColor: nextStatus ? const Color(0xFF10B981) : Colors.orange,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
+    }
   }
 
   void _confirmDelete(DonationCampaign campaign) {
@@ -188,125 +373,150 @@ class _OngDonationsDashboardScreenState
 
   @override
   Widget build(BuildContext context) {
-    final thmode = Provider.of<DarkMode>(context);
-    final isDark = thmode.darkMode;
+    return Consumer<ActiveAccountProvider>(
+      builder: (context, activeAccountProvider, child) {
+        final activeAccount = activeAccountProvider.activeAccount;
+        if (activeAccount != null && activeAccount.type != AccountType.ong) {
+          return const PublicDonationMuralScreen();
+        }
 
-    return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: PatasEssencialAppBar(
-        title: 'Mural de Doações & PIX',
-        subtitle: 'Campanhas comunitárias e arrecadação do abrigo',
-        leadingIcon: const Icon(
-          Icons.volunteer_activism_rounded,
-          color: Colors.pinkAccent,
-          size: 22,
-        ),
-        actions: [
-          IconButton(
-            icon: const Icon(
-              Icons.add_circle_outline_rounded,
+        final thmode = Provider.of<DarkMode>(context);
+        final isDark = thmode.darkMode;
+
+        return Scaffold(
+          backgroundColor:
+              isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
+          appBar: PatasEssencialAppBar(
+            title: 'Mural de Doações & PIX',
+            subtitle: 'Campanhas comunitárias e arrecadação do abrigo',
+            leadingIcon: const Icon(
+              Icons.volunteer_activism_rounded,
               color: Colors.pinkAccent,
-              size: 24,
+              size: 22,
             ),
-            tooltip: 'Nova Campanha',
-            onPressed: () => _openCreateCampaign(),
+            actions: [
+              IconButton(
+                icon: const Icon(
+                  Icons.public_rounded,
+                  color: Colors.pinkAccent,
+                  size: 22,
+                ),
+                tooltip: context.t('donation.filter_all_mural'),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const PublicDonationMuralScreen(),
+                    ),
+                  );
+                },
+              ),
+              IconButton(
+                icon: const Icon(
+                  Icons.add_circle_outline_rounded,
+                  color: Colors.pinkAccent,
+                  size: 24,
+                ),
+                tooltip: 'Nova Campanha',
+                onPressed: () => _openCreateCampaign(),
+              ),
+            ],
           ),
-        ],
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _loadCampaigns,
-          color: Colors.pinkAccent,
-          child: Align(
-            alignment: Alignment.topCenter,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(maxWidth: 1080),
-              child: CustomScrollView(
-                slivers: [
-                  // 1. Resumo Métrico
-                  SliverToBoxAdapter(
-                    child: Padding(
-                      padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
-                      child: _buildMetricSummary(isDark),
-                    ),
-                  ),
-
-                  // 2. Lista de Campanhas
-                  if (_isLoading)
-                    const SliverFillRemaining(
-                      child: Center(
-                        child: CircularProgressIndicator(color: Colors.pinkAccent),
+          body: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: _loadCampaigns,
+              color: Colors.pinkAccent,
+              child: Align(
+                alignment: Alignment.topCenter,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(maxWidth: 1080),
+                  child: CustomScrollView(
+                    slivers: [
+                      // 1. Resumo Métrico
+                      SliverToBoxAdapter(
+                        child: Padding(
+                          padding: const EdgeInsets.fromLTRB(16, 16, 16, 12),
+                          child: _buildMetricSummary(isDark),
+                        ),
                       ),
-                    )
-                  else if (_campaigns.isEmpty)
-                    SliverFillRemaining(
-                      hasScrollBody: false,
-                      child: _buildEmptyState(isDark),
-                    )
-                  else
-                    SliverPadding(
-                      padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
-                      sliver: context.isWide
-                          ? SliverGrid(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    MediaQuery.of(context).size.width >= 950
-                                        ? 3
-                                        : 2,
-                                mainAxisSpacing: 18,
-                                crossAxisSpacing: 18,
-                                childAspectRatio: 0.72,
-                              ),
-                              delegate: SliverChildBuilderDelegate(
-                                (ctx, i) => _buildCampaignCard(_campaigns[i], isDark, isGrid: true),
-                                childCount: _campaigns.length,
-                              ),
-                            )
-                          : SliverList(
-                              delegate: SliverChildBuilderDelegate(
-                                (ctx, i) => Padding(
-                                  padding: const EdgeInsets.only(bottom: 14),
-                                  child: _buildCampaignCard(_campaigns[i], isDark, isGrid: false),
-                                ),
-                                childCount: _campaigns.length,
-                              ),
-                            ),
-                    ),
 
-                  // Padding dinâmico inferior
-                  if (context.isMobile)
-                    const SliverToBoxAdapter(child: MobileScrollPadding()),
-                ],
+                      // 2. Lista de Campanhas
+                      if (_isLoading)
+                        const SliverFillRemaining(
+                          child: Center(
+                            child: CircularProgressIndicator(color: Colors.pinkAccent),
+                          ),
+                        )
+                      else if (_campaigns.isEmpty)
+                        SliverFillRemaining(
+                          hasScrollBody: false,
+                          child: _buildEmptyState(isDark),
+                        )
+                      else
+                        SliverPadding(
+                          padding: const EdgeInsets.fromLTRB(16, 8, 16, 24),
+                          sliver: context.isWide
+                              ? SliverGrid(
+                                  gridDelegate:
+                                      SliverGridDelegateWithFixedCrossAxisCount(
+                                    crossAxisCount:
+                                        MediaQuery.of(context).size.width >= 950
+                                            ? 3
+                                            : 2,
+                                    mainAxisSpacing: 18,
+                                    crossAxisSpacing: 18,
+                                    childAspectRatio: 0.69,
+                                  ),
+                                  delegate: SliverChildBuilderDelegate(
+                                    (ctx, i) => _buildCampaignCard(_campaigns[i], isDark, isGrid: true),
+                                    childCount: _campaigns.length,
+                                  ),
+                                )
+                              : SliverList(
+                                  delegate: SliverChildBuilderDelegate(
+                                    (ctx, i) => Padding(
+                                      padding: const EdgeInsets.only(bottom: 14),
+                                      child: _buildCampaignCard(_campaigns[i], isDark, isGrid: false),
+                                    ),
+                                    childCount: _campaigns.length,
+                                  ),
+                                ),
+                        ),
+
+                      // Padding dinâmico inferior
+                      if (context.isMobile)
+                        const SliverToBoxAdapter(child: MobileScrollPadding()),
+                    ],
+                  ),
+                ),
               ),
             ),
           ),
-        ),
-      ),
-      floatingActionButton: Padding(
-        padding: EdgeInsets.only(
-          bottom: context.isDesktop
-              ? 20
-              : (MediaQuery.paddingOf(context).bottom + 76),
-        ),
-        child: FloatingActionButton.extended(
-          heroTag: null,
-          onPressed: () => _openCreateCampaign(),
-          backgroundColor: Colors.pinkAccent,
-          foregroundColor: Colors.white,
-          icon: const Icon(Icons.add_rounded),
-          label: const Text(
-            'Nova Campanha',
-            style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
+          floatingActionButton: Padding(
+            padding: EdgeInsets.only(
+              bottom: context.isDesktop
+                  ? 20
+                  : (MediaQuery.paddingOf(context).bottom + 76),
+            ),
+            child: FloatingActionButton.extended(
+              heroTag: null,
+              onPressed: () => _openCreateCampaign(),
+              backgroundColor: Colors.pinkAccent,
+              foregroundColor: Colors.white,
+              icon: const Icon(Icons.add_rounded),
+              label: const Text(
+                'Nova Campanha',
+                style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
+              ),
+            ),
           ),
-        ),
-      ),
+        );
+      },
     );
   }
 
   Widget _buildMetricSummary(bool isDark) {
-    final activeCount = _campaigns.where((c) => c.isActive).length;
+    final activeCount = _campaigns.where((c) => c.isActive && !c.isExpired).length;
     final totalMoney = _campaigns
         .where((c) => c.goalType == 'money')
         .fold(0.0, (sum, c) => sum + c.currentAmount);
@@ -441,7 +651,7 @@ class _OngDonationsDashboardScreenState
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // Imagem proporcional (16:9) + Badge de Categoria + Menu de Ações
+          // Imagem proporcional (16:9) + Badges de Categoria e Prazo + Menu
           Stack(
             children: [
               ClipRRect(
@@ -468,22 +678,50 @@ class _OngDonationsDashboardScreenState
               Positioned(
                 top: 10,
                 left: 10,
-                child: Container(
-                  padding:
-                      const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
-                  decoration: BoxDecoration(
-                    color: Colors.black.withValues(alpha: 0.65),
-                    borderRadius: BorderRadius.circular(10),
-                  ),
-                  child: Text(
-                    campaign.category,
-                    style: const TextStyle(
-                      fontFamily: 'Fredoka',
-                      fontSize: 11,
-                      fontWeight: FontWeight.bold,
-                      color: Colors.white,
+                child: Wrap(
+                  spacing: 6,
+                  children: [
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 9, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black.withValues(alpha: 0.65),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        campaign.category,
+                        style: const TextStyle(
+                          fontFamily: 'Fredoka',
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
                     ),
-                  ),
+                    Container(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: campaign.isExpired
+                            ? Colors.redAccent.withValues(alpha: 0.85)
+                            : (!campaign.isActive
+                                ? Colors.orange.withValues(alpha: 0.85)
+                                : Colors.purple.withValues(alpha: 0.75)),
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        !campaign.isActive
+                            ? 'PAUSADA'
+                            : (campaign.isExpired ? 'ENCERRADA' : campaign.deadlineText),
+                        style: const TextStyle(
+                          fontFamily: 'Fredoka',
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: Colors.white,
+                        ),
+                      ),
+                    ),
+                  ],
                 ),
               ),
               Positioned(
@@ -498,16 +736,13 @@ class _OngDonationsDashboardScreenState
                     icon: const Icon(Icons.more_vert_rounded,
                         color: Colors.white, size: 20),
                     onSelected: (val) {
-                      if (val == 'progress') {
-                        _openUpdateProgressDialog(campaign, isDark);
-                      }
-                      if (val == 'edit') {
-                        _openCreateCampaign(campaign);
-                      }
-                      if (val == 'delete') {
-                        _confirmDelete(campaign);
-                      }
-                      if (val == 'pix') {
+                      if (val == 'adjust_goal') {
+                        _openAdjustGoalDialog(campaign, isDark);
+                      } else if (val == 'add_external') {
+                        _openAddExternalDonationDialog(campaign, isDark);
+                      } else if (val == 'toggle_status') {
+                        _toggleCampaignStatus(campaign);
+                      } else if (val == 'extract') {
                         Navigator.push(
                           context,
                           MaterialPageRoute(
@@ -519,27 +754,58 @@ class _OngDonationsDashboardScreenState
                         ).then((_) {
                           if (mounted) _loadCampaigns();
                         });
+                      } else if (val == 'edit') {
+                        _openCreateCampaign(campaign);
+                      } else if (val == 'delete') {
+                        _confirmDelete(campaign);
                       }
                     },
                     itemBuilder: (ctx) => [
-                      const PopupMenuItem(
-                        value: 'progress',
+                      PopupMenuItem(
+                        value: 'adjust_goal',
                         child: Row(
                           children: [
-                            Icon(Icons.edit_note_rounded, size: 18),
-                            SizedBox(width: 8),
-                            Text('Atualizar Valor Arrecadado'),
+                            const Icon(Icons.flag_rounded, size: 18, color: Colors.pinkAccent),
+                            const SizedBox(width: 8),
+                            Text(context.t('donation.adjust_goal_btn')),
                           ],
                         ),
                       ),
-                      const PopupMenuItem(
-                        value: 'pix',
+                      PopupMenuItem(
+                        value: 'add_external',
                         child: Row(
                           children: [
-                            Icon(Icons.pix_rounded,
-                                size: 18, color: Colors.teal),
-                            SizedBox(width: 8),
-                            Text('Ver Chave PIX'),
+                            const Icon(Icons.add_circle_outline_rounded,
+                                size: 18, color: Color(0xFF10B981)),
+                            const SizedBox(width: 8),
+                            Text(context.t('donation.add_external_donation_btn')),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'toggle_status',
+                        child: Row(
+                          children: [
+                            Icon(
+                              campaign.isActive ? Icons.pause_circle_rounded : Icons.play_circle_rounded,
+                              size: 18,
+                              color: campaign.isActive ? Colors.orange : const Color(0xFF10B981),
+                            ),
+                            const SizedBox(width: 8),
+                            Text(campaign.isActive
+                                ? context.t('donation.pause_campaign')
+                                : context.t('donation.resume_campaign')),
+                          ],
+                        ),
+                      ),
+                      PopupMenuItem(
+                        value: 'extract',
+                        child: Row(
+                          children: [
+                            const Icon(Icons.analytics_rounded,
+                                size: 18, color: Color(0xFF00BDAE)),
+                            const SizedBox(width: 8),
+                            Text(context.t('donation.view_extract_and_donors')),
                           ],
                         ),
                       ),
@@ -625,7 +891,7 @@ class _OngDonationsDashboardScreenState
           ),
           if (!isGrid) const SizedBox(height: 8),
 
-          // Barra de Progresso + Rodapé
+          // Barra de Progresso + Rodapé de Ações
           Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisSize: MainAxisSize.min,
@@ -673,42 +939,65 @@ class _OngDonationsDashboardScreenState
                   ),
                 ],
               ),
-              const SizedBox(height: 6),
-              const Divider(height: 8),
+              const SizedBox(height: 10),
+              // Botões de Ação da ONG
               Row(
                 children: [
-                  const Icon(Icons.pix_rounded, size: 16, color: Colors.teal),
-                  const SizedBox(width: 4),
+                  // Botão Extrato & Doadores
                   Expanded(
-                    child: Text(
-                      campaign.pixKey ?? 'PIX Cadastrado',
-                      style: TextStyle(
-                        fontSize: 11,
-                        color: isDark ? Colors.white60 : Colors.grey.shade700,
+                    child: OutlinedButton.icon(
+                      style: OutlinedButton.styleFrom(
+                        padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 8),
+                        side: BorderSide(color: const Color(0xFF00BDAE).withValues(alpha: 0.5)),
+                        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                       ),
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
+                      onPressed: () {
+                        Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                            builder: (_) => CampaignDonationPage(
+                              campaign: campaign,
+                              onDonationUpdated: _loadCampaigns,
+                            ),
+                          ),
+                        ).then((_) {
+                          if (mounted) _loadCampaigns();
+                        });
+                      },
+                      icon: const Icon(Icons.analytics_rounded, size: 14, color: Color(0xFF00BDAE)),
+                      label: Text(
+                        context.t('donation.tab_ong_extract'),
+                        style: const TextStyle(
+                          fontFamily: 'Fredoka',
+                          fontSize: 11,
+                          fontWeight: FontWeight.bold,
+                          color: Color(0xFF00BDAE),
+                        ),
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                      ),
                     ),
                   ),
+                  const SizedBox(width: 8),
+                  // Botão Ajustar Meta
                   InkWell(
-                    onTap: () => _openUpdateProgressDialog(campaign, isDark),
+                    onTap: () => _openAdjustGoalDialog(campaign, isDark),
                     borderRadius: BorderRadius.circular(10),
                     child: Container(
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 10, vertical: 4),
+                      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 8),
                       decoration: BoxDecoration(
                         color: Colors.pinkAccent.withValues(alpha: 0.12),
-                        borderRadius: BorderRadius.circular(8),
+                        borderRadius: BorderRadius.circular(10),
+                        border: Border.all(color: Colors.pinkAccent.withValues(alpha: 0.3)),
                       ),
-                      child: const Row(
+                      child: Row(
                         mainAxisSize: MainAxisSize.min,
                         children: [
-                          Icon(Icons.edit_note_rounded,
-                              size: 14, color: Colors.pinkAccent),
-                          SizedBox(width: 4),
+                          const Icon(Icons.flag_rounded, size: 14, color: Colors.pinkAccent),
+                          const SizedBox(width: 4),
                           Text(
-                            'Atualizar',
-                            style: TextStyle(
+                            context.t('donation.adjust_goal_btn'),
+                            style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 11,
                               fontWeight: FontWeight.bold,

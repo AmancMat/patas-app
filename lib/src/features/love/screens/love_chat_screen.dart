@@ -1383,7 +1383,6 @@ class _LoveChatScreenState extends State<LoveChatScreen>
                   : () async {
                       setStateDialog(() => isSubmitting = true);
                       final nav = Navigator.of(dialogContext);
-                      final parentContext = context;
 
                       await _loveService.reportUser(
                         reporterId: widget.activePet.userId,
@@ -1394,8 +1393,8 @@ class _LoveChatScreenState extends State<LoveChatScreen>
                       );
 
                       nav.pop();
-                      if (mounted) {
-                        _showReportSuccessConfirmation(parentContext);
+                      if (context.mounted) {
+                        _showReportSuccessConfirmation(context);
                       }
                     },
               child: isSubmitting

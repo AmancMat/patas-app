@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/health/models/vaccine_model.dart';
 import 'package:patas_web_app/src/features/health/services/health_service.dart';
@@ -199,8 +200,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
-                          const Text(
-                            'SISTEMA PATAS • PASSAPORTE DIGITAL',
+                          Text(
+                            context.t('passport.sheet_header_system'),
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 10,
@@ -211,7 +212,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            '${passport.petName} — cNFT Soberano',
+                            context.t('passport.sheet_header_sovereign', args: {'name': passport.petName}),
                             style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 14.5,
@@ -285,14 +286,14 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     fontSize: 12,
                     fontWeight: FontWeight.w500,
                   ),
-                  tabs: const [
+                  tabs: [
                     Tab(
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.badge_rounded, size: 16),
-                          SizedBox(width: 6),
-                          Text('Identidade'),
+                          const Icon(Icons.badge_rounded, size: 16),
+                          const SizedBox(width: 6),
+                          Text(context.t('passport.tab_identity')),
                         ],
                       ),
                     ),
@@ -300,9 +301,9 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.vaccines_rounded, size: 16),
-                          SizedBox(width: 6),
-                          Text('Vacinas'),
+                          const Icon(Icons.vaccines_rounded, size: 16),
+                          const SizedBox(width: 6),
+                          Text(context.t('passport.tab_vaccines')),
                         ],
                       ),
                     ),
@@ -310,9 +311,9 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Icon(Icons.hub_rounded, size: 16),
-                          SizedBox(width: 6),
-                          Text('Blockchain'),
+                          const Icon(Icons.hub_rounded, size: 16),
+                          const SizedBox(width: 6),
+                          Text(context.t('passport.tab_blockchain')),
                         ],
                       ),
                     ),
@@ -351,7 +352,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         const SizedBox(width: 8),
                         Expanded(
                           child: Text(
-                            '$_copiedLabel copiado para a área de transferência!',
+                            context.t('passport.copied_to_clipboard', args: {'label': _copiedLabel ?? ''}),
                             style: const TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 12,
@@ -411,7 +412,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     color: isDark ? Colors.white60 : Colors.black54,
                   ),
                   label: Text(
-                    'Fechar Passaporte',
+                    context.t('passport.close_passport'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 13,
@@ -487,7 +488,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         ),
                       ),
                       Text(
-                        '${passport.species} • ${passport.breed}',
+                        '${_formatSpecies(context, passport.species)} • ${_formatBreed(context, passport.breed)}',
                         style: TextStyle(
                           fontSize: 13,
                           color: isDark ? Colors.white70 : Colors.black87,
@@ -506,7 +507,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                                 borderRadius: BorderRadius.circular(6),
                               ),
                               child: Text(
-                                passport.gender!,
+                                _formatGender(context, passport.gender),
                                 style: TextStyle(
                                   fontSize: 11,
                                   fontWeight: FontWeight.w600,
@@ -520,8 +521,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                               color: const Color(0xFF10B981).withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(6),
                             ),
-                            child: const Text(
-                              'Status: Ativo',
+                            child: Text(
+                              context.t('passport.status_active'),
                               style: TextStyle(
                                 fontSize: 11,
                                 fontWeight: FontWeight.bold,
@@ -582,7 +583,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                             children: [
                               Flexible(
                                 child: Text(
-                                  'Microchip ISO 11784',
+                                  context.t('passport.chip_title'),
                                   style: TextStyle(
                                     fontSize: 11,
                                     fontWeight: FontWeight.w600,
@@ -606,7 +607,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                                   ),
                                 ),
                                 child: Text(
-                                  passport.isPhysicalMicrochip ? 'CHIP FÍSICO' : 'RG DIGITAL PROVISÓRIO',
+                                  passport.isPhysicalMicrochip ? context.t('passport.chip_physical_badge') : context.t('passport.chip_provisional_badge'),
                                   style: TextStyle(
                                     fontFamily: 'Fredoka',
                                     fontSize: 9,
@@ -647,7 +648,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                                 ? const Color(0xFF14F195)
                                 : const Color(0xFFF59E0B)),
                       ),
-                      tooltip: 'Copiar Microchip',
+                      tooltip: context.t('passport.copy_microchip_tooltip'),
                       onPressed: () => _copyToClipboard(context, passport.microchipNumber, 'Microchip'),
                     ),
                   ],
@@ -670,8 +671,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         Expanded(
                           child: Text(
                             passport.isPhysicalMicrochip
-                                ? 'Chip RFID verificado e implantado clinicamente no pet.'
-                                : 'Código provisório internacional. Toque para entender como vincular o chip físico.',
+                                ? context.t('passport.chip_implanted_hint')
+                                : context.t('passport.chip_provisional_hint'),
                             style: TextStyle(
                               fontSize: 11,
                               color: isDark ? Colors.amber.shade200 : Colors.amber.shade900,
@@ -708,7 +709,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     const Icon(Icons.qr_code_2_rounded, size: 18, color: Color(0xFF9945FF)),
                     const SizedBox(width: 6),
                     Text(
-                      'QR Code de Fiscalização Sanitária',
+                      context.t('passport.qr_title'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 13,
@@ -748,7 +749,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                 ),
                 const SizedBox(height: 8),
                 Text(
-                  'Escaneável por fiscais de trânsito animal, aeroportos e clínicas veterinárias.',
+                  context.t('passport.qr_hint'),
                   textAlign: TextAlign.center,
                   style: TextStyle(
                     fontSize: 11,
@@ -770,10 +771,10 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
             ),
             child: Column(
               children: [
-                _buildDataRow('Tutor Custodiante', passport.ownerName, isDark),
+                _buildDataRow(context.t('passport.custodian_tutor'), passport.ownerName, isDark),
                 const SizedBox(height: 8),
                 _buildDataRow(
-                  'Carteira Solana',
+                  context.t('passport.solana_wallet_label'),
                   '${passport.ownerWallet.substring(0, 6)}...${passport.ownerWallet.substring(passport.ownerWallet.length - 6)}',
                   isDark,
                 ),
@@ -837,7 +838,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Status Sanitário: Conforme',
+                            context.t('passport.vaccines_status_compliant'),
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 13.5,
@@ -847,7 +848,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                           ),
                           const SizedBox(height: 2),
                           Text(
-                            'Histórico imunológico integrado e auditável criptograficamente.',
+                            context.t('passport.vaccines_status_desc'),
                             style: TextStyle(
                               fontSize: 11,
                               color: isDark ? Colors.white70 : const Color(0xFF047857),
@@ -863,7 +864,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
               const SizedBox(height: 16),
 
               Text(
-                'Caderneta de Vacinação On-Chain',
+                context.t('passport.vaccines_onchain_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 14,
@@ -892,7 +893,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       ),
                       const SizedBox(height: 10),
                       Text(
-                        'Nenhuma vacina individual registrada ainda.',
+                        context.t('passport.vaccines_none_title'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 13,
@@ -902,7 +903,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       ),
                       const SizedBox(height: 4),
                       Text(
-                        'As vacinas cadastradas no módulo Patas Saúde aparecem aqui automaticamente com carimbo de autenticidade.',
+                        context.t('passport.vaccines_none_desc'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 11.5,
@@ -975,7 +976,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                                 ),
                                 const SizedBox(height: 2),
                                 Text(
-                                  'Aplicada em: ${DateFormat('dd/MM/yyyy').format(vax.applicationDate)}',
+                                  context.t('passport.applied_at', args: {'date': DateFormat('dd/MM/yyyy').format(vax.applicationDate)}),
                                   style: TextStyle(
                                     fontSize: 11,
                                     color: isDark ? Colors.white60 : Colors.black54,
@@ -990,13 +991,13 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                               color: const Color(0xFF14F195).withValues(alpha: 0.15),
                               borderRadius: BorderRadius.circular(8),
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisSize: MainAxisSize.min,
                               children: [
-                                Icon(Icons.check_circle_rounded, size: 12, color: Color(0xFF14F195)),
-                                SizedBox(width: 4),
+                                const Icon(Icons.check_circle_rounded, size: 12, color: Color(0xFF14F195)),
+                                const SizedBox(width: 4),
                                 Text(
-                                  'On-Chain',
+                                  context.t('passport.onchain_badge'),
                                   style: TextStyle(
                                     fontFamily: 'Fredoka',
                                     fontSize: 10,
@@ -1031,7 +1032,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     const SizedBox(width: 10),
                     Expanded(
                       child: Text(
-                        'Novas vacinas cadastradas no Patas Saúde são carimbadas e somadas automaticamente a este mesmo passaporte on-chain, mantendo a mesma chave vitalícia.',
+                        context.t('passport.vaccines_auto_sync_note'),
                         style: TextStyle(
                           fontSize: 11,
                           color: isDark ? Colors.white70 : Colors.black87,
@@ -1104,7 +1105,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       ),
                       const SizedBox(height: 2),
                       Text(
-                        'Padrão Metaplex Bubblegum (cNFT)',
+                        context.t('passport.protocol_bubblegum'),
                         style: TextStyle(
                           fontSize: 11,
                           color: Colors.white.withValues(alpha: 0.75),
@@ -1119,13 +1120,13 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     color: const Color(0xFF14F195).withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(8),
                   ),
-                  child: const Row(
+                  child: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
-                      Icon(Icons.shield_rounded, size: 12, color: Color(0xFF14F195)),
-                      SizedBox(width: 4),
+                      const Icon(Icons.shield_rounded, size: 12, color: Color(0xFF14F195)),
+                      const SizedBox(width: 4),
                       Text(
-                        'Auditável',
+                        context.t('passport.auditable_badge'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 10,
@@ -1156,14 +1157,14 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
               children: [
                 _buildCopyableRow(
                   context,
-                  label: 'Asset ID (cNFT)',
+                  label: context.t('passport.asset_id_label'),
                   value: passport.cNftAssetId,
                   isDark: isDark,
                 ),
                 const Divider(height: 18),
                 _buildCopyableRow(
                   context,
-                  label: 'Árvore de Merkle',
+                  label: context.t('passport.merkle_tree_label'),
                   value: passport.merkleTreeAddress,
                   isDark: isDark,
                 ),
@@ -1171,7 +1172,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                   const Divider(height: 18),
                   _buildCopyableRow(
                     context,
-                    label: 'TX Signature (Mint)',
+                    label: context.t('passport.tx_sig_label'),
                     value: passport.txSignature!,
                     isDark: isDark,
                   ),
@@ -1181,7 +1182,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     Text(
-                      'Índice da Folha (Leaf)',
+                      context.t('passport.leaf_index_label'),
                       style: TextStyle(
                         fontSize: 11.5,
                         fontWeight: FontWeight.w500,
@@ -1205,7 +1206,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
                       Text(
-                        'Slot da Rede Solana',
+                        context.t('passport.block_slot_label'),
                         style: TextStyle(
                           fontSize: 11.5,
                           fontWeight: FontWeight.w500,
@@ -1234,8 +1235,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
           ElevatedButton.icon(
             onPressed: () => SolanaPayService.openExplorer(address: passport.merkleTreeAddress),
             icon: const Icon(Icons.open_in_new_rounded, size: 18),
-            label: const Text(
-              'Auditar no Solana Explorer (Devnet)',
+            label: Text(
+              context.t('passport.audit_explorer_btn'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 14,
@@ -1258,13 +1259,13 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
             onPressed: () {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
-                  content: const Row(
+                  content: Row(
                     children: [
-                      Icon(Icons.verified_rounded, color: Color(0xFF14F195), size: 20),
-                      SizedBox(width: 10),
+                      const Icon(Icons.verified_rounded, color: Color(0xFF14F195), size: 20),
+                      const SizedBox(width: 10),
                       Expanded(
                         child: Text(
-                          'Prova de Merkle válida: Raiz criptográfica confirmada no nó Devnet!',
+                          context.t('passport.merkle_proof_valid'),
                           style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
                         ),
                       ),
@@ -1278,8 +1279,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
               );
             },
             icon: const Icon(Icons.fact_check_rounded, size: 16, color: Color(0xFF14F195)),
-            label: const Text(
-              'Verificar Prova Criptográfica On-Chain',
+            label: Text(
+              context.t('passport.verify_proof_btn'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 13,
@@ -1311,7 +1312,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         const Icon(Icons.local_fire_department_rounded, color: Colors.orangeAccent, size: 24),
                         const SizedBox(width: 8),
                         Text(
-                          'Queimar / Revogar cNFT',
+                          context.t('passport.burn_dialog_title'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 16,
@@ -1322,7 +1323,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       ],
                     ),
                     content: Text(
-                      'Deseja queimar o cNFT e revogar o passaporte de ${passport.petName}? O ativo será marcado como cancelado na blockchain e o pet voltará ao estado "Não Emitido".',
+                      context.t('passport.burn_dialog_content', args: {'name': passport.petName}),
                       style: TextStyle(
                         fontSize: 13,
                         color: isDark ? Colors.white70 : Colors.black87,
@@ -1332,7 +1333,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       TextButton(
                         onPressed: () => Navigator.pop(ctx, false),
                         child: Text(
-                          'Cancelar',
+                          context.t('passport.burn_dialog_cancel'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             color: isDark ? Colors.white60 : Colors.black54,
@@ -1346,8 +1347,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                           foregroundColor: Colors.white,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
                         ),
-                        child: const Text(
-                          'Sim, Queimar cNFT',
+                        child: Text(
+                          context.t('passport.burn_dialog_confirm'),
                           style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
                         ),
                       ),
@@ -1356,11 +1357,11 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                 );
 
                 if (confirm == true) {
-                  await PetPassportService.burnPassport(passport.petId);
+                  await PetPassportService.burnPassport(passport.petId, petName: passport.petName);
                   if (context.mounted) {
                     ScaffoldMessenger.of(context).showSnackBar(
-                      const SnackBar(
-                        content: Text('Passaporte cNFT revogado com sucesso.'),
+                      SnackBar(
+                        content: Text(context.t('passport.burn_success_snackbar')),
                         backgroundColor: Colors.orangeAccent,
                       ),
                     );
@@ -1369,8 +1370,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                 }
               },
               icon: const Icon(Icons.local_fire_department_rounded, size: 16, color: Colors.orangeAccent),
-              label: const Text(
-                'Queimar cNFT / Revogar Registro (Modo Soberano)',
+              label: Text(
+                context.t('passport.burn_button_label'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 12,
@@ -1385,6 +1386,37 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
         ],
       ),
     );
+  }
+
+  String _formatSpecies(BuildContext context, String species) {
+    final lower = species.toLowerCase().trim();
+    if (lower.contains('felin') || lower.contains('gato') || lower.contains('cat')) {
+      return context.t('species.feline');
+    }
+    if (lower.contains('canin') || lower.contains('cão') || lower.contains('cao') || lower.contains('cachorro') || lower.contains('dog')) {
+      return context.t('species.canine');
+    }
+    return species;
+  }
+
+  String _formatGender(BuildContext context, String? gender) {
+    if (gender == null || gender.trim().isEmpty) return '';
+    final lower = gender.toLowerCase().trim();
+    if (lower.contains('fêm') || lower.contains('fem') || lower == 'f') {
+      return context.t('gender.female');
+    }
+    if (lower.contains('mach') || lower.contains('masc') || lower.contains('male') || lower == 'm') {
+      return context.t('gender.male');
+    }
+    return gender;
+  }
+
+  String _formatBreed(BuildContext context, String breed) {
+    final lower = breed.toLowerCase().trim();
+    if (lower == 'srd' || lower.contains('sem raça') || lower.contains('sem raca') || lower.contains('mixed')) {
+      return context.t('breed.srd');
+    }
+    return breed;
   }
 
   Widget _buildCopyableRow(
@@ -1517,7 +1549,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           Text(
-                            'Microchip Provisório vs. Físico',
+                            context.t('passport.microchip_dialog_title'),
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: 16,
@@ -1526,7 +1558,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                             ),
                           ),
                           Text(
-                            'Padrão Internacional ISO 11784/11785',
+                            context.t('passport.microchip_dialog_subtitle'),
                             style: TextStyle(
                               fontSize: 11,
                               color: isDark ? Colors.white60 : Colors.black54,
@@ -1539,7 +1571,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                 ),
                 const SizedBox(height: 16),
                 Text(
-                  'Este código de 15 dígitos foi gerado pelo Patas para dar a $petName uma certidão digital única e imutável na rede descentralizada.',
+                  context.t('passport.microchip_dialog_desc1', args: {'name': petName}),
                   style: TextStyle(
                     fontSize: 13,
                     color: isDark ? Colors.white70 : Colors.black87,
@@ -1561,7 +1593,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       const SizedBox(width: 8),
                       Expanded(
                         child: Text(
-                          'Atenção: Ele ainda NÃO substitui o microchip físico que o veterinário injeta sob a pele do animal!',
+                          context.t('passport.microchip_dialog_warning'),
                           style: TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.bold,
@@ -1574,10 +1606,7 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                 ),
                 const SizedBox(height: 12),
                 Text(
-                  '📌 Como funciona quando aplicar o chip real:\n'
-                  '1. O médico veterinário aplica o chip físico (tamanho de um grão de arroz).\n'
-                  '2. O leitor RFID da clínica obtém o número de 15 dígitos definitivo.\n'
-                  '3. Você cadastra esse número no Patas, e o passaporte on-chain é atualizado com a certidão oficial definitiva, sem alterar o histórico de vacinas.',
+                  context.t('passport.microchip_dialog_steps'),
                   style: TextStyle(
                     fontSize: 12.5,
                     color: isDark ? Colors.white70 : Colors.black87,
@@ -1595,8 +1624,8 @@ class _PetPassportDetailSheetState extends State<PetPassportDetailSheet> {
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                       padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
                     ),
-                    child: const Text(
-                      'Entendi!',
+                    child: Text(
+                      context.t('passport.microchip_dialog_understood'),
                       style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
                     ),
                   ),

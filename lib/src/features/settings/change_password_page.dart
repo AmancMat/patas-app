@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/auth/services/auth_services.dart';
 import 'package:patas_web_app/src/localization/locator.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:provider/provider.dart';
 import '../../../../app.dart';
 
@@ -26,6 +28,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
   Future<void> _updatePassword() async {
     if (!_formKey.currentState!.validate()) return;
 
+    final successMsg = context.tr('password.success_message');
     setState(() => _isSaving = true);
 
     try {
@@ -39,7 +42,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
 
       if (mounted) {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Senha atualizada com sucesso!')),
+          SnackBar(content: Text(successMsg)),
         );
         Navigator.pop(context);
       }
@@ -70,10 +73,10 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             automaticallyImplyLeading: false,
             centerTitle: true,
             title: Text(
-              'Alterar Senha',
-              style: TextStyle(
-                color: textColor,
-                fontSize: 20,
+              context.tr('password.title'),
+              style: const TextStyle(
+                color: AppColors.patasColor,
+                fontSize: 22,
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
               ),
@@ -97,14 +100,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
-              'Alterar Senha',
-              style: TextStyle(
-                color: textColor,
-                fontSize: 20,
+              context.tr('password.title'),
+              style: const TextStyle(
+                color: AppColors.patasColor,
+                fontSize: 22,
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
               ),
             ),
+            centerTitle: true,
           ),
       body: SingleChildScrollView(
         padding: const EdgeInsets.all(24),
@@ -114,14 +118,14 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Text(
-                'Confirme sua senha atual e escolha uma nova senha forte para manter sua conta segura.',
+                context.tr('password.subtitle'),
                 style: TextStyle(
                     color: textColor.withValues(alpha: 0.7), fontSize: 14),
               ),
               const SizedBox(height: 32),
 
               // Current Password
-              _buildLabel('Senha Atual', textColor),
+              _buildLabel(context.tr('password.current_password'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _currentPasswordController,
@@ -129,12 +133,12 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 style: TextStyle(color: textColor),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Informe sua senha atual';
+                    return context.tr('password.current_password_required');
                   }
                   return null;
                 },
                 decoration: _buildInputDecoration(
-                  hint: 'Sua senha atual',
+                  hint: context.tr('password.current_password_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                   isObscured: _obscureCurrentPassword,
@@ -146,7 +150,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               const SizedBox(height: 24),
 
               // Password
-              _buildLabel('Nova Senha', textColor),
+              _buildLabel(context.tr('password.new_password'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _passwordController,
@@ -154,15 +158,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 style: TextStyle(color: textColor),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Informe a nova senha';
+                    return context.tr('password.new_password_required');
                   }
                   if (value.length < 6) {
-                    return 'A senha deve ter pelo menos 6 caracteres';
+                    return context.tr('password.min_length_error');
                   }
                   return null;
                 },
                 decoration: _buildInputDecoration(
-                  hint: 'Mínimo 6 caracteres',
+                  hint: context.tr('password.min_characters'),
                   cardColor: cardColor,
                   textColor: textColor,
                   isObscured: _obscurePassword,
@@ -174,7 +178,7 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
               const SizedBox(height: 24),
 
               // Confirm Password
-              _buildLabel('Confirmar Nova Senha', textColor),
+              _buildLabel(context.tr('password.confirm_password'), textColor),
               const SizedBox(height: 8),
               TextFormField(
                 controller: _confirmPasswordController,
@@ -182,15 +186,15 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                 style: TextStyle(color: textColor),
                 validator: (value) {
                   if (value == null || value.isEmpty) {
-                    return 'Confirme sua senha';
+                    return context.tr('password.confirm_password_required');
                   }
                   if (value != _passwordController.text) {
-                    return 'As senhas não coincidem';
+                    return context.tr('password.passwords_dont_match');
                   }
                   return null;
                 },
                 decoration: _buildInputDecoration(
-                  hint: 'Repita a senha',
+                  hint: context.tr('password.repeat_password_hint'),
                   cardColor: cardColor,
                   textColor: textColor,
                   isObscured: _obscureConfirmPassword,
@@ -217,12 +221,13 @@ class _ChangePasswordPageState extends State<ChangePasswordPage> {
                         child: CircularProgressIndicator(
                             strokeWidth: 2, color: Colors.white),
                       )
-                    : const Text(
-                        'Atualizar Senha',
-                        style: TextStyle(
+                    : Text(
+                        context.tr('password.update_button'),
+                        style: const TextStyle(
                             fontSize: 16, fontWeight: FontWeight.bold),
                       ),
               ),
+              const MobileScrollPadding(),
             ],
           ),
         ),

@@ -3,6 +3,8 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/features/love/services/patas_love_service.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import '../../../app.dart';
 
 class BlockedUsersPage extends StatefulWidget {
@@ -48,23 +50,26 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
     final currentUserId = _supabase.auth.currentUser?.id;
     if (currentUserId == null) return;
 
+    final unblockTitle = context.tr('blocked.unblock_title');
+    final unblockDesc = context.tr('blocked.unblock_desc', {'name': userName});
+    final unblockSuccessMsg = context.tr('blocked.unblock_success', {'name': userName});
+    final unblockErrorMsg = context.tr('blocked.unblock_error');
+
     final confirm = await showDialog<bool>(
       context: context,
       builder: (dialogContext) => AlertDialog(
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
-        title: const Text('Desbloquear Tutor?'),
-        content: Text(
-          'Deseja desbloquear $userName? Ele(a) poderá visualizar seu perfil e enviar mensagens novamente.',
-        ),
+        title: Text(unblockTitle),
+        content: Text(unblockDesc),
         actions: [
           TextButton(
             onPressed: () => Navigator.of(dialogContext).pop(false),
-            child: const Text('Cancelar'),
+            child: Text(context.tr('common.cancel')),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(backgroundColor: AppColors.patasColor),
             onPressed: () => Navigator.of(dialogContext).pop(true),
-            child: const Text('Desbloquear', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('blocked.unblock_btn'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -80,12 +85,12 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
     if (mounted) {
       if (success) {
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$userName foi desbloqueado(a) com sucesso.')),
+          SnackBar(content: Text(unblockSuccessMsg)),
         );
         _fetchBlockedUsers();
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Falha ao desbloquear tutor. Tente novamente.')),
+          SnackBar(content: Text(unblockErrorMsg)),
         );
       }
     }
@@ -117,7 +122,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                       ),
                       const SizedBox(height: 16),
                       Text(
-                        'Nenhum tutor bloqueado',
+                        context.tr('blocked.empty_title'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 18,
@@ -126,7 +131,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'Os tutores que você bloquear aparecerão aqui e poderão ser desbloqueados a qualquer momento.',
+                        context.tr('blocked.empty_desc'),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           fontSize: 13,
@@ -141,9 +146,13 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                 shrinkWrap: widget.isDialog,
                 physics: widget.isDialog ? const NeverScrollableScrollPhysics() : null,
                 padding: const EdgeInsets.all(16),
-                itemCount: _blockedUsers.length,
+                itemCount: _blockedUsers.length + 1,
                 separatorBuilder: (_, __) => const SizedBox(height: 12),
                 itemBuilder: (context, index) {
+                  if (index == _blockedUsers.length) {
+                    return const MobileScrollPadding();
+                  }
+
                   final user = _blockedUsers[index];
                   final name = user['user_name'] as String;
                   final photo = user['user_photo'] as String?;
@@ -192,7 +201,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                'Tutor Bloqueado',
+                                context.tr('blocked.user_badge'),
                                 style: TextStyle(
                                   fontSize: 12,
                                   color: isDark ? Colors.white54 : Colors.black54,
@@ -212,9 +221,9 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                                 horizontal: 12, vertical: 8),
                           ),
                           onPressed: () => _unblockUser(blockedId, name),
-                          child: const Text(
-                            'Desbloquear',
-                            style: TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
+                          child: Text(
+                            context.tr('blocked.unblock_btn'),
+                            style: const TextStyle(fontSize: 12, fontWeight: FontWeight.bold),
                           ),
                         ),
                       ],
@@ -233,9 +242,9 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
             child: Row(
               mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                const Text(
-                  'Usuários Bloqueados',
-                  style: TextStyle(
+                Text(
+                  context.tr('blocked.title'),
+                  style: const TextStyle(
                     fontFamily: 'Fredoka',
                     fontSize: 22,
                     color: AppColors.patasColor,
@@ -244,7 +253,7 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
                 ),
                 IconButton(
                   onPressed: () => Navigator.of(context).pop(),
-                  tooltip: 'Fechar',
+                  tooltip: context.tr('common.close'),
                   icon: Icon(
                     Icons.close_rounded,
                     color: isDark ? Colors.white70 : Colors.black54,
@@ -272,9 +281,9 @@ class _BlockedUsersPageState extends State<BlockedUsersPage> {
           ),
           onPressed: () => Navigator.pop(context),
         ),
-        title: const Text(
-          'Usuários Bloqueados',
-          style: TextStyle(
+        title: Text(
+          context.tr('blocked.title'),
+          style: const TextStyle(
             fontFamily: 'Fredoka',
             color: AppColors.patasColor,
             fontSize: 20,

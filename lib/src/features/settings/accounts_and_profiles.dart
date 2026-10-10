@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/features/pets/models/pet_model.dart';
 import 'package:patas_web_app/src/features/pets/pets_create/add_kind_page.dart';
 import 'package:patas_web_app/src/features/pets/pets_edit/edit_pet_page.dart';
@@ -79,21 +81,26 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
   }
 
   Future<void> _deleteProfile(String id, String type, String name) async {
+    final deleteTitle = context.tr('accounts.delete_title', {'type': type});
+    final deleteConfirm = context.tr('accounts.delete_confirm', {'name': name});
+    final deleteSuccessMsg = context.tr('accounts.delete_success', {'type': type});
+    final deleteErrorMsg = context.tr('accounts.delete_error');
+    final myProfileFallback = context.tr('accounts.my_profile');
+
     final confirmed = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: Text('Excluir $type'),
-        content: Text(
-            'Tem certeza que deseja excluir o perfil de "$name"? Esta ação não pode ser desfeita.'),
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(deleteTitle),
+        content: Text(deleteConfirm),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            onPressed: () => Navigator.pop(dialogCtx, false),
+            child: Text(context.tr('common.cancel')),
           ),
           TextButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(dialogCtx, true),
             style: TextButton.styleFrom(foregroundColor: Colors.red),
-            child: const Text('Excluir'),
+            child: Text(context.tr('common.delete')),
           ),
         ],
       ),
@@ -120,7 +127,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
           if (user != null) {
             await accountProvider.setActiveAccount(ActiveAccount(
               id: user.id,
-              name: _userData?['name'] ?? 'Meu Perfil',
+              name: _userData?['name'] ?? myProfileFallback,
               photoUrl: _userData?['photo_url'],
               type: AccountType.user,
             ));
@@ -130,15 +137,14 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
         if (!mounted) return;
 
         ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(content: Text('$type excluído com sucesso!')),
+          SnackBar(content: Text(deleteSuccessMsg)),
         );
         _loadData();
       } catch (e) {
         debugPrint('Erro ao excluir perfil: $e');
         if (!mounted) return;
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(
-              content: Text('Erro ao excluir perfil. Tente novamente.')),
+          SnackBar(content: Text(deleteErrorMsg)),
         );
         setState(() => _isLoading = false);
       }
@@ -160,9 +166,9 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               elevation: 0,
               automaticallyImplyLeading: false,
               centerTitle: true,
-              title: const Text(
-                'Contas e Perfis',
-                style: TextStyle(
+              title: Text(
+                context.tr('accounts.title'),
+                style: const TextStyle(
                     color: AppColors.patasColor,
                     fontSize: 22,
                     fontFamily: 'Fredoka',
@@ -188,9 +194,9 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                 ),
                 onPressed: () => Navigator.pop(context),
               ),
-              title: const Text(
-                'Contas e Perfis',
-                style: TextStyle(
+              title: Text(
+                context.tr('accounts.title'),
+                style: const TextStyle(
                     color: AppColors.patasColor,
                     fontSize: 22,
                     fontFamily: 'Fredoka',
@@ -206,7 +212,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
             padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 10),
             children: [
               Text(
-                'Gerencie as contas e perfis associados ao seu usuário.',
+                context.tr('accounts.subtitle'),
                 style: TextStyle(
                     color: textColor.withValues(alpha: 0.7),
                     fontSize: 14,
@@ -215,7 +221,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               const SizedBox(height: 25),
 
               // Seção do Usuário Principal
-              _buildSectionTitle('Sua Conta', textColor),
+              _buildSectionTitle(context.tr('accounts.your_account'), textColor),
               _buildUserCard(cardColor, textColor),
 
               const SizedBox(height: 30),
@@ -224,7 +230,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildSectionTitle('Meus Pets', textColor),
+                  _buildSectionTitle(context.tr('accounts.my_pets'), textColor),
                   TextButton.icon(
                     onPressed: () {
                       Navigator.push(
@@ -235,13 +241,13 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                     },
                     icon: const Icon(Icons.add_circle_outline,
                         size: 20, color: AppColors.patasColor),
-                    label: const Text('Adicionar',
-                        style: TextStyle(color: AppColors.patasColor)),
+                    label: Text(context.tr('accounts.add_btn'),
+                        style: const TextStyle(color: AppColors.patasColor)),
                   ),
                 ],
               ),
               if (!_isLoading && _userPets.isEmpty)
-                _buildEmptyState('Nenhum pet cadastrado', Icons.pets, textColor)
+                _buildEmptyState(context.tr('accounts.no_pets'), Icons.pets, textColor)
               else
                 ..._userPets
                     .map((pet) => _buildPetCard(pet, cardColor, textColor)),
@@ -252,7 +258,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildSectionTitle('Minhas ONGs e Abrigos', textColor),
+                  _buildSectionTitle(context.tr('accounts.my_ongs'), textColor),
                   if (_userOngs.isEmpty)
                     TextButton.icon(
                       onPressed: () {
@@ -265,14 +271,14 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                       },
                       icon: const Icon(Icons.add_circle_outline,
                           size: 20, color: AppColors.patasColor),
-                      label: const Text('Criar',
-                          style: TextStyle(color: AppColors.patasColor)),
+                      label: Text(context.tr('accounts.create_btn'),
+                          style: const TextStyle(color: AppColors.patasColor)),
                     ),
                 ],
               ),
               if (!_isLoading && _userOngs.isEmpty)
                 _buildEmptyState(
-                    'Nenhuma ONG cadastrada', Icons.home_work, textColor)
+                    context.tr('accounts.no_ongs'), Icons.home_work, textColor)
               else
                 ..._userOngs
                     .map((ong) => _buildOngCard(ong, cardColor, textColor)),
@@ -283,7 +289,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  _buildSectionTitle('Minhas Empresas e Marcas', textColor),
+                  _buildSectionTitle(context.tr('accounts.my_corps'), textColor),
                   if (_userCorps.isEmpty)
                     TextButton.icon(
                       onPressed: () {
@@ -296,19 +302,20 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                       },
                       icon: const Icon(Icons.add_circle_outline,
                           size: 20, color: AppColors.patasColor),
-                      label: const Text('Criar',
-                          style: TextStyle(color: AppColors.patasColor)),
+                      label: Text(context.tr('accounts.create_btn'),
+                          style: const TextStyle(color: AppColors.patasColor)),
                     ),
                 ],
               ),
               if (!_isLoading && _userCorps.isEmpty)
                 _buildEmptyState(
-                    'Nenhuma empresa cadastrada', Icons.store, textColor)
+                    context.tr('accounts.no_corps'), Icons.store, textColor)
               else
                 ..._userCorps
                     .map((corp) => _buildCorpCard(corp, cardColor, textColor)),
 
               const SizedBox(height: 40),
+              const MobileScrollPadding(),
             ],
           ),
         ),
@@ -326,6 +333,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
           fontSize: 18,
           fontWeight: FontWeight.bold,
           letterSpacing: 0.5,
+          fontFamily: 'Fredoka',
         ),
       ),
     );
@@ -364,7 +372,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  _userData?['name'] ?? 'Carregando...',
+                  _userData?['name'] ?? context.tr('common.loading'),
                   overflow: TextOverflow.ellipsis,
                   maxLines: 1,
                   style: TextStyle(
@@ -389,9 +397,9 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
               color: AppColors.patasColor.withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(10),
             ),
-            child: const Text(
-              'Principal',
-              style: TextStyle(
+            child: Text(
+              context.tr('accounts.primary_badge'),
+              style: const TextStyle(
                 color: AppColors.patasColor,
                 fontSize: 10,
                 fontWeight: FontWeight.bold,
@@ -442,7 +450,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                   ),
                 ),
                 Text(
-                  pet.breed ?? 'Raça não definida',
+                  pet.breed ?? context.tr('accounts.undefined_breed'),
                   style: TextStyle(
                     color: textColor.withValues(alpha: 0.5),
                     fontSize: 12,
@@ -505,7 +513,7 @@ class _AccountsAndProfileState extends State<AccountsAndProfile> {
                   ),
                 ),
                 Text(
-                  ong.cnpj ?? 'CNPJ não informado',
+                  ong.cnpj ?? context.tr('accounts.cnpj_not_provided'),
                   style: TextStyle(
                     color: textColor.withValues(alpha: 0.5),
                     fontSize: 12,

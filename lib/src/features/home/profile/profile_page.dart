@@ -1729,16 +1729,16 @@ class _ProfilePageState extends State<ProfilePage> {
   void _confirmDeleteFamily(FamilyMember member) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: Text(context.tr('profile.confirm_delete_title')),
         content: Text(context.tr('profile.confirm_delete_family_desc', {'name': member.name, 'relationship': member.relationship})),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(dialogCtx),
               child: Text(context.tr('common.cancel'))),
           TextButton(
             onPressed: () async {
-              final nav = Navigator.of(context);
+              final nav = Navigator.of(dialogCtx);
               final msg = ScaffoldMessenger.of(context);
               nav.pop();
               try {
@@ -1765,16 +1765,16 @@ class _ProfilePageState extends State<ProfilePage> {
       Pet pet, List<Pet> pets, ActivePetProvider activePetProvider) {
     showDialog(
       context: context,
-      builder: (context) => AlertDialog(
+      builder: (dialogCtx) => AlertDialog(
         title: Text(context.tr('profile.confirm_delete_title')),
         content: Text(context.tr('profile.confirm_delete_pet_desc', {'name': pet.name})),
         actions: [
           TextButton(
-              onPressed: () => Navigator.pop(context),
+              onPressed: () => Navigator.pop(dialogCtx),
               child: Text(context.tr('common.cancel'))),
           TextButton(
             onPressed: () async {
-              final nav = Navigator.of(context);
+              final nav = Navigator.of(dialogCtx);
               final msg = ScaffoldMessenger.of(context);
               nav.pop();
               try {
@@ -1892,9 +1892,9 @@ class _ProfilePageState extends State<ProfilePage> {
         if (value == 'unfollow') {
           _handleUnfollow(activePet);
         } else if (value == 'block') {
-          _confirmBlockTutor(context, activePet);
+          _confirmBlockTutor(activePet);
         } else if (value == 'report') {
-          _reportTutor(context, activePet);
+          _reportTutor(activePet);
         }
       },
       itemBuilder: (context) => [
@@ -1991,7 +1991,7 @@ class _ProfilePageState extends State<ProfilePage> {
     }
   }
 
-  void _confirmBlockTutor(BuildContext context, Pet targetPet) {
+  void _confirmBlockTutor(Pet targetPet) {
     showDialog(
       context: context,
       builder: (dialogContext) => AlertDialog(
@@ -2060,7 +2060,7 @@ class _ProfilePageState extends State<ProfilePage> {
     );
   }
 
-  void _reportTutor(BuildContext context, Pet targetPet) {
+  void _reportTutor(Pet targetPet) {
     String selectedReason = 'Conteúdo inadequado ou ofensivo';
     final detailsController = TextEditingController();
     bool isSubmitting = false;
@@ -2076,7 +2076,7 @@ class _ProfilePageState extends State<ProfilePage> {
     showDialog(
       context: context,
       builder: (dialogContext) => StatefulBuilder(
-        builder: (context, setStateDialog) => AlertDialog(
+        builder: (builderContext, setStateDialog) => AlertDialog(
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
           title: Row(
             children: [

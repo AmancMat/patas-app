@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/providers/accessibility_provider.dart';
 import 'package:patas_web_app/src/providers/font_size_provider.dart';
 import 'package:provider/provider.dart';
@@ -20,17 +21,17 @@ class AccessibilitySettingsPanel extends StatelessWidget {
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          _buildSectionTitle('Visualização', isDark),
+          _buildSectionTitle(context.tr('accessibility.section_view'), isDark),
           _buildFontSizeControl(context, isDark),
           const SizedBox(height: 16),
           _buildColorBlindControl(context, isDark),
           const SizedBox(height: 24),
-          
-          _buildSectionTitle('Movimento e Interação', isDark),
+
+          _buildSectionTitle(context.tr('accessibility.section_motion'), isDark),
           _buildReduceMotionControl(context, isDark),
           const SizedBox(height: 16),
           _buildExpandedSpacingControl(context, isDark),
-          
+
           const SizedBox(height: 16),
         ],
       ),
@@ -46,6 +47,7 @@ class AccessibilitySettingsPanel extends StatelessWidget {
           color: isDark ? AppColors.patasColor : AppColors.patasColor,
           fontWeight: FontWeight.bold,
           fontSize: 18,
+          fontFamily: 'Fredoka',
         ),
       ),
     );
@@ -64,16 +66,17 @@ class AccessibilitySettingsPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Tamanho da Fonte',
+                context.tr('accessibility.font_size_title'),
                 style: TextStyle(
                   color: isDark ? Colors.white : AppColors.darkBG,
                   fontWeight: FontWeight.bold,
                   fontSize: 16,
+                  fontFamily: 'Fredoka',
                 ),
               ),
               const SizedBox(height: 8),
               Text(
-                'Ajuste o tamanho dos textos em todo o aplicativo.',
+                context.tr('accessibility.font_size_desc'),
                 style: TextStyle(
                   color: isDark ? Colors.grey[400] : Colors.grey[700],
                   fontSize: 14,
@@ -84,29 +87,29 @@ class AccessibilitySettingsPanel extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
                   _buildFontButton(
-                    context, 
-                    'A', 
-                    0.85, 
-                    'small', 
-                    fontProvider, 
+                    context,
+                    'A',
+                    0.85,
+                    'small',
+                    fontProvider,
                     isDark,
                     14.0,
                   ),
                   _buildFontButton(
-                    context, 
-                    'A', 
-                    1.0, 
-                    'normal', 
-                    fontProvider, 
+                    context,
+                    'A',
+                    1.0,
+                    'normal',
+                    fontProvider,
                     isDark,
                     18.0,
                   ),
                   _buildFontButton(
-                    context, 
-                    'A', 
-                    1.2, 
-                    'large', 
-                    fontProvider, 
+                    context,
+                    'A',
+                    1.2,
+                    'large',
+                    fontProvider,
                     isDark,
                     24.0,
                   ),
@@ -120,16 +123,16 @@ class AccessibilitySettingsPanel extends StatelessWidget {
   }
 
   Widget _buildFontButton(
-    BuildContext context, 
-    String label, 
-    double multiplier, 
-    String level, 
-    FontSizeProvider provider, 
+    BuildContext context,
+    String label,
+    double multiplier,
+    String level,
+    FontSizeProvider provider,
     bool isDark,
     double iconSize,
   ) {
     final isSelected = provider.multiplier == multiplier;
-    
+
     return InkWell(
       onTap: () {
         if (level == 'small') {
@@ -145,12 +148,12 @@ class AccessibilitySettingsPanel extends StatelessWidget {
         width: 60,
         height: 60,
         decoration: BoxDecoration(
-          color: isSelected 
-              ? AppColors.patasColor.withValues(alpha: 0.2) 
+          color: isSelected
+              ? AppColors.patasColor.withValues(alpha: 0.2)
               : Colors.transparent,
           border: Border.all(
-            color: isSelected 
-                ? AppColors.patasColor 
+            color: isSelected
+                ? AppColors.patasColor
                 : (isDark ? Colors.grey[700]! : Colors.grey[300]!),
             width: 2,
           ),
@@ -162,8 +165,8 @@ class AccessibilitySettingsPanel extends StatelessWidget {
             style: TextStyle(
               fontSize: iconSize,
               fontWeight: isSelected ? FontWeight.bold : FontWeight.normal,
-              color: isSelected 
-                  ? AppColors.patasColor 
+              color: isSelected
+                  ? AppColors.patasColor
                   : (isDark ? Colors.white : AppColors.darkBG),
             ),
           ),
@@ -189,16 +192,17 @@ class AccessibilitySettingsPanel extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Reduzir Animações',
+                      context.tr('accessibility.reduce_motion_title'),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : AppColors.darkBG,
                         fontSize: 16,
+                        fontFamily: 'Fredoka',
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Desativa transições, deslizes e efeitos visuais elaborados.',
+                      context.tr('accessibility.reduce_motion_desc'),
                       style: TextStyle(
                         color: isDark ? Colors.grey[400] : Colors.grey[700],
                         fontSize: 12,
@@ -238,16 +242,17 @@ class AccessibilitySettingsPanel extends StatelessWidget {
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
                     Text(
-                      'Espaçamento Ampliado',
+                      context.tr('accessibility.expanded_spacing_title'),
                       style: TextStyle(
                         fontWeight: FontWeight.bold,
                         color: isDark ? Colors.white : AppColors.darkBG,
                         fontSize: 16,
+                        fontFamily: 'Fredoka',
                       ),
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Aumenta a distância entre elementos, facilitando o toque.',
+                      context.tr('accessibility.expanded_spacing_desc'),
                       style: TextStyle(
                         color: isDark ? Colors.grey[400] : Colors.grey[700],
                         fontSize: 12,
@@ -283,16 +288,17 @@ class AccessibilitySettingsPanel extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Filtro de Cores (Daltonismo)',
+                context.tr('accessibility.colorblind_title'),
                 style: TextStyle(
                   fontWeight: FontWeight.bold,
                   color: isDark ? Colors.white : AppColors.darkBG,
                   fontSize: 16,
+                  fontFamily: 'Fredoka',
                 ),
               ),
               const SizedBox(height: 4),
               Text(
-                'Aplica uma correção visual para ajudar na distinção de cores.',
+                context.tr('accessibility.colorblind_desc'),
                 style: TextStyle(
                   color: isDark ? Colors.grey[400] : Colors.grey[700],
                   fontSize: 12,
@@ -312,28 +318,48 @@ class AccessibilitySettingsPanel extends StatelessWidget {
                 child: DropdownButtonHideUnderline(
                   child: DropdownButton<ColorBlindMode>(
                     value: accProvider.colorBlindMode,
-                    dropdownColor: isDark ? AppColors.darkBG : Colors.white,
+                    dropdownColor: isDark ? const Color(0xFF1E293B) : Colors.white,
                     isExpanded: true,
                     icon: Icon(
                       Icons.arrow_drop_down,
                       color: isDark ? Colors.white : AppColors.darkBG,
                     ),
-                    items: const [
+                    items: [
                       DropdownMenuItem(
                         value: ColorBlindMode.none,
-                        child: Text('Nenhum (Padrão)'),
+                        child: Text(
+                          context.tr('accessibility.colorblind_none'),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : AppColors.darkBG,
+                          ),
+                        ),
                       ),
                       DropdownMenuItem(
                         value: ColorBlindMode.protanopia,
-                        child: Text('Protanopia (Vermelho / Verde)'),
+                        child: Text(
+                          context.tr('accessibility.colorblind_protanopia'),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : AppColors.darkBG,
+                          ),
+                        ),
                       ),
                       DropdownMenuItem(
                         value: ColorBlindMode.deuteranopia,
-                        child: Text('Deuteranopia (Verde / Vermelho)'),
+                        child: Text(
+                          context.tr('accessibility.colorblind_deuteranopia'),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : AppColors.darkBG,
+                          ),
+                        ),
                       ),
                       DropdownMenuItem(
                         value: ColorBlindMode.tritanopia,
-                        child: Text('Tritanopia (Azul / Amarelo)'),
+                        child: Text(
+                          context.tr('accessibility.colorblind_tritanopia'),
+                          style: TextStyle(
+                            color: isDark ? Colors.white : AppColors.darkBG,
+                          ),
+                        ),
                       ),
                     ],
                     onChanged: (ColorBlindMode? newValue) {

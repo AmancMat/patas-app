@@ -5,6 +5,7 @@ import 'package:flutter/services.dart';
 import 'package:qr_flutter/qr_flutter.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import 'package:patas_web_app/src/features/pets/active_pet_provider.dart';
 import '../../acolhe/services/shelter_service.dart';
 import '../models/solana_pay_model.dart';
@@ -181,8 +182,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               Expanded(
                 child: Text(
                   _selectedAmount > 0
-                      ? '🎉 Doação de R\$ ${roundedBrl.toStringAsFixed(2).replaceAll('.', ',')} ($_selectedAmount $_selectedToken) computada com sucesso!'
-                      : '🎉 Doação de R\$ ${roundedBrl.toStringAsFixed(2).replaceAll('.', ',')} ($_selectedToken) computada com sucesso!',
+                      ? context.t('solana.donation_computed_success', args: {'amount': roundedBrl.toStringAsFixed(2).replaceAll('.', ','), 'token': '$_selectedAmount $_selectedToken'})
+                      : context.t('solana.donation_computed_success', args: {'amount': roundedBrl.toStringAsFixed(2).replaceAll('.', ','), 'token': _selectedToken}),
                   style: const TextStyle(fontFamily: 'Fredoka', fontSize: 13, color: Colors.white),
                 ),
               ),
@@ -222,13 +223,13 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
     Clipboard.setData(ClipboardData(text: _currentDonation.recipientWallet));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Row(
+        content: Row(
           children: [
-            Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.check_circle_rounded, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Endereço Solana copiado! Transfira via Phantom ou Solflare.',
+                context.t('solana.wallet_copied'),
                 style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
               ),
             ),
@@ -260,7 +261,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               const Icon(Icons.qr_code_scanner_rounded, color: Color(0xFF9945FF), size: 24),
               const SizedBox(width: 10),
               Text(
-                'Como pagar pelo Desktop',
+                context.t('solana.desktop_how_to_pay_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 16,
@@ -271,7 +272,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             ],
           ),
           content: Text(
-            'No computador, abra o app da Phantom ou Solflare no seu celular e aponte a câmera para o QR Code na tela.\n\nA transação será identificada e confirmada instantaneamente!',
+            context.t('solana.desktop_how_to_pay_desc'),
             style: TextStyle(
               fontSize: 13,
               height: 1.4,
@@ -281,7 +282,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
           actions: [
             TextButton(
               onPressed: () => Navigator.pop(ctx),
-              child: const Text('Entendi', style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
+              child: Text(context.t('solana.understood'), style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
             ),
           ],
         ),
@@ -298,7 +299,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               const Icon(Icons.account_balance_wallet_outlined, color: Color(0xFF9945FF), size: 24),
               const SizedBox(width: 10),
               Text(
-                'Carteira Solana',
+                context.t('solana.wallet_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 16,
@@ -313,7 +314,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Nenhum aplicativo de carteira compatível (Phantom ou Solflare) respondeu à solicitação.',
+                context.t('solana.no_wallet_app_found'),
                 style: TextStyle(
                   fontSize: 13.5,
                   height: 1.4,
@@ -323,7 +324,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               ),
               const SizedBox(height: 8),
               Text(
-                'Você pode instalar a Phantom Wallet na Play Store ou copiar o endereço da ONG para transferir diretamente de qualquer corretora ou aplicativo.',
+                context.t('solana.install_wallet_desc'),
                 style: TextStyle(
                   fontSize: 12.5,
                   height: 1.4,
@@ -338,8 +339,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 Navigator.pop(ctx);
                 _copyWallet(context);
               },
-              child: const Text(
-                'Copiar Endereço',
+              child: Text(
+                context.t('solana.copy_address'),
                 style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
               ),
             ),
@@ -349,8 +350,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 SolanaPayService.openPhantomPlayStore();
               },
               icon: const Icon(Icons.download_rounded, size: 16),
-              label: const Text(
-                'Baixar Phantom',
+              label: Text(
+                context.t('solana.download_phantom'),
                 style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
@@ -381,8 +382,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
     if (!launched && mounted) {
       ScaffoldMessenger.of(context).showSnackBar(
         SnackBar(
-          content: const Text(
-            'Não foi possível abrir o link da Cloak automaticamente.',
+          content: Text(
+            context.t('solana.cant_open_cloak'),
             style: TextStyle(fontFamily: 'Fredoka'),
           ),
           backgroundColor: Colors.red.shade700,
@@ -401,13 +402,13 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
     Clipboard.setData(ClipboardData(text: url));
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
-        content: const Row(
+        content: Row(
           children: [
-            Icon(Icons.shield_rounded, color: Colors.white, size: 20),
-            SizedBox(width: 10),
+            const Icon(Icons.shield_rounded, color: Colors.white, size: 20),
+            const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Link da Doação Privada Cloak copiado com sucesso!',
+                context.t('solana.cloak_link_copied'),
                 style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
               ),
             ),
@@ -440,7 +441,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             const SizedBox(width: 10),
             Expanded(
               child: Text(
-                'Privacidade com Cloak',
+                context.t('solana.cloak_privacy_title'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 16,
@@ -456,7 +457,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Como funciona a Doação Privada no Patas:',
+              context.t('solana.cloak_how_it_works'),
               style: TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 13,
@@ -466,10 +467,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             ),
             const SizedBox(height: 8),
             Text(
-              '1. A Cloak utiliza Provas Zero-Knowledge (modelo Zcash na Solana).\n'
-              '2. Os fundos entram em um Shielded Pool (piscina protegida).\n'
-              '3. O abrigo recebe a doação diretamente, mas a ponte que liga a sua carteira ao destino fica 100% invisível no explorador da Solana.\n'
-              '4. Seu patrimônio e seu saldo pessoal continuam em sigilo absoluto.',
+              context.t('solana.cloak_how_it_works_desc'),
               style: TextStyle(
                 fontSize: 12.5,
                 height: 1.45,
@@ -484,13 +482,13 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: const Color(0xFF14F195).withValues(alpha: 0.3)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.verified_user_rounded, color: Color(0xFF14F195), size: 18),
-                  SizedBox(width: 8),
+                  const Icon(Icons.verified_user_rounded, color: Color(0xFF14F195), size: 18),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Protocolo oficial auditado na Solana Mainnet.',
+                      context.t('solana.cloak_audited_badge'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 11,
@@ -507,12 +505,12 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(ctx),
-            child: const Text('Entendi', style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
+            child: Text(context.t('solana.understood'), style: const TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold)),
           ),
           ElevatedButton.icon(
             onPressed: () => SolanaPayService.openExplorer(address: 'https://docs.cloak.ag'),
             icon: const Icon(Icons.open_in_new_rounded, size: 14),
-            label: const Text('Docs Cloak', style: TextStyle(fontFamily: 'Fredoka', fontSize: 12)),
+            label: Text(context.t('solana.docs_cloak'), style: const TextStyle(fontFamily: 'Fredoka', fontSize: 12)),
             style: ElevatedButton.styleFrom(
               backgroundColor: const Color(0xFF14F195),
               foregroundColor: Colors.black,
@@ -590,7 +588,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                     Row(
                       children: [
                         Text(
-                          'Doação Anônima (Cloak)',
+                          context.t('solana.anonymous_donation_title'),
                           style: TextStyle(
                             fontFamily: 'Fredoka',
                             fontSize: 13,
@@ -622,8 +620,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                     const SizedBox(height: 2),
                     Text(
                       _isCloakPrivacyEnabled
-                          ? 'Sua carteira pessoal e saldo ficam 100% invisíveis na chain.'
-                          : 'Oculta sua carteira pessoal via Zero-Knowledge.',
+                          ? context.t('solana.anonymous_donation_desc_on')
+                          : context.t('solana.anonymous_donation_desc_off'),
                       style: TextStyle(
                         fontSize: 11,
                         color: _isCloakPrivacyEnabled ? (isDark ? Colors.white70 : Colors.black87) : (isDark ? Colors.white60 : Colors.black54),
@@ -658,13 +656,13 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 borderRadius: BorderRadius.circular(10),
                 border: Border.all(color: const Color(0xFF14F195).withValues(alpha: 0.25)),
               ),
-              child: const Row(
+              child: Row(
                 children: [
-                  Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF10B981)),
-                  SizedBox(width: 8),
+                  const Icon(Icons.info_outline_rounded, size: 14, color: Color(0xFF10B981)),
+                  const SizedBox(width: 8),
                   Expanded(
                     child: Text(
-                      'Zcash on Solana: Como a prova ZK protege você?',
+                      context.t('solana.zk_info_banner'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 11.5,
@@ -692,7 +690,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             children: [
               Expanded(
                 child: _buildTokenToggleItem(
-                  title: 'Dólar Digital (USDC)',
+                  title: context.t('solana.usdc_title'),
                   symbol: 'USDC',
                   isSelected: _selectedToken == 'USDC',
                   isDark: isDark,
@@ -700,7 +698,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
               ),
               Expanded(
                 child: _buildTokenToggleItem(
-                  title: 'Solana (SOL)',
+                  title: context.t('solana.sol_title'),
                   symbol: 'SOL',
                   isSelected: _selectedToken == 'SOL',
                   isDark: isDark,
@@ -714,7 +712,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
 
         // Presets de Valores
         Text(
-          'Escolha o valor da doação:',
+          context.t('solana.choose_amount'),
           style: TextStyle(
             fontFamily: 'Fredoka',
             fontSize: 13,
@@ -736,7 +734,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             return ChoiceChip(
               label: Text(
                 isFree
-                    ? '✨ Valor Livre'
+                    ? context.t('solana.free_amount')
                     : (_selectedToken == 'USDC'
                         ? '\$ ${val.toInt()} (~R\$ $brlEquiv)'
                         : '$val SOL (~R\$ $brlEquiv)'),
@@ -763,7 +761,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
         if (_selectedAmount == 0.0) ...[
           const SizedBox(height: 8),
           Text(
-            '💡 Escaneie o QR Code e digite na Phantom/Solflare o valor exato que deseja doar.',
+            context.t('solana.free_amount_hint'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 12,
@@ -831,8 +829,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                         const Icon(Icons.check_circle_rounded,
                             size: 40, color: Color(0xFF0F172A)),
                         const SizedBox(height: 4),
-                        const Text(
-                          'PAGO COM SUCESSO!',
+                        Text(
+                          context.t('solana.paid_success'),
                           textAlign: TextAlign.center,
                           style: TextStyle(
                             fontFamily: 'Fredoka',
@@ -867,13 +865,13 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                             onTap: () => SolanaPayService.openExplorer(
                               transactionSignature: _confirmedTxSignature,
                             ),
-                            child: const Row(
+                            child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: [
-                                Icon(Icons.open_in_new_rounded, size: 12, color: Color(0xFF0F172A)),
-                                SizedBox(width: 4),
+                                const Icon(Icons.open_in_new_rounded, size: 12, color: Color(0xFF0F172A)),
+                                const SizedBox(width: 4),
                                 Text(
-                                  'Ver Comprovante',
+                                  context.t('solana.view_receipt'),
                                   style: TextStyle(
                                     fontSize: 10.5,
                                     fontWeight: FontWeight.bold,
@@ -920,10 +918,10 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                   const SizedBox(width: 5),
                   Text(
                     _isPaymentConfirmed
-                        ? 'Transação Confirmada On-Chain'
+                        ? context.t('solana.tx_confirmed_onchain')
                         : (_isCloakPrivacyEnabled
-                            ? 'Modo Cloak Ativo • Zero-Knowledge Shield'
-                            : 'Aguardando pagamento na Devnet...'),
+                            ? context.t('solana.cloak_active_shield')
+                            : context.t('solana.waiting_devnet_payment')),
                     style: const TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 11,
@@ -956,7 +954,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'Doação somada à meta da campanha!',
+                        context.t('solana.donation_added_to_goal'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 13,
@@ -965,7 +963,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                         ),
                       ),
                       Text(
-                        'O progresso da barra e o total arrecadado já foram atualizados no mural.',
+                        context.t('solana.progress_updated_mural'),
                         style: TextStyle(
                           fontSize: 11,
                           color: isDark ? Colors.white70 : Colors.black87,
@@ -983,8 +981,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
             child: ElevatedButton.icon(
               onPressed: () => Navigator.pop(context, true),
               icon: const Icon(Icons.check_circle_rounded, size: 18),
-              label: const Text(
-                'Concluir e Ver no Mural',
+              label: Text(
+                context.t('solana.finish_view_mural'),
                 style: TextStyle(fontFamily: 'Fredoka', fontSize: 14, fontWeight: FontWeight.bold),
               ),
               style: ElevatedButton.styleFrom(
@@ -1017,7 +1015,7 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
                   Text(
-                    'Endereço da Carteira Solana (ONG):',
+                    context.t('solana.shelter_wallet_address'),
                     style: TextStyle(
                       fontFamily: 'Fredoka',
                       fontSize: 11,
@@ -1027,14 +1025,14 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                   ),
                   InkWell(
                     onTap: () => SolanaPayService.openExplorer(address: _currentDonation.recipientWallet),
-                    child: const Row(
+                    child: Row(
                       mainAxisSize: MainAxisSize.min,
                       children: [
-                        Icon(Icons.launch_rounded, size: 12, color: Color(0xFF14F195)),
-                        SizedBox(width: 4),
+                        const Icon(Icons.launch_rounded, size: 12, color: Color(0xFF14F195)),
+                        const SizedBox(width: 4),
                         Text(
-                          'Explorer',
-                          style: TextStyle(
+                          context.t('solana.explorer'),
+                          style: const TextStyle(
                             fontSize: 11,
                             fontWeight: FontWeight.bold,
                             color: Color(0xFF14F195),
@@ -1069,8 +1067,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 child: OutlinedButton.icon(
                   onPressed: () => _copyCloakLink(context),
                   icon: const Icon(Icons.copy_rounded, size: 16),
-                  label: const Text(
-                    'Copiar Link ZK',
+                  label: Text(
+                    context.t('solana.copy_zk_link'),
                     style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -1090,8 +1088,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 child: ElevatedButton.icon(
                   onPressed: _handleCloakDonation,
                   icon: const Icon(Icons.shield_rounded, size: 18),
-                  label: const Text(
-                    'Doar com Cloak',
+                  label: Text(
+                    context.t('solana.donate_with_cloak'),
                     style: TextStyle(fontFamily: 'Fredoka', fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -1114,8 +1112,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 child: OutlinedButton.icon(
                   onPressed: () => _copyWallet(context),
                   icon: const Icon(Icons.copy_rounded, size: 16),
-                  label: const Text(
-                    'Copiar Wallet',
+                  label: Text(
+                    context.t('solana.copy_wallet'),
                     style: TextStyle(fontFamily: 'Fredoka', fontSize: 13),
                   ),
                   style: OutlinedButton.styleFrom(
@@ -1135,8 +1133,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
                 child: ElevatedButton.icon(
                   onPressed: () => _handleOpenWallet(solanaUri),
                   icon: const Icon(Icons.account_balance_wallet_rounded, size: 16),
-                  label: const Text(
-                    'Abrir Carteira',
+                  label: Text(
+                    context.t('solana.open_wallet'),
                     style: TextStyle(fontFamily: 'Fredoka', fontSize: 13, fontWeight: FontWeight.bold),
                   ),
                   style: ElevatedButton.styleFrom(
@@ -1159,8 +1157,8 @@ class _SolanaPayDonationTabState extends State<SolanaPayDonationTab> {
         TextButton.icon(
           onPressed: _simulateInstantConfirmation,
           icon: const Icon(Icons.play_circle_outline_rounded, size: 16, color: Color(0xFF14F195)),
-          label: const Text(
-            'Simular Confirmação Instantânea (Demo Hackathon)',
+          label: Text(
+            context.t('solana.demo_simulate_confirmation'),
             style: TextStyle(
               fontFamily: 'Fredoka',
               fontSize: 12,

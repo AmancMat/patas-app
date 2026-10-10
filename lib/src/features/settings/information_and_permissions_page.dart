@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:provider/provider.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:patas_web_app/src/features/settings/activity_history_page.dart';
@@ -26,22 +28,25 @@ class _InformationAndPermissionsPageState
     final user = supabase.auth.currentUser;
     if (user == null) return;
 
+    final dialogTitle = context.tr('info_perm.delete_dialog_title');
+    final dialogContent = context.tr('info_perm.delete_dialog_content');
+    final requestSentMsg = context.tr('info_perm.delete_request_sent');
+
     final confirm = await showDialog<bool>(
       context: context,
-      builder: (context) => AlertDialog(
-        title: const Text('Excluir Conta',
-            style: TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
-        content: const Text(
-            'Sua conta será desativada imediatamente e todos os dados serão excluídos permanentemente após 30 dias.\n\nDurante este período, você pode cancelar a exclusão fazendo login novamente.\n\nTem certeza que deseja continuar?'),
+      builder: (dialogCtx) => AlertDialog(
+        title: Text(dialogTitle,
+            style: const TextStyle(fontWeight: FontWeight.bold, color: Colors.red)),
+        content: Text(dialogContent),
         actions: [
           TextButton(
-            onPressed: () => Navigator.pop(context, false),
-            child: const Text('Cancelar'),
+            onPressed: () => Navigator.pop(dialogCtx, false),
+            child: Text(context.tr('common.cancel')),
           ),
           ElevatedButton(
-            onPressed: () => Navigator.pop(context, true),
+            onPressed: () => Navigator.pop(dialogCtx, true),
             style: ElevatedButton.styleFrom(backgroundColor: Colors.red),
-            child: const Text('Excluir', style: TextStyle(color: Colors.white)),
+            child: Text(context.tr('common.delete'), style: const TextStyle(color: Colors.white)),
           ),
         ],
       ),
@@ -50,20 +55,16 @@ class _InformationAndPermissionsPageState
     if (confirm == true) {
       setState(() => _isDeleting = true);
       try {
-        // Chama o método real de solicitação de exclusão
         await locator.get<AuthService>().requestAccountDeletion();
 
-        // O método já faz logout, então só precisamos navegar
         if (mounted) {
           Navigator.of(context)
               .pushNamedAndRemoveUntil(NamedRoute.signIn, (route) => false);
 
-          // Mostra mensagem de confirmação
           ScaffoldMessenger.of(context).showSnackBar(
-            const SnackBar(
-              content: Text(
-                  'Solicitação de exclusão enviada. Você tem 30 dias para cancelar fazendo login novamente.'),
-              duration: Duration(seconds: 5),
+            SnackBar(
+              content: Text(requestSentMsg),
+              duration: const Duration(seconds: 5),
               backgroundColor: Colors.orange,
             ),
           );
@@ -71,7 +72,7 @@ class _InformationAndPermissionsPageState
       } catch (e) {
         if (mounted) {
           ScaffoldMessenger.of(context).showSnackBar(
-            SnackBar(content: Text('Erro ao solicitar exclusão: $e')),
+            SnackBar(content: Text(context.tr('info_perm.delete_request_error', {'error': '$e'}))),
           );
         }
       } finally {
@@ -85,12 +86,10 @@ class _InformationAndPermissionsPageState
     if (await canLaunchUrl(url)) {
       await launchUrl(url);
     } else {
-      // Fallback para Android se necessário
       if (!mounted) return;
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-            content: Text(
-                'Não foi possível abrir as configurações. Vá manualmente em Ajustes > Patas.')),
+        SnackBar(
+            content: Text(context.tr('info_perm.open_settings_error'))),
       );
     }
   }
@@ -111,10 +110,10 @@ class _InformationAndPermissionsPageState
             automaticallyImplyLeading: false,
             centerTitle: true,
             title: Text(
-              'Suas Informações',
-              style: TextStyle(
-                color: textColor,
-                fontSize: 20,
+              context.tr('info_perm.title'),
+              style: const TextStyle(
+                color: AppColors.patasColor,
+                fontSize: 22,
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
               ),
@@ -140,10 +139,10 @@ class _InformationAndPermissionsPageState
               onPressed: () => Navigator.pop(context),
             ),
             title: Text(
-              'Suas Informações',
-              style: TextStyle(
-                color: textColor,
-                fontSize: 20,
+              context.tr('info_perm.title'),
+              style: const TextStyle(
+                color: AppColors.patasColor,
+                fontSize: 22,
                 fontFamily: 'Fredoka',
                 fontWeight: FontWeight.bold,
               ),
@@ -152,27 +151,26 @@ class _InformationAndPermissionsPageState
       body: ListView(
         padding: const EdgeInsets.all(24),
         children: [
-          _buildSectionHeader('GESTÃO DE DADOS', textColor),
+          _buildSectionHeader(context.tr('info_perm.data_management'), textColor),
           _buildCard(
             cardColor: cardColor,
             children: [
               _buildListTile(
                 icon: Icons.download_outlined,
-                title: 'Baixar suas informações',
-                subtitle: 'Obtenha uma cópia de todos os seus dados e pets.',
+                title: context.tr('info_perm.download_data_title'),
+                subtitle: context.tr('info_perm.download_data_desc'),
                 textColor: textColor,
                 onTap: () {
                   ScaffoldMessenger.of(context).showSnackBar(
-                    const SnackBar(
-                        content: Text(
-                            'Preparando arquivo de dados... você receberá um link no seu e-mail em breve.')),
+                    SnackBar(
+                        content: Text(context.tr('info_perm.download_data_notice'))),
                   );
                 },
               ),
               _buildListTile(
                 icon: Icons.history,
-                title: 'Histórico de atividade',
-                subtitle: 'Veja o que você fez recentemente no app.',
+                title: context.tr('info_perm.activity_history_title'),
+                subtitle: context.tr('info_perm.activity_history_desc'),
                 textColor: textColor,
                 onTap: () {
                   Navigator.push(
@@ -185,26 +183,26 @@ class _InformationAndPermissionsPageState
             ],
           ),
           const SizedBox(height: 32),
-          _buildSectionHeader('PERMISSÕES DO DISPOSITIVO', textColor),
+          _buildSectionHeader(context.tr('info_perm.device_permissions'), textColor),
           _buildCard(
             cardColor: cardColor,
             children: [
               _buildPermissionTile(
                 icon: Icons.camera_alt_outlined,
-                title: 'Câmera',
-                description: 'Usada para tirar fotos dos seus pets e postar.',
+                title: context.tr('info_perm.camera_title'),
+                description: context.tr('info_perm.camera_desc'),
                 textColor: textColor,
               ),
               _buildPermissionTile(
                 icon: Icons.photo_library_outlined,
-                title: 'Galeria',
-                description: 'Usada para selecionar fotos já existentes.',
+                title: context.tr('info_perm.gallery_title'),
+                description: context.tr('info_perm.gallery_desc'),
                 textColor: textColor,
               ),
               _buildPermissionTile(
                 icon: Icons.notifications_none_outlined,
-                title: 'Notificações',
-                description: 'Avisos sobre lembretes de vacinas e consultas.',
+                title: context.tr('info_perm.notifications_title'),
+                description: context.tr('info_perm.notifications_desc'),
                 textColor: textColor,
               ),
               Padding(
@@ -212,8 +210,8 @@ class _InformationAndPermissionsPageState
                     const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                 child: TextButton(
                   onPressed: _openAppSettings,
-                  child: const Text('Abrir Configurações do Sistema',
-                      style: TextStyle(
+                  child: Text(context.tr('info_perm.open_system_settings'),
+                      style: const TextStyle(
                           color: AppColors.patasColor,
                           fontWeight: FontWeight.bold)),
                 ),
@@ -221,15 +219,14 @@ class _InformationAndPermissionsPageState
             ],
           ),
           const SizedBox(height: 32),
-          _buildSectionHeader('GESTÃO DE CONTA', textColor),
+          _buildSectionHeader(context.tr('info_perm.account_management'), textColor),
           _buildCard(
             cardColor: cardColor,
             children: [
               _buildListTile(
                 icon: Icons.delete_forever_outlined,
-                title: 'Excluir minha conta',
-                subtitle:
-                    'Esta ação apagará permanentemente todos os seus dados.',
+                title: context.tr('info_perm.delete_account_title'),
+                subtitle: context.tr('info_perm.delete_account_desc'),
                 textColor: Colors.red,
                 onTap: _isDeleting ? null : _deleteAccount,
                 trailing: _isDeleting
@@ -243,6 +240,8 @@ class _InformationAndPermissionsPageState
               ),
             ],
           ),
+          const SizedBox(height: 40),
+          const MobileScrollPadding(),
         ],
       ),
     );

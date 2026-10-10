@@ -70,6 +70,41 @@ class DonationCampaign {
   int get exceededPercentInt =>
       progressPercentInt > 100 ? (progressPercentInt - 100) : 0;
 
+  /// Indica se a campanha está expirada pelo prazo de vigência estipulado pela ONG
+  bool get isExpired {
+    if (endsAt == null) return false;
+    final now = DateTime.now();
+    final endOfDay = DateTime(endsAt!.year, endsAt!.month, endsAt!.day, 23, 59, 59);
+    return now.isAfter(endOfDay);
+  }
+
+  /// Indica se a campanha possui uma data limite/prazo de encerramento definido
+  bool get hasDeadline => endsAt != null;
+
+  /// Indica se a campanha está ativa e apta a receber novas doações
+  bool get isAcceptingDonations => isActive && !isExpired;
+
+  /// Retorna a quantidade de dias restantes até o encerramento da campanha
+  int? get daysRemaining {
+    if (endsAt == null) return null;
+    final now = DateTime.now();
+    final endOfDay = DateTime(endsAt!.year, endsAt!.month, endsAt!.day, 23, 59, 59);
+    final difference = endOfDay.difference(now);
+    return difference.inDays;
+  }
+
+  /// Retorna texto descritivo do prazo de vigência da campanha
+  String get deadlineText {
+    if (!isActive) return 'Pausada';
+    if (endsAt == null) return 'Contínua';
+    if (isExpired) return 'Encerrada';
+
+    final remaining = daysRemaining ?? 0;
+    if (remaining == 0) return 'Termina hoje';
+    if (remaining == 1) return 'Termina amanhã';
+    return '$remaining dias restantes';
+  }
+
   /// Rótulo descritivo do status da meta
   String get goalStatusBadgeText {
     if (isGoalExceeded) {

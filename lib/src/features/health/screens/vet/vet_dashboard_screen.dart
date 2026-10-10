@@ -83,8 +83,9 @@ class _VetDashboardScreenState extends State<VetDashboardScreen>
   /// Ativos: data futura E status não finalizado
   List<HealthAppointment> get _activeAppointments {
     return _appointments.where((appt) {
-      if (appt.status == 'cancelled' || appt.status == 'completed')
+      if (appt.status == 'cancelled' || appt.status == 'completed') {
         return false;
+      }
       try {
         final dt = DateTime.parse(
           '${appt.appointmentDate} ${appt.appointmentTime}',

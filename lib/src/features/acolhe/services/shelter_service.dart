@@ -585,6 +585,93 @@ class ShelterService {
     }
   }
 
+  /// Busca TODOS os recibos/doações de uma campanha específica (visão administrativa da ONG)
+  Future<List<ShelterDonationReceiptModel>> getAllCampaignDonations(String campaignId) async {
+    try {
+      final res = await _supabase
+          .from('shelter_campaign_donations')
+          .select()
+          .eq('campaign_id', campaignId)
+          .order('created_at', ascending: false);
+
+      return (res as List)
+          .map((item) => ShelterDonationReceiptModel.fromJson(item))
+          .toList();
+    } catch (e) {
+      debugPrint('[ShelterService] Erro ao buscar todas as doações da campanha: $e');
+      return [];
+    }
+  }
+
+  /// Busca todas as doações recebidas por uma lista de campanhas da ONG
+  Future<List<ShelterDonationReceiptModel>> getOngDonations(List<String> campaignIds) async {
+    if (campaignIds.isEmpty) return [];
+    try {
+      final res = await _supabase
+          .from('shelter_campaign_donations')
+          .select()
+          .inFilter('campaign_id', campaignIds)
+          .order('created_at', ascending: false);
+
+      return (res as List)
+          .map((item) => ShelterDonationReceiptModel.fromJson(item))
+          .toList();
+    } catch (e) {
+      debugPrint('[ShelterService] Erro ao buscar doações da ONG: $e');
+      return [];
+    }
+  }
+
+  /// Atualiza a meta (target_amount) de uma campanha de doação
+  Future<bool> updateCampaignGoal({
+    required String campaignId,
+    required double newTargetAmount,
+  }) async {
+    try {
+      await _supabase
+          .from('shelter_donation_campaigns')
+          .update({'target_amount': newTargetAmount})
+          .eq('id', campaignId)
+          .timeout(const Duration(seconds: 5));
+      return true;
+    } catch (e) {
+      debugPrint('[ShelterService] Erro ao atualizar meta da campanha: $e');
+      return false;
+    }
+  }
+
+  /// Altera o status de ativação da campanha (pausar ou reativar)
+  Future<bool> toggleCampaignStatus({
+    required String campaignId,
+    required bool isActive,
+  }) async {
+    try {
+      await _supabase
+          .from('shelter_donation_campaigns')
+          .update({'is_active': isActive})
+          .eq('id', campaignId)
+          .timeout(const Duration(seconds: 5));
+      return true;
+    } catch (e) {
+      debugPrint('[ShelterService] Erro ao alterar status da campanha: $e');
+      return false;
+    }
+  }
+  /// Registra uma doação externa/presencial recebida por fora pela ONG e soma ao progresso
+  Future<bool> addExternalDonation({
+    required String campaignId,
+    required double amount,
+    String? note,
+    String? donorName,
+  }) async {
+    return registerDonationProgress(
+      campaignId: campaignId,
+      addedAmount: amount,
+      paymentMethod: 'presencial',
+      donorName: donorName ?? (note != null && note.isNotEmpty ? note : 'Arrecadação Externa / Presencial'),
+    );
+  }
+
   /// Sincroniza transações retroativas da blockchain da Solana para a tabela de recibos
   Future<int> syncBlockchainDonations({
     required String campaignId,

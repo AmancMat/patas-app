@@ -78,11 +78,14 @@ class _AppLocalizationsDelegate
 }
 
 /// Extensão de conveniência para uso ergonômico no BuildContext.
-/// Exemplo: `Text(context.tr('nav.feed'))` ou `context.l10n.translate('auth.login')`
+/// Exemplo: `Text(context.tr('nav.feed'))` ou `context.t('auth.login', args: {'user': 'Max'})`
 extension AppLocalizationsContextExtension on BuildContext {
   AppLocalizations get l10n => AppLocalizations.of(this);
   String tr(String key, [Map<String, String>? params]) =>
       AppLocalizations.of(this).translate(key, params);
+  String t(String key, {Map<String, String>? args}) =>
+      AppLocalizations.of(this).translate(key, args);
   bool get isEn => AppLocalizations.of(this).isEn;
   bool get isPt => AppLocalizations.of(this).isPt;
 }
+

@@ -68,6 +68,10 @@ class _OngCreateCampaignSheetState extends State<OngCreateCampaignSheet> {
   String _selectedPixType = 'cnpj';
   bool _isLoading = false;
 
+  DateTime? _endsAt;
+  bool _hasDeadline = false;
+  bool _isActive = true;
+
   final List<String> _categories = [
     'Ração & Alimento',
     'Saúde & Cirurgia',
@@ -102,6 +106,9 @@ class _OngCreateCampaignSheetState extends State<OngCreateCampaignSheet> {
     _selectedGoalType = c?.goalType ?? 'money';
     _selectedPixType = c?.pixKeyType ?? 'cnpj';
     _currentPhotoUrl = c?.imageUrl;
+    _endsAt = c?.endsAt;
+    _hasDeadline = c?.endsAt != null;
+    _isActive = c?.isActive ?? true;
   }
 
   @override
@@ -242,6 +249,8 @@ class _OngCreateCampaignSheetState extends State<OngCreateCampaignSheet> {
         beneficiaryPetName: _petBeneficiaryController.text.trim().isNotEmpty
             ? _petBeneficiaryController.text.trim()
             : null,
+        isActive: _isActive,
+        endsAt: _hasDeadline ? _endsAt : null,
         createdAt: widget.existingCampaign?.createdAt ?? DateTime.now(),
       );
 
@@ -798,6 +807,180 @@ class _OngCreateCampaignSheetState extends State<OngCreateCampaignSheet> {
                 maxLines: 4,
                 isDark: isDark,
               ),
+
+              const SizedBox(height: 16),
+
+              // 8. Prazo de Vigência & Data Limite
+              Container(
+                padding: const EdgeInsets.all(14),
+                decoration: BoxDecoration(
+                  color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                  borderRadius: BorderRadius.circular(16),
+                  border: Border.all(
+                    color: isDark ? Colors.white12 : Colors.grey.shade300,
+                  ),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        const Icon(Icons.event_available_rounded, size: 18, color: Colors.pinkAccent),
+                        const SizedBox(width: 8),
+                        Text(
+                          'Prazo de Vigência da Campanha',
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 14,
+                            fontWeight: FontWeight.bold,
+                            color: isDark ? Colors.white : AppColors.darkBG,
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(height: 6),
+                    Text(
+                      'Defina até quando a campanha poderá receber novas doações antes de ser encerrada automaticamente.',
+                      style: TextStyle(
+                        fontSize: 11.5,
+                        color: isDark ? Colors.white60 : Colors.black54,
+                      ),
+                    ),
+                    const SizedBox(height: 12),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          _hasDeadline ? 'Campanha com Data Limite' : 'Campanha Contínua (Sem prazo)',
+                          style: TextStyle(
+                            fontFamily: 'Fredoka',
+                            fontSize: 13,
+                            fontWeight: FontWeight.w600,
+                            color: isDark ? Colors.white70 : Colors.black87,
+                          ),
+                        ),
+                        Switch(
+                          value: _hasDeadline,
+                          activeThumbColor: Colors.pinkAccent,
+                          onChanged: (val) {
+                            setState(() {
+                              _hasDeadline = val;
+                              if (val && _endsAt == null) {
+                                _endsAt = DateTime.now().add(const Duration(days: 30));
+                              }
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                    if (_hasDeadline) ...[
+                      const SizedBox(height: 10),
+                      InkWell(
+                        onTap: () async {
+                          final picked = await showDatePicker(
+                            context: context,
+                            initialDate: _endsAt ?? DateTime.now().add(const Duration(days: 30)),
+                            firstDate: DateTime.now(),
+                            lastDate: DateTime.now().add(const Duration(days: 365 * 3)),
+                            builder: (context, child) {
+                              return Theme(
+                                data: Theme.of(context).copyWith(
+                                  colorScheme: ColorScheme.light(
+                                    primary: Colors.pinkAccent,
+                                    onPrimary: Colors.white,
+                                    surface: isDark ? const Color(0xFF1E293B) : Colors.white,
+                                    onSurface: isDark ? Colors.white : Colors.black87,
+                                  ),
+                                ),
+                                child: child!,
+                              );
+                            },
+                          );
+                          if (picked != null) {
+                            setState(() => _endsAt = picked);
+                          }
+                        },
+                        borderRadius: BorderRadius.circular(12),
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+                          decoration: BoxDecoration(
+                            color: isDark ? const Color(0xFF1E293B) : Colors.white,
+                            borderRadius: BorderRadius.circular(12),
+                            border: Border.all(
+                              color: Colors.pinkAccent.withValues(alpha: 0.5),
+                            ),
+                          ),
+                          child: Row(
+                            children: [
+                              const Icon(Icons.calendar_month_rounded, size: 20, color: Colors.pinkAccent),
+                              const SizedBox(width: 10),
+                              Expanded(
+                                child: Text(
+                                  _endsAt != null
+                                      ? 'Encerramento: ${_endsAt!.day.toString().padLeft(2, '0')}/${_endsAt!.month.toString().padLeft(2, '0')}/${_endsAt!.year}'
+                                      : 'Toque para escolher a data final',
+                                  style: TextStyle(
+                                    fontFamily: 'Fredoka',
+                                    fontSize: 13.5,
+                                    fontWeight: FontWeight.bold,
+                                    color: isDark ? Colors.white : AppColors.darkBG,
+                                  ),
+                                ),
+                              ),
+                              const Icon(Icons.arrow_drop_down_rounded, color: Colors.pinkAccent),
+                            ],
+                          ),
+                        ),
+                      ),
+                    ],
+                  ],
+                ),
+              ),
+
+              if (widget.existingCampaign != null) ...[
+                const SizedBox(height: 14),
+                // 9. Status da Campanha (Ativa ou Pausada)
+                Container(
+                  padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                  decoration: BoxDecoration(
+                    color: isDark ? const Color(0xFF0F172A) : const Color(0xFFF8FAFC),
+                    borderRadius: BorderRadius.circular(16),
+                    border: Border.all(
+                      color: isDark ? Colors.white12 : Colors.grey.shade300,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    children: [
+                      Row(
+                        children: [
+                          Icon(
+                            _isActive ? Icons.play_circle_fill_rounded : Icons.pause_circle_filled_rounded,
+                            color: _isActive ? const Color(0xFF10B981) : Colors.orangeAccent,
+                            size: 20,
+                          ),
+                          const SizedBox(width: 8),
+                          Text(
+                            _isActive ? 'Campanha Ativa' : 'Campanha Pausada',
+                            style: TextStyle(
+                              fontFamily: 'Fredoka',
+                              fontSize: 13,
+                              fontWeight: FontWeight.bold,
+                              color: isDark ? Colors.white : AppColors.darkBG,
+                            ),
+                          ),
+                        ],
+                      ),
+                      Switch(
+                        value: _isActive,
+                        activeThumbColor: const Color(0xFF10B981),
+                        inactiveThumbColor: Colors.orangeAccent,
+                        onChanged: (val) => setState(() => _isActive = val),
+                      ),
+                    ],
+                  ),
+                ),
+              ],
 
               const SizedBox(height: 22),
 

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import 'package:supabase_flutter/supabase_flutter.dart';
 import 'package:patas_web_app/app.dart';
 import 'package:patas_web_app/src/constants/app_colors.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import '../../pets/models/pet_model.dart';
 import '../models/pet_passport_model.dart';
 import '../services/pet_passport_service.dart';
@@ -53,13 +54,23 @@ class PetPassportOnboardingDialog extends StatefulWidget {
 class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialog> {
   bool _isMinting = false;
   String _mintStep = 'Preparando metadados...';
+  bool _isStepInitialized = false;
+
+  @override
+  void didChangeDependencies() {
+    super.didChangeDependencies();
+    if (!_isStepInitialized && !_isMinting) {
+      _mintStep = context.t('passport.onboarding_minting_meta');
+      _isStepInitialized = true;
+    }
+  }
 
   void _startMint() async {
     final currentUserId = Supabase.instance.client.auth.currentUser?.id;
     if (widget.pet.userId != currentUserId) {
       ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(
-          content: Text('Apenas o tutor dono do pet pode emitir o passaporte cNFT.'),
+        SnackBar(
+          content: Text(context.t('passport.onboarding_owner_only_error')),
           backgroundColor: Colors.redAccent,
         ),
       );
@@ -69,13 +80,13 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
 
     setState(() {
       _isMinting = true;
-      _mintStep = 'Consultando nó Solana Devnet...';
+      _mintStep = context.t('passport.onboarding_minting_query');
     });
 
     try {
       await Future.delayed(const Duration(milliseconds: 600));
       if (mounted) {
-        setState(() => _mintStep = 'Cunhando cNFT (Metaplex Bubblegum)...');
+        setState(() => _mintStep = context.t('passport.onboarding_minting_bubblegum'));
       }
 
       final passport = await PetPassportService.mintAndRegisterPassport(
@@ -83,7 +94,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
       );
 
       if (mounted) {
-        setState(() => _mintStep = 'Registro gravado na Árvore de Merkle!');
+        setState(() => _mintStep = context.t('passport.onboarding_minting_merkle'));
         await Future.delayed(const Duration(milliseconds: 500));
       }
 
@@ -99,7 +110,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
         setState(() => _isMinting = false);
         ScaffoldMessenger.of(context).showSnackBar(
           SnackBar(
-            content: Text('Erro ao emitir passaporte: $e'),
+            content: Text(context.t('passport.onboarding_error', args: {'error': e.toString()})),
             backgroundColor: Colors.redAccent,
           ),
         );
@@ -163,9 +174,9 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                         color: const Color(0xFF14F195).withValues(alpha: 0.15),
                         borderRadius: BorderRadius.circular(6),
                       ),
-                      child: const Text(
-                        'TECNOLOGIA SOLANA cNFT',
-                        style: TextStyle(
+                      child: Text(
+                        context.t('passport.onboarding_tech_badge'),
+                        style: const TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: 10,
                           fontWeight: FontWeight.bold,
@@ -176,7 +187,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                     ),
                     const SizedBox(height: 4),
                     Text(
-                      'Passaporte Digital do Pet',
+                      context.t('passport.onboarding_title'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 18,
@@ -194,7 +205,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
 
           // Texto explicativo amigável
           Text(
-            'Crie a certidão digital oficial de ${widget.pet.name}. Um documento vitalício, infalsificável e aceito em clínicas e viagens — sem custos para você:',
+            context.t('passport.onboarding_desc', args: {'name': widget.pet.name}),
             style: TextStyle(
               fontSize: 13,
               color: isDark ? Colors.white70 : Colors.black87,
@@ -208,24 +219,24 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
           _buildPillarItem(
             icon: Icons.memory_rounded,
             color: const Color(0xFF14F195),
-            title: 'Microchip ISO 11784 (RG Digital)',
-            description: 'Identificador internacional gerado para o pet, pronto para ser vinculado ao chip físico veterinário.',
+            title: context.t('passport.onboarding_pillar1_title'),
+            description: context.t('passport.onboarding_pillar1_desc'),
             isDark: isDark,
           ),
           const SizedBox(height: 10),
           _buildPillarItem(
             icon: Icons.vaccines_rounded,
             color: const Color(0xFF9945FF),
-            title: 'Caderneta de Vacinas Atualizável',
-            description: 'Histórico auditável na Solana. Novas vacinas são somadas à mesma identidade para sempre.',
+            title: context.t('passport.onboarding_pillar2_title'),
+            description: context.t('passport.onboarding_pillar2_desc'),
             isDark: isDark,
           ),
           const SizedBox(height: 10),
           _buildPillarItem(
             icon: Icons.energy_savings_leaf_rounded,
             color: const Color(0xFF38BDF8),
-            title: 'Sem Burocracia ou Custo (Gasless)',
-            description: 'Você não precisa de criptomoedas nem entender de finanças. O Patas cuida de tudo.',
+            title: context.t('passport.onboarding_pillar3_title'),
+            description: context.t('passport.onboarding_pillar3_desc'),
             isDark: isDark,
           ),
 
@@ -254,7 +265,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                   const SizedBox(width: 10),
                   Expanded(
                     child: Text(
-                      'O que é Blockchain e Passaporte? Tire suas dúvidas',
+                      context.t('passport.onboarding_faq_button'),
                       style: TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 12,
@@ -313,8 +324,8 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
             ElevatedButton.icon(
               onPressed: _startMint,
               icon: const Icon(Icons.auto_awesome_rounded, size: 18),
-              label: const Text(
-                'Emitir Passaporte Oficial On-Chain',
+              label: Text(
+                context.t('passport.onboarding_mint_button'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 14,
@@ -333,7 +344,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
             TextButton(
               onPressed: () => Navigator.of(context).pop(),
               child: Text(
-                'Agora Não',
+                context.t('passport.onboarding_not_now'),
                 style: TextStyle(
                   fontFamily: 'Fredoka',
                   fontSize: 13,
@@ -456,7 +467,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Text(
-                              'Entenda em 1 Minuto',
+                              context.t('passport.faq_title'),
                               style: TextStyle(
                                 fontFamily: 'Fredoka',
                                 fontSize: 16.5,
@@ -465,7 +476,7 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                               ),
                             ),
                             Text(
-                              'Sem jargões complicados, tudo direto ao ponto.',
+                              context.t('passport.faq_subtitle'),
                               style: TextStyle(
                                 fontSize: 11.5,
                                 color: isDark ? Colors.white60 : Colors.black54,
@@ -497,39 +508,32 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                           isDark: isDark,
                           icon: Icons.account_balance_rounded,
                           color: const Color(0xFF9945FF),
-                          question: 'O que é essa tal de Blockchain?',
-                          answer:
-                              'Imagine um cartório digital mundial, aberto 24 horas por dia, que não pertence a nenhuma empresa ou governo. '
-                              'Ao registrar a certidão de $petName lá, os dados ficam carimbados para sempre e ninguém no mundo pode apagar, alterar ou falsificar a identidade dele.',
+                          question: context.t('passport.faq_q1'),
+                          answer: context.t('passport.faq_a1', args: {'name': petName}),
                         ),
                         const SizedBox(height: 12),
                         _buildFaqItem(
                           isDark: isDark,
                           icon: Icons.memory_rounded,
                           color: const Color(0xFF14F195),
-                          question: 'Esse Microchip é o mesmo que o veterinário aplica?',
-                          answer:
-                              'Sim, segue exatamente o mesmo padrão internacional (ISO 11784). Ao emitir no Patas, geramos um RG Digital provisório. '
-                              'Quando você levar $petName para colocar o microchip físico (o grãozinho injetado sob a pele), você poderá cadastrar o número definitivo aqui para vincular tudo no mesmo passaporte!',
+                          question: context.t('passport.faq_q2'),
+                          answer: context.t('passport.faq_a2', args: {'name': petName}),
                         ),
                         const SizedBox(height: 12),
                         _buildFaqItem(
                           isDark: isDark,
                           icon: Icons.vaccines_rounded,
                           color: const Color(0xFF38BDF8),
-                          question: 'E quando $petName tomar novas vacinas no futuro?',
-                          answer:
-                              'O passaporte tem uma chave única permanente (como um CPF). Toda vez que você ou a clínica cadastrar uma nova vacina no Patas, '
-                              'o registro on-chain na Solana é atualizado com o novo carimbo sanitário, somando ao histórico sem precisar criar outro documento.',
+                          question: context.t('passport.faq_q3', args: {'name': petName}),
+                          answer: context.t('passport.faq_a3'),
                         ),
                         const SizedBox(height: 12),
                         _buildFaqItem(
                           isDark: isDark,
                           icon: Icons.price_check_rounded,
                           color: const Color(0xFFF59E0B),
-                          question: 'Eu preciso pagar ou entender de criptomoedas?',
-                          answer:
-                              'Não! O processo é 100% gratuito para você. O Patas cobre todas as taxas da rede Solana e faz tudo de forma automática nos bastidores. Você só aproveita a segurança.',
+                          question: context.t('passport.faq_q4'),
+                          answer: context.t('passport.faq_a4'),
                         ),
                       ],
                     ),
@@ -547,8 +551,8 @@ class _PetPassportOnboardingDialogState extends State<PetPassportOnboardingDialo
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(14)),
                       padding: const EdgeInsets.symmetric(vertical: 12),
                     ),
-                    child: const Text(
-                      'Entendi! Voltar para a Emissão',
+                    child: Text(
+                      context.t('passport.faq_back_btn'),
                       style: TextStyle(fontFamily: 'Fredoka', fontWeight: FontWeight.bold),
                     ),
                   ),

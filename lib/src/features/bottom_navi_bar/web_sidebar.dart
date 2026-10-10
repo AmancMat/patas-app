@@ -155,48 +155,60 @@ class WebSidebar extends StatelessWidget {
                               children: [
                                 const SizedBox(height: 16),
                                 // Logo e nome alinhados
-                                Padding(
-                                  padding: EdgeInsets.symmetric(
-                                    horizontal: isCollapsed ? 8 : 16,
-                                    vertical: 8,
-                                  ),
-                                  child: SingleChildScrollView(
-                                    scrollDirection: Axis.horizontal,
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    child: Row(
-                                      mainAxisAlignment: isCollapsed
-                                          ? MainAxisAlignment.center
-                                          : MainAxisAlignment.start,
-                                      children: [
-                                        Image.asset(
-                                          'assets/logo.png',
-                                          width: 40,
-                                          height: 40,
-                                          fit: BoxFit.contain,
-                                        ),
-                                        if (!isCollapsed) ...[
-                                          const SizedBox(width: 12),
-                                          SizedBox(
-                                            width: 120,
-                                            child: Text(
-                                              'Patas',
-                                              style: TextStyle(
-                                                color: isDark
-                                                    ? Colors.white
-                                                    : AppColors.patasColor,
-                                                fontWeight: FontWeight.bold,
-                                                fontFamily: 'Fredoka',
-                                                fontSize: 22,
-                                              ),
-                                              overflow: TextOverflow.ellipsis,
-                                              maxLines: 1,
+                                SizedBox(
+                                  width: double.infinity,
+                                  child: isCollapsed
+                                      ? Center(
+                                          child: Padding(
+                                            padding: const EdgeInsets.symmetric(
+                                              vertical: 8,
+                                            ),
+                                            child: Image.asset(
+                                              'assets/logo.png',
+                                              width: 40,
+                                              height: 40,
+                                              fit: BoxFit.contain,
                                             ),
                                           ),
-                                        ],
-                                      ],
-                                    ),
-                                  ),
+                                        )
+                                      : Padding(
+                                          padding: const EdgeInsets.symmetric(
+                                            horizontal: 16,
+                                            vertical: 8,
+                                          ),
+                                          child: SingleChildScrollView(
+                                            scrollDirection: Axis.horizontal,
+                                            physics:
+                                                const NeverScrollableScrollPhysics(),
+                                            child: Row(
+                                              children: [
+                                                Image.asset(
+                                                  'assets/logo.png',
+                                                  width: 40,
+                                                  height: 40,
+                                                  fit: BoxFit.contain,
+                                                ),
+                                                const SizedBox(width: 12),
+                                                SizedBox(
+                                                  width: 120,
+                                                  child: Text(
+                                                    'Patas',
+                                                    style: TextStyle(
+                                                      color: isDark
+                                                          ? Colors.white
+                                                          : AppColors.patasColor,
+                                                      fontWeight: FontWeight.bold,
+                                                      fontFamily: 'Fredoka',
+                                                      fontSize: 22,
+                                                    ),
+                                                    overflow: TextOverflow.ellipsis,
+                                                    maxLines: 1,
+                                                  ),
+                                                ),
+                                              ],
+                                            ),
+                                          ),
+                                        ),
                                 ),
                                 const Divider(
                                   height: 1,

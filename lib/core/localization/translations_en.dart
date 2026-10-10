@@ -30,7 +30,8 @@ const Map<String, String> enTranslations = {
   'common.success': 'Success!',
   'common.save_changes': 'Save changes',
   'common.no_internet_title': 'Oops! No connection',
-  'common.no_internet_desc': 'We could not connect to our servers. Check your internet connection to continue caring for your pet.',
+  'common.no_internet_desc':
+      'We could not connect to our servers. Check your internet connection to continue caring for your pet.',
 
   // === 1. Auth & Onboarding (auth & onboarding) ===
   'onboarding.vet_button': 'Patas Vet Area',
@@ -38,12 +39,14 @@ const Map<String, String> enTranslations = {
   'onboarding.start_button': 'Get Started',
   'onboarding.slide_1': 'Connect with people\npassionate about animals.',
   'onboarding.slide_2': 'Track and care for your pet’s\nhealth in one place.',
-  'onboarding.slide_3': 'Discover shelters, adopt, and\nhelp save lives every day.',
+  'onboarding.slide_3':
+      'Discover shelters, adopt, and\nhelp save lives every day.',
   'onboarding.welcome_title': 'Welcome to Patas',
   'onboarding.welcome_tagline': 'Care, protect, and support your best friends!',
   'onboarding.start_action': 'Start',
   'auth.welcome_title': 'The All-in-One Pet Ecosystem',
-  'auth.welcome_subtitle': 'Connecting love, veterinary health, shelter rescue, and Web3 technology in a unified platform.',
+  'auth.welcome_subtitle':
+      'Connecting love, veterinary health, shelter rescue, and Web3 technology in a unified platform.',
   'auth.login': 'Log In',
   'auth.sign_up': 'Sign Up',
   'auth.sign_in_title': 'Welcome back!',
@@ -57,7 +60,8 @@ const Map<String, String> enTranslations = {
   'auth.confirm_password': 'Confirm password',
   'auth.remember_me': 'Remember me',
   'auth.forgot_password': 'Forgot password?',
-  'auth.forgot_password_desc': 'We will send a password reset link to your email.',
+  'auth.forgot_password_desc':
+      'We will send a password reset link to your email.',
   'auth.send_reset_link': 'Send reset link',
   'auth.or_continue_with': 'or sign in with',
   'auth.google_login': 'Sign in with Google',
@@ -69,7 +73,8 @@ const Map<String, String> enTranslations = {
   'auth.no_account': "Don't have an account? ",
   'auth.already_have_account': 'Already have an account? ',
   'auth.sign_up_title': 'Join the Pack! 🐶',
-  'auth.sign_up_subtitle': 'Sign up to manage pets, adopt rescued animals, or register your shelter.',
+  'auth.sign_up_subtitle':
+      'Sign up to manage pets, adopt rescued animals, or register your shelter.',
   'auth.create_account_title': 'Create Account',
   'auth.join_family': 'Join the Patas Family! 🐾',
   'auth.name': 'Full name',
@@ -85,13 +90,15 @@ const Map<String, String> enTranslations = {
   'auth.and': ' and the ',
   'auth.privacy_policy': 'Privacy Policy',
   'auth.terms_end': ' of Patas.',
-  'auth.terms_required_error': 'To create an account, you must read and accept the Patas Terms of Use and Privacy Policy.',
+  'auth.terms_required_error':
+      'To create an account, you must read and accept the Patas Terms of Use and Privacy Policy.',
   'auth.terms_understood_button': 'Understood',
   'auth.soon': 'Soon',
   'auth.pro_login': 'Veterinarian or Business Login',
   'auth.vet_shortcut': 'Are you a Veterinarian? Access here',
   'auth.interests_title': 'What are you looking for on Patas?',
-  'auth.interests_subtitle': 'Customize your journey to see what matters most to you.',
+  'auth.interests_subtitle':
+      'Customize your journey to see what matters most to you.',
   'auth.interests_continue': 'Continue to app',
   'interests.title': 'Your Interests 🐾',
   'interests.skip': 'Skip all',
@@ -141,9 +148,11 @@ const Map<String, String> enTranslations = {
   'first_profile.title': 'Create First Profile',
   'first_profile.new_title': 'New Profile',
   'first_profile.welcome': 'Let\'s get started!',
-  'first_profile.desc': 'Create the profile for your pet, shelter, or business to start sharing special moments and caring for the ones you love.',
+  'first_profile.desc':
+      'Create the profile for your pet, shelter, or business to start sharing special moments and caring for the ones you love.',
   'first_profile.which_type': 'What type of profile do you want to create?',
-  'first_profile.which_type_sub': 'Choose one of the section options below to see details',
+  'first_profile.which_type_sub':
+      'Choose one of the section options below to see details',
   'first_profile.pets_section': 'Pet Profiles',
   'first_profile.orgs_section': 'Organization Profiles',
   'first_profile.pet_dog': 'Dog',
@@ -156,9 +165,11 @@ const Map<String, String> enTranslations = {
   'first_profile.org_corp_title': 'Businesses & Brands',
   'first_profile.org_corp_sub': 'Pet commerce and services',
   'first_profile.pet_tutor_title': 'Pet or Owner Profile',
-  'first_profile.pet_tutor_desc': 'For animal lovers who want to manage their pets’ lives.',
+  'first_profile.pet_tutor_desc':
+      'For animal lovers who want to manage their pets’ lives.',
   'first_profile.org_title': 'Shelter, NGO, or Business',
-  'first_profile.org_desc': 'For rescue organizations and pet service providers.',
+  'first_profile.org_desc':
+      'For rescue organizations and pet service providers.',
 
   // === 1B. First Profile Creation (pet_create, ong_create & corp_create) ===
   'pet_create.title': 'Register Pet',
@@ -215,11 +226,13 @@ const Map<String, String> enTranslations = {
   'pet_create.blood_type_b': 'Type B',
   'pet_create.blood_type_ab': 'Type AB',
   'pet_create.required_fields_title': 'Required Fields',
-  'pet_create.required_fields_desc': 'Please fill in all fields marked with * to continue.',
+  'pet_create.required_fields_desc':
+      'Please fill in all fields marked with * to continue.',
   'pet_create.gallery': 'Gallery',
   'pet_create.camera': 'Camera',
   'pet_create.photo_options': 'Choose photo',
-  'pet_create.user_not_identified': 'Error: User not identified. Please try logging in again.',
+  'pet_create.user_not_identified':
+      'Error: User not identified. Please try logging in again.',
   'pet_create.upload_error': 'Image upload error: {error}',
   'pet_create.bird_ring': 'Leg Band / Ring Number*',
   'pet_create.bird_ibama': 'Environmental Registry (Optional)',
@@ -239,7 +252,8 @@ const Map<String, String> enTranslations = {
   'pet_create.weight_g': 'Weight (g)',
 
   'ong_create.title': 'Register Shelter / NGO',
-  'ong_create.subtitle': 'Register your shelter to receive support and list animals',
+  'ong_create.subtitle':
+      'Register your shelter to receive support and list animals',
   'ong_create.logo': 'Organization Logo*',
   'ong_create.basic_info': 'Basic Information',
   'ong_create.name': 'Organization Name*',
@@ -285,7 +299,8 @@ const Map<String, String> enTranslations = {
   'ong_create.create_error': 'Error creating profile: {error}',
 
   'corp_create.title': 'Create Business Profile',
-  'corp_create.subtitle': 'Promote your products and services on the Patas ecosystem',
+  'corp_create.subtitle':
+      'Promote your products and services on the Patas ecosystem',
   'corp_create.logo': 'Business Logo*',
   'corp_create.basic_info': 'Basic Information',
   'corp_create.name': 'Business Name*',
@@ -400,14 +415,19 @@ const Map<String, String> enTranslations = {
   'notifications.error': 'Error loading notifications: {error}',
   'notifications.web_badge': 'NEW • WEB BROWSER',
   'notifications.web_title': 'Enable Notifications',
-  'notifications.web_desc': 'Stay updated in real time directly in your browser. Notifications are essential for:',
+  'notifications.web_desc':
+      'Stay updated in real time directly in your browser. Notifications are essential for:',
   'notifications.web_donations_title': 'Donations & Shelter Funding',
-  'notifications.web_donations_desc': 'Get alerted instantly when your campaign receives new donations via Solana Pay or PIX.',
+  'notifications.web_donations_desc':
+      'Get alerted instantly when your campaign receives new donations via Solana Pay or PIX.',
   'notifications.web_payments_title': 'Payment Confirmations & Payouts',
-  'notifications.web_payments_desc': 'Receive instant receipts and proof of secure financial transactions.',
+  'notifications.web_payments_desc':
+      'Receive instant receipts and proof of secure financial transactions.',
   'notifications.web_health_title': 'Pet Health & Care',
-  'notifications.web_health_desc': 'Vaccine reminders, rescue alerts, and community updates firsthand.',
-  'notifications.web_browser_tip': 'When clicking "Enable Notifications", your browser will open a prompt at the top of the screen. Click "Allow" to confirm.',
+  'notifications.web_health_desc':
+      'Vaccine reminders, rescue alerts, and community updates firsthand.',
+  'notifications.web_browser_tip':
+      'When clicking "Enable Notifications", your browser will open a prompt at the top of the screen. Click "Allow" to confirm.',
   'notifications.web_enable_button': 'Enable Browser Notifications',
   'notifications.web_not_now': 'Not Now',
   'notifications.web_success': '🔔 Browser notifications enabled successfully!',
@@ -445,8 +465,10 @@ const Map<String, String> enTranslations = {
   'feed.hide_post': 'Hide post',
   'feed.delete_subtitle': 'Remove permanently',
   'feed.hide_subtitle': 'See fewer posts like this',
-  'feed.delete_confirm': 'Are you sure you want to permanently delete this post?',
-  'feed.delete_confirm_story': 'Are you sure you want to permanently delete this story?',
+  'feed.delete_confirm':
+      'Are you sure you want to permanently delete this post?',
+  'feed.delete_confirm_story':
+      'Are you sure you want to permanently delete this story?',
   'feed.delete_dialog_title_post': 'Delete Post',
   'feed.delete_dialog_title_story': 'Delete Story',
   'feed.report_post': 'Report post',
@@ -458,11 +480,13 @@ const Map<String, String> enTranslations = {
   'feed.end_of_feed': 'You are all caught up! 🐾',
   'feed.network_error': 'Unstable signal or no connection',
   'feed.server_instability': 'Server instability',
-  'feed.server_instability_desc': 'Could not load posts right now. Tap to try again.',
+  'feed.server_instability_desc':
+      'Could not load posts right now. Tap to try again.',
   'feed.no_internet_desc': 'Check your internet connection and try again.',
   'feed.tap_to_retry': 'Tap to try again',
   'feed.empty_title': 'No posts found',
-  'feed.empty_subtitle': 'Share special moments of your pet with the community!',
+  'feed.empty_subtitle':
+      'Share special moments of your pet with the community!',
   'feed.comment_error': 'Error posting comment: {error}',
   'feed.open_profile_semantic': 'Open profile of {name}',
   'feed.confirmed_fair': 'CONFIRMED FAIR',
@@ -473,10 +497,13 @@ const Map<String, String> enTranslations = {
   'feed.confirmed_attendees': '{count} confirmed',
   'feed.select_media_hint': 'Add a photo or video to engage more people!',
   'feed.video_limit_title': 'Long Video',
-  'feed.video_limit_desc': 'This video is {seconds} seconds long. The maximum limit for feed posts is {max} seconds.',
-  'feed.video_limit_continue': 'If you continue, the video will be published using the first {max} seconds.',
+  'feed.video_limit_desc':
+      'This video is {seconds} seconds long. The maximum limit for feed posts is {max} seconds.',
+  'feed.video_limit_continue':
+      'If you continue, the video will be published using the first {max} seconds.',
   'feed.video_limit_btn': 'Continue ({max}s)',
-  'feed.empty_post_validation': 'Please add an image, video, or text to publish.',
+  'feed.empty_post_validation':
+      'Please add an image, video, or text to publish.',
   'feed.status_preparing': 'Preparing...',
   'feed.status_uploading_video': 'Uploading video...',
   'feed.status_uploading_video_progress': 'Uploading video... {progress}%',
@@ -498,10 +525,13 @@ const Map<String, String> enTranslations = {
   'feed.add_video_camera_sub': 'Record a new video now with quick editing',
   'feed.invalid_video': 'Invalid video',
   'feed.optimizing_video': 'Optimizing and adjusting video...',
-  'feed.optimizing_video_progress': 'Optimizing and adjusting video... {progress}%',
+  'feed.optimizing_video_progress':
+      'Optimizing and adjusting video... {progress}%',
   'feed.compressing_video_desc': 'Compressing for fast and seamless upload.',
-  'feed.video_cropped_success': 'Video trimmed to 60s and optimized successfully!',
-  'feed.video_optimized_success': 'Video optimized successfully! Duration: {duration}s',
+  'feed.video_cropped_success':
+      'Video trimmed to 60s and optimized successfully!',
+  'feed.video_optimized_success':
+      'Video optimized successfully! Duration: {duration}s',
   'feed.video_recorded_success': 'Video recorded and optimized successfully!',
   'feed.video_optimize_error': 'Error optimizing video',
   'feed.unexpected_error': 'Unexpected error: {error}',
@@ -510,7 +540,8 @@ const Map<String, String> enTranslations = {
   // Stories
   'story.badge': 'Story',
   'story.create_title': 'Create Story',
-  'story.create_subtitle': 'Share quick photos and videos of your pets with friends',
+  'story.create_subtitle':
+      'Share quick photos and videos of your pets with friends',
   'story.create_semantic': 'Create new Story',
   'story.empty': 'Stories from accounts you follow will appear here',
   'story.server_error': 'Server instability loading stories',
@@ -527,7 +558,8 @@ const Map<String, String> enTranslations = {
   'story.select_image_or_video_error': 'Select an image or video first!',
   'story.select_video_error': 'Select a video first!',
   'story.video_long_title': 'Long Video',
-  'story.video_long_desc': 'The selected video is {seconds}s long.\n\nStories can be up to {max} seconds max.\nDo you want to post only the first {max} seconds of your video?',
+  'story.video_long_desc':
+      'The selected video is {seconds}s long.\n\nStories can be up to {max} seconds max.\nDo you want to post only the first {max} seconds of your video?',
   'story.video_long_btn': 'Continue with {max}s',
   'story.add_photo_title': 'Add Photo to Story',
   'story.add_video_title': 'Add Video to Story',
@@ -576,7 +608,8 @@ const Map<String, String> enTranslations = {
   'profile.cnft_registered': 'cNFT Registered',
   'profile.cnft_none': 'No cNFT',
   'profile.unavailable_title': 'Profile Unavailable',
-  'profile.unavailable_desc': 'This profile is unavailable or has been blocked.',
+  'profile.unavailable_desc':
+      'This profile is unavailable or has been blocked.',
   'profile.back_to_feed': 'Back to Feed',
   'profile.uploading_cover': 'Uploading cover image...',
   'profile.cover_update_error': 'Failed to update cover: {error}',
@@ -602,27 +635,34 @@ const Map<String, String> enTranslations = {
   'profile.edit_pet_tooltip': 'Edit pet',
   'profile.delete_pet_tooltip': 'Delete pet',
   'profile.delete_pet_limit_title': 'Action not allowed',
-  'profile.delete_pet_limit_desc': 'You must keep at least one active pet profile.',
+  'profile.delete_pet_limit_desc':
+      'You must keep at least one active pet profile.',
   'profile.confirm_delete_title': 'Confirm Deletion',
-  'profile.confirm_delete_family_desc': 'Delete {name} ({relationship})? This action cannot be undone.',
+  'profile.confirm_delete_family_desc':
+      'Delete {name} ({relationship})? This action cannot be undone.',
   'profile.family_deleted_success': '{name} deleted successfully!',
   'profile.delete_error': 'Error deleting: {error}',
-  'profile.confirm_delete_pet_desc': 'Delete {name}? This action cannot be undone.',
+  'profile.confirm_delete_pet_desc':
+      'Delete {name}? This action cannot be undone.',
   'profile.pet_deleted_success': '{name} was deleted!',
   'profile.follow_error': 'Failed to process your request :(',
   'profile.unfollow_error': 'Failed to unfollow :(',
   'profile.block_option': 'Block',
   'profile.report_option': 'Report',
   'profile.block_tutor_title': 'Block Owner?',
-  'profile.block_tutor_desc': 'Are you sure you want to block {name}\'s owner? You will no longer be able to message or view each other\'s profiles.',
+  'profile.block_tutor_desc':
+      'Are you sure you want to block {name}\'s owner? You will no longer be able to message or view each other\'s profiles.',
   'profile.tutor_blocked_success': '{name}\'s owner was blocked successfully.',
   'profile.tutor_block_error': 'Failed to block owner. Please try again.',
   'profile.report_tutor_title': 'Report {name}',
-  'profile.report_tutor_desc': 'Please select the reason for reporting so our team can evaluate the profile:',
+  'profile.report_tutor_desc':
+      'Please select the reason for reporting so our team can evaluate the profile:',
   'profile.report_reason_label': 'Report Reason',
-  'profile.report_details_hint': 'Describe more details about the issue (optional)...',
+  'profile.report_details_hint':
+      'Describe more details about the issue (optional)...',
   'profile.report_submit_btn': 'Submit Report',
-  'profile.report_success': 'Your report has been submitted. Thank you for keeping our community safe!',
+  'profile.report_success':
+      'Your report has been submitted. Thank you for keeping our community safe!',
   'profile.report_reason_inappropriate': 'Inappropriate or offensive content',
   'profile.report_reason_fake': 'Fake profile or scam',
   'profile.report_reason_spam': 'Spam or unwanted messages',
@@ -634,7 +674,8 @@ const Map<String, String> enTranslations = {
   'profile.patas_love_public_available': 'Available on Patas Love',
   'profile.patas_love_public_subtitle': 'Open for playdates and breeding',
   'profile.love_activated_title': 'Patas Love Activated!',
-  'profile.love_activated_desc': 'Successfully activated for {name}!\n\nOther owners can now see the meetup availability badge on your pet profile, and you can search for partners via Patas Love in the Patas Essential hub.',
+  'profile.love_activated_desc':
+      'Successfully activated for {name}!\n\nOther owners can now see the meetup availability badge on your pet profile, and you can search for partners via Patas Love in the Patas Essential hub.',
   'profile.folder_profile': 'Profile',
   'profile.folder_posts': 'Posts',
   'profile.folder_stories': 'Stories',
@@ -655,7 +696,8 @@ const Map<String, String> enTranslations = {
   'profile.name_call_hint': 'How would you like to be called?',
   'profile.name_required_error': 'Please enter your name',
   'profile.name_hint': 'Name',
-  'profile.name_visibility_notice': 'Your name will be visible to other users when you comment or share your pets\' stories.',
+  'profile.name_visibility_notice':
+      'Your name will be visible to other users when you comment or share your pets\' stories.',
   'profile.tutor_updated_success': 'Profile updated successfully!',
   'profile.tutor_save_error': 'Failed to save: {error}',
   'profile.change_photo_semantic': 'Change profile picture',
@@ -669,7 +711,8 @@ const Map<String, String> enTranslations = {
   'profile.select_birthdate_semantic': 'Select birth date',
   'profile.change_pet_photo_semantic': 'Add or change pet profile picture',
   'profile.required_fields_title': 'Required Fields',
-  'profile.required_fields_desc': 'Please fill all required fields (*) to continue.',
+  'profile.required_fields_desc':
+      'Please fill all required fields (*) to continue.',
   'profile.upload_image_error': 'Image upload error: {error}',
   'profile.pet_updated_success': 'Pet updated successfully!',
   'profile.pet_update_error': 'Failed to update pet: {error}',
@@ -704,19 +747,25 @@ const Map<String, String> enTranslations = {
   'market.section_tutor_tools': 'Services & Microapps',
   'market.section_highlights': 'Highlights',
   'market.header_desktop_ong_title': 'Patas Shelter 🐾',
-  'market.header_desktop_ong_sub': 'Social impact panel, rescued pets, donations and responsible adoptions.',
+  'market.header_desktop_ong_sub':
+      'Social impact panel, rescued pets, donations and responsible adoptions.',
   'market.header_desktop_biz_title': 'Patas Business 💼',
-  'market.header_desktop_biz_sub': 'Professional management of services, scheduling, clients and billing.',
+  'market.header_desktop_biz_sub':
+      'Professional management of services, scheduling, clients and billing.',
   'market.header_desktop_tutor_title': 'Patas Essential',
-  'market.header_desktop_tutor_sub': 'Explore exclusive microapps and services for your pet.',
+  'market.header_desktop_tutor_sub':
+      'Explore exclusive microapps and services for your pet.',
   'market.hero_tutor_title': 'Patas Health',
-  'market.hero_tutor_desc_desktop': 'Complete health network for your pet. Appointments, home tests and 24/7 telemedicine.',
+  'market.hero_tutor_desc_desktop':
+      'Complete health network for your pet. Appointments, home tests and 24/7 telemedicine.',
   'market.hero_tutor_desc_mobile': 'Appointments, lab exams and much more',
   'market.hero_ong_title': 'Adoption Center',
-  'market.hero_ong_desc_desktop': 'Manage rescued animals, medical history, neutering records and adoption forms in real time.',
+  'market.hero_ong_desc_desktop':
+      'Manage rescued animals, medical history, neutering records and adoption forms in real time.',
   'market.hero_ong_desc_mobile': 'Rescued pets, medical care & adopters',
   'market.hero_biz_title': 'Schedule & Appointments',
-  'market.hero_biz_desc_desktop': 'View and manage today\'s appointments, scheduled training sessions, open slots and tutor requests.',
+  'market.hero_biz_desc_desktop':
+      'View and manage today\'s appointments, scheduled training sessions, open slots and tutor requests.',
   'market.hero_biz_desc_mobile': 'Sessions, consultations & scheduled slots',
   'market.trainers_card_title': 'Trainers',
   'market.trainers_card_desc': 'Trainers & Pet Behavior',
@@ -750,11 +799,14 @@ const Map<String, String> enTranslations = {
   'market.badge_soon': 'Coming soon',
   'market.btn_discover': 'EXPLORE',
   'market.love_dialog_no_pet_title': 'No Pet Selected',
-  'market.love_dialog_no_pet_content': 'Please select an active pet in profile to access Patas Love.',
+  'market.love_dialog_no_pet_content':
+      'Please select an active pet in profile to access Patas Love.',
   'market.love_dialog_incompatible_title': 'Incompatible Species',
-  'market.love_dialog_incompatible_content': 'Patas Love is currently available only for dogs and cats. We will soon bring support for more species!',
+  'market.love_dialog_incompatible_content':
+      'Patas Love is currently available only for dogs and cats. We will soon bring support for more species!',
   'market.love_dialog_pending_title': 'Pending Activation',
-  'market.love_dialog_pending_content': 'To use Patas Love, you must enable "Available for Patas Love" in {name}\'s profile.',
+  'market.love_dialog_pending_content':
+      'To use Patas Love, you must enable "Available for Patas Love" in {name}\'s profile.',
   'market.love_dialog_go_to_profile': 'Go to Profile',
   'market.ong_donations_desc': 'Direct PIX and pet food drives',
   'market.ong_badge_pix_direct': 'DIRECT PIX',
@@ -797,12 +849,15 @@ const Map<String, String> enTranslations = {
   'trainers.search_hint': 'Search trainer by name or specialty...',
   'trainers.register_tooltip': 'Register as Specialist',
   'trainers.empty_filter_title': 'No trainers found',
-  'trainers.empty_filter_desc': 'We did not find specialists with the selected filters. Try searching another term or clear filters.',
+  'trainers.empty_filter_desc':
+      'We did not find specialists with the selected filters. Try searching another term or clear filters.',
   'trainers.clear_filters': 'Clear Filters',
   'trainers.empty_state_title': 'No trainers registered here yet',
-  'trainers.empty_state_desc': 'We are expanding our network of trainers and pet behavior specialists. As soon as new professionals register in your area, they will appear here!',
+  'trainers.empty_state_desc':
+      'We are expanding our network of trainers and pet behavior specialists. As soon as new professionals register in your area, they will appear here!',
   'trainers.cta_trainer_title': 'Are you a trainer or behaviorist?',
-  'trainers.cta_trainer_desc': 'Register your professional profile and start receiving students in your area!',
+  'trainers.cta_trainer_desc':
+      'Register your professional profile and start receiving students in your area!',
   'trainers.cta_trainer_btn': 'Register as Specialist',
   'trainers.cta_trainer_full_btn': 'Register my Professional Profile',
   'trainers.at_home': 'At home',
@@ -859,12 +914,14 @@ const Map<String, String> enTranslations = {
   'love.tab_compatible': 'Dating Feed',
   'love.tab_chats': 'Messages',
   'love.no_compatible_pets': 'No partners found at the moment',
-  'love.no_compatible_desc': 'As soon as other owners activate Patas Love for pets of the same species as {name}, they will appear here!',
+  'love.no_compatible_desc':
+      'As soon as other owners activate Patas Love for pets of the same species as {name}, they will appear here!',
   'love.pet_banner_title': 'Patas Love: {name}',
   'love.active_badge': 'Profile active for new dates 💖',
   'love.inactive_badge': 'Profile disabled for dating',
   'love.no_chats_yet': 'No chats started yet',
-  'love.no_chats_desc': 'Browse the Feed tab and click "Chat" on a pet profile to start a conversation.',
+  'love.no_chats_desc':
+      'Browse the Feed tab and click "Chat" on a pet profile to start a conversation.',
   'love.status_match': 'Match!',
   'love.status_pending': 'Pending',
   'love.start_chat_btn': 'Chat',
@@ -906,7 +963,8 @@ const Map<String, String> enTranslations = {
   'acolhe.animal_count_singular': '1 animal listed',
   'acolhe.animal_count_plural': '{count} animals listed',
   'acolhe.confirm_delete_title': 'Remove animal?',
-  'acolhe.confirm_delete_content': 'Are you sure you want to remove "{name}" from the shelter records?',
+  'acolhe.confirm_delete_content':
+      'Are you sure you want to remove "{name}" from the shelter records?',
   'acolhe.remove_btn': 'Remove',
   'acolhe.cancel_btn': 'Cancel',
   'acolhe.animal_options_tooltip': 'Animal options',
@@ -936,7 +994,8 @@ const Map<String, String> enTranslations = {
   'acolhe.cat_label': '🐱 Cat',
   'acolhe.detail_available_tag': 'Available for Responsible Adoption',
   'acolhe.apply_button': 'I Want to Adopt {name} ❤️',
-  'acolhe.apply_success_snackbar': 'Adoption application sent successfully! The shelter will get in touch.',
+  'acolhe.apply_success_snackbar':
+      'Adoption application sent successfully! The shelter will get in touch.',
   'acolhe.health_care_section': 'Health Care',
   'acolhe.rescue_story_section': 'Rescue Story',
   'acolhe.behavior_section': 'Temperament & Behavior',
@@ -996,7 +1055,8 @@ const Map<String, String> enTranslations = {
   'acolhe.badge_deworm_ok': 'Dewormer OK',
   'acolhe.badge_deworm_pending': 'Dewormer Pend.',
   'acolhe.empty_medical_filter': 'No sheltered pets in this filter.',
-  'acolhe.empty_medical_desc': 'Change filters above or register pets in the Adoption Center.',
+  'acolhe.empty_medical_desc':
+      'Change filters above or register pets in the Adoption Center.',
   'acolhe.temp_homes_sub_ong': 'Volunteer foster care network',
   'acolhe.temp_homes_sub_tutor': 'Support by fostering a rescue pet',
   'acolhe.new_volunteer': 'New Volunteer',
@@ -1004,9 +1064,12 @@ const Map<String, String> enTranslations = {
   'acolhe.want_to_foster_btn': 'Become a Foster Home 🏡',
   'acolhe.banner_conn_title_ong': 'Open Connection with Local Pet Owners 🤝',
   'acolhe.banner_conn_title_tutor': 'Be a Volunteer Foster Home! 🏡🐾',
-  'acolhe.banner_conn_desc_ong_pending': 'You have {count} new volunteer application(s) to foster pets from your shelter!',
-  'acolhe.banner_conn_desc_ong_empty': 'Community members can apply through the app to foster pets from your shelter.',
-  'acolhe.banner_conn_desc_tutor': 'You can save lives by opening your home to foster a rescued animal until permanent adoption!',
+  'acolhe.banner_conn_desc_ong_pending':
+      'You have {count} new volunteer application(s) to foster pets from your shelter!',
+  'acolhe.banner_conn_desc_ong_empty':
+      'Community members can apply through the app to foster pets from your shelter.',
+  'acolhe.banner_conn_desc_tutor':
+      'You can save lives by opening your home to foster a rescued animal until permanent adoption!',
   'acolhe.view_pending_count': 'View ({count})',
   'acolhe.apply_volunteer': 'Apply Now',
   'acolhe.kpi_total_homes': 'Total Homes',
@@ -1017,16 +1080,21 @@ const Map<String, String> enTranslations = {
   'acolhe.kpi_sub_available_now': 'Available now',
   'acolhe.kpi_sub_sheltered_hosted': 'Rescued pets hosted',
   'acolhe.kpi_sub_community_tutors': 'Community volunteers',
-  'acolhe.search_temp_homes_hint': 'Search by volunteer, neighborhood, city or phone...',
+  'acolhe.search_temp_homes_hint':
+      'Search by volunteer, neighborhood, city or phone...',
   'acolhe.filter_chip_all': 'All',
   'acolhe.filter_chip_with_spots': 'With Spots',
   'acolhe.filter_chip_full': 'Full',
   'acolhe.filter_chip_applications': 'Applications',
   'acolhe.empty_temp_homes_title': 'No foster homes registered yet.',
-  'acolhe.empty_temp_homes_filter_title': 'No homes match the selected filters.',
-  'acolhe.empty_temp_homes_desc_ong': 'Register volunteer fosters or receive community applications to expand shelter capacity!',
-  'acolhe.empty_temp_homes_desc_tutor': 'No foster homes registered for this shelter yet. Be the first volunteer to foster a pet!',
-  'acolhe.empty_temp_homes_filter_desc': 'Try changing search terms or filters above.',
+  'acolhe.empty_temp_homes_filter_title':
+      'No homes match the selected filters.',
+  'acolhe.empty_temp_homes_desc_ong':
+      'Register volunteer fosters or receive community applications to expand shelter capacity!',
+  'acolhe.empty_temp_homes_desc_tutor':
+      'No foster homes registered for this shelter yet. Be the first volunteer to foster a pet!',
+  'acolhe.empty_temp_homes_filter_desc':
+      'Try changing search terms or filters above.',
   'acolhe.volunteer_tutor_badge': 'Volunteer Foster 🤝',
   'acolhe.unspecified_address': 'Address not provided',
   'acolhe.capacity_label': 'Capacity: {occupied}/{max} spots filled',
@@ -1050,8 +1118,10 @@ const Map<String, String> enTranslations = {
   'acolhe.publish_event': 'Publish Event',
   'acolhe.hero_events_ong': 'Fairs, Bazaars & Social Events 📢',
   'acolhe.hero_events_tutor': 'Find Adoption Fairs & Events 🐾',
-  'acolhe.hero_events_ong_desc': 'Every fair registered here is promoted on the Social Feed to local pet owners and volunteers.',
-  'acolhe.hero_events_tutor_desc': 'Confirm attendance at adoption fairs, meet rescued pets in person and support the cause.',
+  'acolhe.hero_events_ong_desc':
+      'Every fair registered here is promoted on the Social Feed to local pet owners and volunteers.',
+  'acolhe.hero_events_tutor_desc':
+      'Confirm attendance at adoption fairs, meet rescued pets in person and support the cause.',
   'acolhe.kpi_upcoming_events': 'Upcoming Events',
   'acolhe.kpi_adoption_fairs': 'Adoption Fairs',
   'acolhe.kpi_confirmed_rsvps': 'Confirmed RSVPs',
@@ -1066,14 +1136,17 @@ const Map<String, String> enTranslations = {
   'acolhe.confirmed_count': '{count} confirmed',
   'acolhe.edit_event': 'Edit Event',
   'acolhe.delete_event': 'Delete Event',
-  'acolhe.delete_event_confirm': 'Are you sure you want to cancel and delete the event "{name}"?',
+  'acolhe.delete_event_confirm':
+      'Are you sure you want to cancel and delete the event "{name}"?',
   'acolhe.rsvp_attending': 'Attending 🎉',
   'acolhe.rsvp_attend_btn': 'I\'ll Be There!',
   'acolhe.share_whatsapp': 'Share on WhatsApp',
   'acolhe.contact_whatsapp': 'Questions on WhatsApp',
   'acolhe.empty_events_title': 'No events in this category',
-  'acolhe.empty_events_ong': 'Tap the button below to schedule the shelter\'s first adoption fair.',
-  'acolhe.empty_events_tutor': 'Stay tuned! New adoption fairs and bazaars will be posted soon.',
+  'acolhe.empty_events_ong':
+      'Tap the button below to schedule the shelter\'s first adoption fair.',
+  'acolhe.empty_events_tutor':
+      'Stay tuned! New adoption fairs and bazaars will be posted soon.',
 
   // === 7. Health & Lost Pet IoT (health / encontra) ===
   'health.title': 'Patas Health',
@@ -1090,7 +1163,8 @@ const Map<String, String> enTranslations = {
 
   // === 8. Web3 Layer & Solana (web3) ===
   'web3.solana_pay_title': 'Solana Pay ⚡',
-  'web3.solana_pay_desc': 'Instant donation, near-zero fees, and full on-chain transparency.',
+  'web3.solana_pay_desc':
+      'Instant donation, near-zero fees, and full on-chain transparency.',
   'web3.scan_to_pay': 'Scan QR Code with your Phantom or Solflare wallet:',
   'web3.copy_url': 'Copy Solana Pay Link',
   'web3.open_wallet': 'Open Mobile Wallet',
@@ -1108,37 +1182,94 @@ const Map<String, String> enTranslations = {
   'web3.issue_cnft_btn': 'Mint cNFT Passport',
   'web3.cloak_title': 'Anonymous Donation (Cloak Shield)',
   'web3.cloak_badge': 'ZK PRIVACY',
-  'web3.cloak_desc': 'Fund emergency surgeries without revealing your wallet balance.',
+  'web3.cloak_desc':
+      'Fund emergency surgeries without revealing your wallet balance.',
 
   // === 9. Settings & Accessibility (settings) ===
   'settings.title': 'Settings & Preferences',
+  'settings.theme_title': 'Theme & Appearance',
+  'settings.theme_subtitle': 'Dark/light mode and notification sounds',
+  'settings.theme_desc': 'Choose the theme that best fits your personal taste and style.',
+  'settings.notification_sound_title': 'Notification Sound',
+  'settings.notification_sound_test': 'Test',
   'settings.language': 'Language',
   'settings.language_desc': 'Choose between English and Portuguese',
   'settings.language_section_title': 'Language & Region',
-  'settings.language_section_desc': 'Choose your preferred language. Changes apply immediately across the entire app.',
+  'settings.language_section_desc':
+      'Choose your preferred language. Changes apply immediately across the entire app.',
   'settings.portuguese_label': 'Portuguese',
   'settings.portuguese_sub': 'Brazil (pt-BR)',
   'settings.english_label': 'English',
   'settings.english_sub': 'United States (en-US)',
   'settings.active_badge': 'Active',
-  'settings.language_hint': 'All app screens officially support English and Portuguese.',
+  'settings.language_hint':
+      'All app screens officially support English and Portuguese.',
   'settings.dark_mode': 'Dark Mode',
+  'settings.accessibility_title': 'Accessibility',
+  'settings.accessibility_subtitle': 'High contrast, fonts and reading assistance',
   'settings.accessibility': 'Accessibility',
   'settings.high_contrast': 'High Contrast',
   'settings.font_size': 'Font Size',
+  'settings.privacy_title': 'Privacy Settings',
+  'settings.privacy_subtitle': 'Profiles, personal data and permissions',
+  'settings.privacy_accounts': 'Accounts and profiles',
+  'settings.privacy_personal_data': 'Personal data',
+  'settings.privacy_info_permissions': 'Your information and permissions',
+  'settings.privacy_blocked_users': 'Blocked users',
+  'settings.security_title': 'Account Security',
+  'settings.security_subtitle': 'Password, login alerts and protection',
+  'settings.security_password_label': 'Password',
+  'settings.security_password_desc': 'Allows you to change your account password and choose a strong and secure one.',
+  'settings.security_alerts_label': 'Login alerts',
+  'settings.security_alerts_desc': 'Allows you to receive notifications when someone tries to access your account from an unknown device or browser.',
+  'settings.security_trusted_contacts_label': 'Trusted contacts',
+  'settings.security_trusted_contacts_desc': 'Allows you to choose friends who can help you recover access to your account if you forget your password or get locked out.',
+  'settings.security_trusted_snackbar': 'Feature in development. You will soon be able to add trusted contacts!',
+  'settings.notifications_title': 'Notifications',
+  'settings.notifications_subtitle': 'Alerts for posts, followers and emails',
   'settings.notifications': 'Push Notifications',
+  'settings.notifications_posts_label': 'Posts, stories, and comments',
+  'settings.notifications_posts_desc': 'Allows you to choose whether to receive notifications when someone posts, shares a story, or comments on your posts or stories',
+  'settings.notifications_followers_label': 'Following and followers',
+  'settings.notifications_followers_desc': 'Allows you to choose whether to receive notifications when someone follows you, unfollows you, or follows other people',
+  'settings.notifications_email_sms_label': 'Email and SMS',
+  'settings.notifications_email_sms_desc': 'Allows you to choose whether to receive email or SMS notifications about Patas news, tips to improve your profile, or activity reminders',
+  'settings.help_title': 'Help & Support',
+  'settings.help_subtitle': 'Help center, FAQs and contact support',
+  'settings.help_support_banner_title': 'Access our support and help channels.',
+  'settings.help_support_banner_desc': 'You can find answers about app features in the Help section. But if you need specific assistance, please access Support.',
+  'settings.legal_title': 'Legal & Privacy',
+  'settings.legal_subtitle': 'Terms of service, policies and LGPD rights',
   'settings.terms_privacy': 'Terms & Privacy',
+  'settings.terms_of_use': 'Terms of Use',
+  'settings.privacy_policy': 'Privacy Policy',
+  'settings.request_account_deletion': 'Request Account Deletion (GDPR/LGPD)',
+  'settings.deletion_dialog_title': 'Account Deletion',
+  'settings.deletion_dialog_content': 'In accordance with privacy regulations (LGPD/GDPR), requesting the deletion of your account will permanently deactivate your personal data, photos, and pet profiles from our active platform.\n\nAre you sure you want to proceed with this request?',
+  'settings.deletion_dialog_confirm': 'Confirm Deletion',
+  'settings.deletion_dialog_snackbar': 'Request submitted. Our team will process your data deletion within 48 hours in accordance with privacy laws.',
+  'settings.about_title': 'About Patas',
+  'settings.about_subtitle': 'Version {version} and Origem credits',
+  'settings.version_label': 'Version: {version}',
+  'settings.developed_by': 'Developed by:',
   'settings.delete_account': 'Delete My Account',
+  'settings.logout_title': 'Log Out',
+  'settings.logout_subtitle': 'Sign out of active session on this device',
   'settings.logout': 'Log Out',
   'settings.logout_confirm': 'Are you sure you want to log out?',
+  'settings.logout_prompt': 'Log out of your account?',
+  'settings.logout_action': 'Log Out',
   'acolhe.rescue_alerts_title': 'Rescues & Alerts',
   'acolhe.rescue_sub_ong': 'Community calls and emergency animal rescue',
-  'acolhe.rescue_sub_tutor': 'Solidarity network for animal relief and protection',
+  'acolhe.rescue_sub_tutor':
+      'Solidarity network for animal relief and protection',
   'acolhe.report_risk_animal': 'Report Animal at Risk',
   'acolhe.banner_rescue_ong': 'Regional Rescue Center',
   'acolhe.banner_rescue_tutor': 'Solidarity Rescue Network',
-  'acolhe.banner_rescue_desc_ong': 'Respond to community reports of animals at risk. Take on the rescue, provide medical care, and onboard them directly into your shelter.',
-  'acolhe.banner_rescue_desc_tutor': 'Spotted an injured, abandoned, or endangered animal? Report immediately with photos and location so shelters and volunteers can assist.',
+  'acolhe.banner_rescue_desc_ong':
+      'Respond to community reports of animals at risk. Take on the rescue, provide medical care, and onboard them directly into your shelter.',
+  'acolhe.banner_rescue_desc_tutor':
+      'Spotted an injured, abandoned, or endangered animal? Report immediately with photos and location so shelters and volunteers can assist.',
   'acolhe.kpi_open_calls': 'Open Calls',
   'acolhe.kpi_critical_cases': 'Critical Cases',
   'acolhe.kpi_in_treatment': 'In Care',
@@ -1159,18 +1290,24 @@ const Map<String, String> enTranslations = {
   'acolhe.shelter_pet_btn': 'Admit to Shelter 🐶',
   'acolhe.delete_call_tooltip': 'Remove Call',
   'acolhe.empty_calls_title': 'No calls in this tab',
-  'acolhe.empty_calls_desc': 'All clear here! When new distress calls are reported, they will appear in this list.',
+  'acolhe.empty_calls_desc':
+      'All clear here! When new distress calls are reported, they will appear in this list.',
   'acolhe.dialog_complete_title': 'Complete Rescue',
-  'acolhe.dialog_complete_prompt': 'Has the animal been assisted or sent for veterinary care?',
+  'acolhe.dialog_complete_prompt':
+      'Has the animal been assisted or sent for veterinary care?',
   'acolhe.dialog_notes_hint': 'Rescue notes (optional)...',
   'acolhe.dialog_confirm_rescue_btn': 'Confirm Rescue ✅',
   'acolhe.dialog_delete_call_title': 'Remove Call?',
-  'acolhe.dialog_delete_call_prompt': 'Are you sure you want to remove this rescue call from the list?',
-  'acolhe.snack_only_ong_assume': 'Only registered shelters can take on rescue calls.',
+  'acolhe.dialog_delete_call_prompt':
+      'Are you sure you want to remove this rescue call from the list?',
+  'acolhe.snack_only_ong_assume':
+      'Only registered shelters can take on rescue calls.',
   'acolhe.snack_call_assumed': 'Call "{title}" taken by your shelter! 🚑',
   'acolhe.snack_call_assume_err': 'Error taking rescue call. Please try again.',
-  'acolhe.snack_select_ong_first': 'Select a shelter to admit and register the animal.',
-  'acolhe.snack_animal_sheltered': 'Animal admitted to shelter and call finished! 🐶🎉',
+  'acolhe.snack_select_ong_first':
+      'Select a shelter to admit and register the animal.',
+  'acolhe.snack_animal_sheltered':
+      'Animal admitted to shelter and call finished! 🐶🎉',
   'acolhe.urgency_critical': 'Critical Urgency',
   'acolhe.urgency_high': 'High Priority',
   'acolhe.urgency_medium': 'Medium Urgency',
@@ -1208,7 +1345,8 @@ const Map<String, String> enTranslations = {
   'health.card_tips_sub': 'Care & well-being',
   'health.vaccines_wallet_title': 'Vaccine Record',
   'health.vaccines_sub_empty': 'Select a pet on Home to view history',
-  'health.vaccines_sub_pet': 'Administered vaccines and pending doses for {name}',
+  'health.vaccines_sub_pet':
+      'Administered vaccines and pending doses for {name}',
   'health.vaccine_status_title': '{name}\'s vaccine status',
   'health.vaccine_status_updated': 'Up to Date!',
   'health.no_vaccines_saved': 'No vaccines saved',
@@ -1235,7 +1373,8 @@ const Map<String, String> enTranslations = {
   'health.no_reminders_scheduled': 'No reminders scheduled.',
   'health.reminder_canceled': 'Reminder cancelled!',
   'health.delete_vaccine_dialog_title': 'Delete Record',
-  'health.delete_vaccine_dialog_confirm': 'Do you really want to delete this vaccine record?',
+  'health.delete_vaccine_dialog_confirm':
+      'Do you really want to delete this vaccine record?',
   'health.vaccine_deleted_snack': 'Vaccine record deleted successfully!',
   'health.reminder_scheduled_snack': 'Reminder scheduled for {date} at {time}!',
   'health.tips_page_title': 'Pet Tips',
@@ -1275,11 +1414,13 @@ const Map<String, String> enTranslations = {
   'health.tab_settings': 'Vet Settings',
   'health.logout_account': 'Log Out',
   'health.dialog_cancel_appointment_title': 'Cancel Appointment?',
-  'health.dialog_cancel_appointment_desc': 'Are you sure you want to cancel this appointment? The pet parent will be notified immediately.',
+  'health.dialog_cancel_appointment_desc':
+      'Are you sure you want to cancel this appointment? The pet parent will be notified immediately.',
   'health.confirm_cancellation': 'Confirm Cancellation',
   'health.appointment_canceled_snack': 'Appointment cancelled successfully.',
   'health.appointment_cancel_err_snack': 'Error cancelling appointment.',
-  'health.logout_confirm_vet': 'Do you really want to log out of your Vet account?',
+  'health.logout_confirm_vet':
+      'Do you really want to log out of your Vet account?',
   'health.no_active_appointments': 'No active appointments',
   'health.no_history_appointments': 'No appointments in history',
 
@@ -1288,7 +1429,8 @@ const Map<String, String> enTranslations = {
   'encontra.subtitle': 'Protection, QR medal and geolocation',
   'encontra.admin_qr_tooltip': 'QR Batch Generator',
   'encontra.unlink_dialog_title': 'Unlink Tag?',
-  'encontra.unlink_dialog_desc': 'Are you sure you want to unlink the smart tag from {name}?\n\n• The current physical tag will stop working for this pet.\n• Your protection subscription will remain active.\n• You can link a new tag to this pet whenever you want.',
+  'encontra.unlink_dialog_desc':
+      'Are you sure you want to unlink the smart tag from {name}?\n\n• The current physical tag will stop working for this pet.\n• Your protection subscription will remain active.\n• You can link a new tag to this pet whenever you want.',
   'encontra.unlink_cancel': 'Cancel',
   'encontra.unlink_confirm': 'Unlink',
   'encontra.unlink_success': 'Tag unlinked successfully!',
@@ -1296,11 +1438,14 @@ const Map<String, String> enTranslations = {
   'encontra.my_pets_and_tags': 'My Pets and Tags',
   'encontra.search_status': 'Search Status',
   'encontra.active_monitoring': 'Active Monitoring',
-  'encontra.monitoring_desc': 'Your smart tags are passively monitoring your pets. Turn on "Lost Mode" on the animal card if they go missing.',
+  'encontra.monitoring_desc':
+      'Your smart tags are passively monitoring your pets. Turn on "Lost Mode" on the animal card if they go missing.',
   'encontra.how_it_works': 'How does it work?',
-  'encontra.how_it_works_desc': 'Activate "Lost Mode" if your pet runs away. Whoever scans the tag will send their location back to you.',
+  'encontra.how_it_works_desc':
+      'Activate "Lost Mode" if your pet runs away. Whoever scans the tag will send their location back to you.',
   'encontra.no_pets_registered': 'No pets registered',
-  'encontra.no_pets_desc': 'You need to register your dog or cat in the profile menu before activating them on smart tags.',
+  'encontra.no_pets_desc':
+      'You need to register your dog or cat in the profile menu before activating them on smart tags.',
   'encontra.tag_none': 'No QR Tag',
   'encontra.tag_active': 'Active Tag',
   'encontra.tag_suspended': 'Suspended Tag',
@@ -1318,7 +1463,8 @@ const Map<String, String> enTranslations = {
   'encontra.manage_subscription': 'Manage Subscription',
   'encontra.view_on_map': 'View on Map',
   'encontra.recent_sightings': 'Recent Sightings',
-  'encontra.no_sightings_yet': 'No sightings recorded for this pet yet. Smart tags are waiting for scans.',
+  'encontra.no_sightings_yet':
+      'No sightings recorded for this pet yet. Smart tags are waiting for scans.',
   'encontra.unknown_location': 'Unknown location',
   'encontra.time_min': '{min}m ago',
   'encontra.time_hour': '{hour}h ago',
@@ -1329,38 +1475,51 @@ const Map<String, String> enTranslations = {
   'encontra.alert_lost_mode_on': '🚨 Alert: Lost Mode ACTIVATED for {name}!',
   'encontra.alert_lost_mode_off': '✅ Lost Mode turned off for {name}.',
   'encontra.about_title': 'About Patas Find',
-  'encontra.about_desc': 'Patas physical tags feature an exclusive QR Code. When someone scans the tag, the system sends the scanner geolocation directly to you if your pet is set to "Lost Mode".\n\nIf you have any questions, reach out to app support.',
+  'encontra.about_desc':
+      'Patas physical tags feature an exclusive QR Code. When someone scans the tag, the system sends the scanner geolocation directly to you if your pet is set to "Lost Mode".\n\nIf you have any questions, reach out to app support.',
   'encontra.view_all_on_map': 'VIEW ALL ON MAP',
-  
+
   // Localizer / Public Scanner
   'encontra.tag_not_found_title': 'Tag Not Registered',
-  'encontra.tag_not_found_desc': 'This Patas Find smart tag has not been activated by any guardian yet.',
+  'encontra.tag_not_found_desc':
+      'This Patas Find smart tag has not been activated by any guardian yet.',
   'encontra.simulate_label': 'Simulate: {mode}',
   'encontra.pet_lost_badge': 'LOST PET',
   'encontra.default_pet_name': 'Pet',
   'encontra.medical_care_title': 'Medical Care',
-  'encontra.medical_care_lost': 'If you find this pet, please try to keep them calm and share your location immediately.',
-  'encontra.medical_care_normal': 'Healthy pet protected by the Patas community.',
+  'encontra.medical_care_lost':
+      'If you find this pet, please try to keep them calm and share your location immediately.',
+  'encontra.medical_care_normal':
+      'Healthy pet protected by the Patas community.',
   'encontra.behavior_title': 'Behavior',
-  'encontra.behavior_lost': 'May be frightened from running away. Approach gently, preferably with soft tones of voice.',
+  'encontra.behavior_lost':
+      'May be frightened from running away. Approach gently, preferably with soft tones of voice.',
   'encontra.behavior_normal': 'Super friendly and gentle with people.',
   'encontra.important_notice': 'Important Notice',
-  'encontra.notice_lost_desc': 'The guardian of {name} has already been notified about this scan. To help them find their friend quickly and accurately, you can share your current location via the button below:',
+  'encontra.notice_lost_desc':
+      'The guardian of {name} has already been notified about this scan. To help them find their friend quickly and accurately, you can share your current location via the button below:',
   'encontra.finder_name_label': 'Your Name (Optional)',
   'encontra.finder_name_hint': 'How can the guardian call you?',
   'encontra.finder_msg_label': 'Additional Message (Optional)',
-  'encontra.finder_msg_hint': 'E.g.: "Resting under tree shade next to the playground."',
+  'encontra.finder_msg_hint':
+      'E.g.: "Resting under tree shade next to the playground."',
   'encontra.sending_gps': 'Capturing GPS...',
   'encontra.location_sent': 'Location Sent!',
   'encontra.send_location_btn': 'Send My Current Location',
   'encontra.all_good_title': 'All Good!',
-  'encontra.all_good_desc': '{name} is currently safe and not lost. Thank you for caring!',
+  'encontra.all_good_desc':
+      '{name} is currently safe and not lost. Thank you for caring!',
   'encontra.meet_patas_btn': 'Discover Patas',
-  'encontra.gps_disabled_err': 'Location service (GPS) is disabled. Please enable it to send.',
-  'encontra.gps_denied_err': 'Location permission denied. Please allow access in browser or phone settings.',
-  'encontra.gps_denied_forever_err': 'Location permission permanently denied in settings.',
-  'encontra.sighting_save_err': 'Error registering sighting in database. Please try again.',
-  'encontra.location_sent_success': 'GPS location sent successfully! The guardian has been notified.',
+  'encontra.gps_disabled_err':
+      'Location service (GPS) is disabled. Please enable it to send.',
+  'encontra.gps_denied_err':
+      'Location permission denied. Please allow access in browser or phone settings.',
+  'encontra.gps_denied_forever_err':
+      'Location permission permanently denied in settings.',
+  'encontra.sighting_save_err':
+      'Error registering sighting in database. Please try again.',
+  'encontra.location_sent_success':
+      'GPS location sent successfully! The guardian has been notified.',
   'encontra.location_required_title': 'Location Required',
   'encontra.tag_tagline': 'Smart Community Identification Tag',
 
@@ -1369,36 +1528,47 @@ const Map<String, String> enTranslations = {
   'encontra.activate_subtitle': 'Link the physical medal to your pet profile',
   'encontra.invalid_tag_code': 'Scanned code is not a valid Patas tag.',
   'encontra.scan_instruction_title': 'Point camera at Tag QR Code',
-  'encontra.scan_instruction_subtitle': 'The QR Code is printed on the front of the physical Patas tag.',
+  'encontra.scan_instruction_subtitle':
+      'The QR Code is printed on the front of the physical Patas tag.',
   'encontra.tag_identified_title': 'Tag Identified!',
-  'encontra.tag_identified_subtitle': 'Now enter the PIN code to confirm the link.',
+  'encontra.tag_identified_subtitle':
+      'Now enter the PIN code to confirm the link.',
   'encontra.simulate_scan_btn': 'Simulate QR Code Scan',
   'encontra.qr_scanned_success': 'QR Code Scanned!',
   'encontra.code_label': 'Code: {uuid}',
   'encontra.enter_security_pin': 'Enter Security PIN',
-  'encontra.pin_desc': 'The 6-digit PIN code is printed on the package insert or tag box.',
+  'encontra.pin_desc':
+      'The 6-digit PIN code is printed on the package insert or tag box.',
   'encontra.pin_required': 'Please enter the PIN.',
   'encontra.pin_length_err': 'PIN must be exactly 6 digits.',
   'encontra.finish_activation_btn': 'Complete Tag Activation',
   'encontra.step_instructions_title': 'Activation Instructions',
   'encontra.step1_title': 'Position the Tag',
-  'encontra.step1_desc': 'Hold the ID tag in front of your computer or phone camera, centering the QR Code in the frame.',
+  'encontra.step1_desc':
+      'Hold the ID tag in front of your computer or phone camera, centering the QR Code in the frame.',
   'encontra.step2_title': 'Automatic Scan',
-  'encontra.step2_desc': 'Once the QR Code is focused, the system will read the UUID automatically and proceed.',
+  'encontra.step2_desc':
+      'Once the QR Code is focused, the system will read the UUID automatically and proceed.',
   'encontra.step3_title': 'Security PIN Code',
-  'encontra.step3_desc': 'Type the 6-digit code from the packaging to validate activation and link to your pet securely.',
+  'encontra.step3_desc':
+      'Type the 6-digit code from the packaging to validate activation and link to your pet securely.',
   'encontra.no_pet_selected_title': 'No pet selected',
-  'encontra.no_pet_selected_desc': 'Return to the dashboard and select a pet before proceeding.',
+  'encontra.no_pet_selected_desc':
+      'Return to the dashboard and select a pet before proceeding.',
   'encontra.tag_activating_for': 'Tag will be activated for:',
   'encontra.change_pet_btn': 'Change',
   'encontra.select_pet_title': 'Select Pet',
-  'encontra.select_pet_subtitle': 'Which pet do you want to activate this tag for?',
+  'encontra.select_pet_subtitle':
+      'Which pet do you want to activate this tag for?',
   'encontra.no_pets_found': 'No pets found. Register a pet first.',
   'encontra.simulate_dialog_title': 'Simulate Tag QR Code',
-  'encontra.simulate_dialog_subtitle': 'Select an available tag to test the activation flow.',
-  'encontra.no_tags_available': 'No tags available for simulation.\nAll tags are already activated or not registered.',
+  'encontra.simulate_dialog_subtitle':
+      'Select an available tag to test the activation flow.',
+  'encontra.no_tags_available':
+      'No tags available for simulation.\nAll tags are already activated or not registered.',
   'encontra.activation_success_title': 'Success!',
-  'encontra.activation_success_desc': 'Smart tag activated and linked to {name} successfully!\n\nNow, if they ever go missing, you will receive the location from anyone scanning the QR Code.',
+  'encontra.activation_success_desc':
+      'Smart tag activated and linked to {name} successfully!\n\nNow, if they ever go missing, you will receive the location from anyone scanning the QR Code.',
 
   // History & Plans
   'encontra.history_title': 'Alert History',
@@ -1406,20 +1576,25 @@ const Map<String, String> enTranslations = {
   'encontra.plans_title': 'Protection Plans',
   'encontra.plans_subtitle': 'Choose the ideal coverage for your pet',
   'encontra.no_sightings_registered': 'No sightings registered',
-  'encontra.activate_lost_mode_to_receive': 'Activate Lost Mode on the dashboard to start receiving sightings.',
+  'encontra.activate_lost_mode_to_receive':
+      'Activate Lost Mode on the dashboard to start receiving sightings.',
   'encontra.timeline_title': 'Sightings Timeline',
   'encontra.location_not_available': 'Location not available',
   'encontra.map_toggle': 'Map',
   'encontra.satellite_toggle': 'Satellite',
   'encontra.sighting_pin': 'Sighting {index}',
   'encontra.keep_pet_safe_title': 'Keep your pet safe',
-  'encontra.keep_pet_safe_desc': 'By subscribing, you activate location monitoring on smart tags. Cancel anytime.',
+  'encontra.keep_pet_safe_desc':
+      'By subscribing, you activate location monitoring on smart tags. Cancel anytime.',
   'encontra.benefit1_title': 'Last sighting location',
-  'encontra.benefit1_desc': 'Community GPS updates the map whenever the tag is scanned.',
+  'encontra.benefit1_desc':
+      'Community GPS updates the map whenever the tag is scanned.',
   'encontra.benefit2_title': 'Critical emergency notifications',
-  'encontra.benefit2_desc': 'Alerts on your phone and guardian official channels.',
+  'encontra.benefit2_desc':
+      'Alerts on your phone and guardian official channels.',
   'encontra.benefit3_title': 'No app required for the finder',
-  'encontra.benefit3_desc': 'Fast, seamless patas.online web page without friction.',
+  'encontra.benefit3_desc':
+      'Fast, seamless patas.online web page without friction.',
   'encontra.choose_plan_title': 'Choose the ideal plan',
   'encontra.monthly_plan': 'Monthly',
   'encontra.annual_plan': 'Annual',
@@ -1431,10 +1606,13 @@ const Map<String, String> enTranslations = {
   'encontra.card_option': 'Card',
   'encontra.subscribe_pix_btn': 'Subscribe with PIX',
   'encontra.advance_card_btn': 'Proceed to Card',
-  'encontra.pix_info_desc': 'PIX payments are processed instantly by the bank. Your subscription is activated immediately.',
-  'encontra.card_info_desc': 'Card payments are processed securely and instantly. Your pet protection will be activated right away.',
+  'encontra.pix_info_desc':
+      'PIX payments are processed instantly by the bank. Your subscription is activated immediately.',
+  'encontra.card_info_desc':
+      'Card payments are processed securely and instantly. Your pet protection will be activated right away.',
   'encontra.confirm_payment_dialog_title': 'Confirm Payment',
-  'encontra.pix_cpf_prompt': 'To generate PIX, your CPF number is required by the payment gateway.',
+  'encontra.pix_cpf_prompt':
+      'To generate PIX, your CPF number is required by the payment gateway.',
   'encontra.generate_pix_btn': 'Generate PIX',
   'encontra.auth_required_err': 'You must be signed in.',
   'encontra.sub_error': 'Error starting subscription: {error}',
@@ -1463,7 +1641,8 @@ const Map<String, String> enTranslations = {
   'family.add_button': 'Add Member',
   'family.save_button': 'Save Changes',
   'family.required_fields_title': 'Required Fields',
-  'family.required_fields_content': 'Please fill in all fields with * to continue.',
+  'family.required_fields_content':
+      'Please fill in all fields with * to continue.',
   'family.name_validation': 'Please enter a name.',
   'family.gallery': 'Gallery',
   'family.camera': 'Camera',
@@ -1475,7 +1654,8 @@ const Map<String, String> enTranslations = {
 
   // Video Replay & Share
   'feed.watch_again': 'Watch again',
-  'feed.share_post_subtitle': 'Share on WhatsApp, social networks & public link',
+  'feed.share_post_subtitle':
+      'Share on WhatsApp, social networks & public link',
   'feed.share_modal_title': 'Share Post',
   'feed.share_other_apps': 'Share to other apps',
   'feed.share_other_apps_desc': 'WhatsApp, Instagram, Telegram or Messages',
@@ -1492,7 +1672,8 @@ const Map<String, String> enTranslations = {
   'home.account_ong': 'NGO / Shelter',
   'home.account_corp': 'Business',
   'home.patas_tip_title': 'Patas Tip',
-  'home.patas_tip_desc': 'Share your pet moments to inspire other tutors in the community! 🐾',
+  'home.patas_tip_desc':
+      'Share your pet moments to inspire other tutors in the community! 🐾',
 
   // Central Patas (Hub)
   'hub.central_title': 'Patas Hub 🐾',
@@ -1527,7 +1708,8 @@ const Map<String, String> enTranslations = {
   'rewards.not_ranked': 'Not ranked',
   'rewards.regulation_btn': 'RULES & TIEBREAKER',
   'rewards.leaderboard_card_title': 'Season Global Leaderboard',
-  'rewards.leaderboard_card_subtitle': 'Check the race and see who is on the podium!',
+  'rewards.leaderboard_card_subtitle':
+      'Check the race and see who is on the podium!',
   'rewards.partnership_prefix': 'PARTNERSHIP: {name}',
   'rewards.sponsor_fallback': 'Sponsor',
   'rewards.prize_fallback': 'Grand Prize',
@@ -1535,29 +1717,40 @@ const Map<String, String> enTranslations = {
   'rewards.referral_title': 'Your Invite Code',
   'rewards.copy_code_tooltip': 'Copy invite code',
   'rewards.copy_code_success': 'Code copied successfully! 🎉',
-  'rewards.referral_hint': 'Share this code with your friends! When they create an account, you will earn +500 points immediately.',
+  'rewards.referral_hint':
+      'Share this code with your friends! When they create an account, you will earn +500 points immediately.',
   'rewards.missions_title': 'Season Quests',
   'rewards.mission_invite_title': 'Invite friends to Patas',
   'rewards.mission_invite_sub': 'Earn points for each registration (No limit!)',
   'rewards.mission_invite_btn': 'Copy Link',
   'rewards.mission_profile_title': '100% Completed Profile',
-  'rewards.mission_profile_sub': 'Complete your Pet\'s health and background info',
+  'rewards.mission_profile_sub':
+      'Complete your Pet\'s health and background info',
   'rewards.mission_profile_btn': 'Complete',
   'rewards.mission_feed_title': 'Spread love in the feed',
   'rewards.mission_feed_sub': 'Like posts from other pets (0/5 today)',
   'rewards.mission_feed_btn': 'Go to Timeline',
   'rewards.regulation_title': 'Official Rules',
   'rewards.regulation_rule1_title': '1. About the Cultural Contest',
-  'rewards.regulation_rule1_desc': 'Patas Rewards is a merit-based engagement competition. The prize is awarded to the tutor account with the highest accumulated score on the platform during the active season.',
+  'rewards.regulation_rule1_desc':
+      'Patas Rewards is a merit-based engagement competition. The prize is awarded to the tutor account with the highest accumulated score on the platform during the active season.',
   'rewards.regulation_rule2_title': '2. Unified Scoring (Tutor and Pets)',
-  'rewards.regulation_rule2_bullet1': '• Single Balance: All engagement activities (likes, comments, referrals) from any connected pet profile combine into a unified score for the tutor\'s account.',
-  'rewards.regulation_rule2_bullet2': '• Daily Quest Limit: Daily score caps for missions (e.g. feed likes cap) apply per account (Family), ensuring a fair and balanced competition for all participants.',
-  'rewards.regulation_rule2_bullet3': '• Dynamic Representation: The podium and global ranking list show the name and picture of the pet currently selected as "Active". Switching active pets dynamically updates the global scoreboard.',
-  'rewards.regulation_rule3_title': '3. Tiebreaker Hierarchy (Absolute Transparency)',
-  'rewards.regulation_rule3_intro': 'In the event of a tie in final season points, the following criteria order will be strictly applied:',
-  'rewards.regulation_rule3_crit1': '• Criterion 1: Number of Referrals. The account with the most verified new users wins.',
-  'rewards.regulation_rule3_crit2': '• Criterion 2: Active Pet Profile Completeness. The account whose Active Pet has the most comprehensive health and profile record wins.',
-  'rewards.regulation_rule3_crit3': '• Criterion 3: Time Factor. If still tied, the account that reached the final score FIRST chronologically according to immutable database timestamps wins.',
+  'rewards.regulation_rule2_bullet1':
+      '• Single Balance: All engagement activities (likes, comments, referrals) from any connected pet profile combine into a unified score for the tutor\'s account.',
+  'rewards.regulation_rule2_bullet2':
+      '• Daily Quest Limit: Daily score caps for missions (e.g. feed likes cap) apply per account (Family), ensuring a fair and balanced competition for all participants.',
+  'rewards.regulation_rule2_bullet3':
+      '• Dynamic Representation: The podium and global ranking list show the name and picture of the pet currently selected as "Active". Switching active pets dynamically updates the global scoreboard.',
+  'rewards.regulation_rule3_title':
+      '3. Tiebreaker Hierarchy (Absolute Transparency)',
+  'rewards.regulation_rule3_intro':
+      'In the event of a tie in final season points, the following criteria order will be strictly applied:',
+  'rewards.regulation_rule3_crit1':
+      '• Criterion 1: Number of Referrals. The account with the most verified new users wins.',
+  'rewards.regulation_rule3_crit2':
+      '• Criterion 2: Active Pet Profile Completeness. The account whose Active Pet has the most comprehensive health and profile record wins.',
+  'rewards.regulation_rule3_crit3':
+      '• Criterion 3: Time Factor. If still tied, the account that reached the final score FIRST chronologically according to immutable database timestamps wins.',
   'rewards.understood_btn': 'Got it',
   'rewards.confirmed_partner': 'CONFIRMED PARTNER',
   'rewards.about_prize': 'ABOUT THE PRIZE',
@@ -1575,11 +1768,416 @@ const Map<String, String> enTranslations = {
   'leaderboard.no_data': 'No data',
   'leaderboard.place_suffix': '#{place}',
   'leaderboard.just_starting_title': 'The ranking is just getting started!',
-  'leaderboard.just_starting_desc': 'There is still plenty of room to reach the podium! Invite your friends with your exclusive invite code and earn +500 points per referral to race ahead!',
+  'leaderboard.just_starting_desc':
+      'There is still plenty of room to reach the podium! Invite your friends with your exclusive invite code and earn +500 points per referral to race ahead!',
   'leaderboard.user_top3': 'Your Pet is on the Podium! Congratulations! 🎉🏆',
   'leaderboard.points_to_podium': '{points} pts away from the podium! 🚀',
   'leaderboard.top15': 'You are in the Top 15! Keep engaging!',
-  'leaderboard.start_engaging': 'Engage on the feed or invite friends to get started! 🐾',
+  'leaderboard.start_engaging':
+      'Engage on the feed or invite friends to get started! 🐾',
   'leaderboard.no_rank': 'No Rank',
   'leaderboard.my_points': 'my points',
+
+  // Solana Pay & Doações Web3 (Trilha 8)
+  'solana.desktop_how_to_pay_title': 'How to pay on Desktop',
+  'solana.desktop_how_to_pay_desc':
+      'On your computer, open the Phantom or Solflare app on your phone and point the camera at the QR Code on screen.\n\nThe transaction will be identified and confirmed instantly!',
+  'solana.understood': 'Understood',
+  'solana.wallet_title': 'Solana Wallet',
+  'solana.no_wallet_app_found':
+      'No compatible wallet app (Phantom or Solflare) responded to the request.',
+  'solana.install_wallet_desc':
+      'You can install Phantom Wallet from the Play Store or copy the shelter address to transfer directly from any exchange or app.',
+  'solana.copy_address': 'Copy Address',
+  'solana.download_phantom': 'Download Phantom',
+  'solana.cant_open_cloak': 'Could not open the Cloak link automatically.',
+  'solana.cloak_link_copied':
+      'Cloak Private Donation link copied successfully!',
+  'solana.cloak_privacy_title': 'Privacy with Cloak',
+  'solana.cloak_how_it_works': 'How Private Donation works on Patas:',
+  'solana.cloak_how_it_works_desc':
+      '1. Cloak uses Zero-Knowledge Proofs (Zcash model on Solana).\n2. Funds enter a Shielded Pool.\n3. The shelter receives the donation directly, but the link connecting your wallet to destination remains 100% invisible on Solana explorer.\n4. Your wealth and personal balance remain completely confidential.',
+  'solana.cloak_audited_badge': 'Official audited protocol on Solana Mainnet.',
+  'solana.docs_cloak': 'Cloak Docs',
+  'solana.anonymous_donation_title': 'Anonymous Donation (Cloak)',
+  'solana.anonymous_donation_desc_on':
+      'Your personal wallet and balance remain 100% invisible on-chain.',
+  'solana.anonymous_donation_desc_off':
+      'Hides your personal wallet via Zero-Knowledge.',
+  'solana.zk_info_banner': 'Zcash on Solana: How ZK proof protects you?',
+  'solana.usdc_title': 'Digital Dollar (USDC)',
+  'solana.sol_title': 'Solana (SOL)',
+  'solana.choose_amount': 'Choose donation amount:',
+  'solana.free_amount': '✨ Custom Amount',
+  'solana.free_amount_hint':
+      '💡 Scan the QR Code and enter the exact amount you wish to donate in Phantom/Solflare.',
+  'solana.paid_success': 'PAID SUCCESSFULLY!',
+  'solana.view_receipt': 'View Receipt',
+  'solana.tx_confirmed_onchain': 'Transaction Confirmed On-Chain',
+  'solana.cloak_active_shield': 'Cloak Mode Active • Zero-Knowledge Shield',
+  'solana.waiting_devnet_payment': 'Waiting for Devnet payment...',
+  'solana.donation_added_to_goal': 'Donation added to campaign goal!',
+  'solana.progress_updated_mural':
+      'Bar progress and total raised have been updated on the board.',
+  'solana.finish_view_mural': 'Complete and View on Board',
+  'solana.shelter_wallet_address': 'Solana Wallet Address (Shelter):',
+  'solana.explorer': 'Explorer',
+  'solana.copy_zk_link': 'Copy ZK Link',
+  'solana.donate_with_cloak': 'Donate with Cloak',
+  'solana.copy_wallet': 'Copy Wallet',
+  'solana.open_wallet': 'Open Wallet',
+  'solana.demo_simulate_confirmation':
+      'Simulate Instant Confirmation (Hackathon Demo)',
+  'solana.wallet_copied':
+      'Solana address copied! Transfer via Phantom or Solflare.',
+  'solana.donation_computed_success':
+      '🎉 Donation of R\$ {amount} ({token}) successfully recorded!',
+
+  // Campanha e Recibos de Doação (Trilha 8)
+  'donation.confirm_pix_title': 'Confirm PIX Donation',
+  'donation.confirm_pix_desc':
+      'Enter the amount in R\$ you just transferred via PIX to record your receipt:',
+  'donation.cancel': 'Cancel',
+  'donation.register_donation': 'Record Donation',
+  'donation.pix_registered_success':
+      '🎉 PIX donation of R\$ {amount} recorded successfully!',
+  'donation.pix_key_copied': 'PIX key copied to clipboard!',
+  'donation.default_subtitle': 'Fundraising Campaign',
+  'donation.tab_support': 'Support Now',
+  'donation.tab_receipts': 'Receipts & History',
+  'donation.progress_goal': '{pct}% of goal reached',
+  'donation.raised_of_goal': 'Raised: R\$ {current} of R\$ {goal}',
+  'donation.supporters_count': '{count} supporters',
+  'donation.method_pix': 'PIX (Instant Brazil)',
+  'donation.method_solana': 'Solana Pay (Crypto & Global)',
+  'donation.pix_instructions':
+      'Transfer any amount to the PIX key below and click Confirm:',
+  'donation.pix_key_label': 'Institution PIX Key:',
+  'donation.copy_pix_key': 'Copy Key',
+  'donation.confirm_payment_btn': 'I sent the PIX • Record Donation',
+  'donation.no_receipts_title': 'No receipts yet',
+  'donation.no_receipts_desc':
+      'Your donations confirmed via PIX or Solana Pay will appear here with a digital receipt.',
+  'donation.receipt_solana_tag': 'SOLANA PAY',
+  'donation.receipt_pix_tag': 'PIX',
+  'donation.receipt_view_onchain': 'View on Blockchain',
+  'donation.receipt_donor': 'Donor: {name}',
+  'donation.receipt_anonymous': 'Anonymous Donation',
+
+  'donation.default_shelter': 'Shelter in Charge',
+  'donation.pix_setting_up': 'PIX Key Setting Up',
+  'donation.pix_setting_up_desc':
+      'This shelter has not set up its direct PIX key yet. You can donate instantly using the Solana Pay tab!',
+  'donation.pix_direct_shelter': 'Direct PIX to Shelter',
+  'donation.pix_direct_shelter_desc':
+      '100% of the amount goes to the shelter official account',
+  'donation.copy_pix_key_tooltip': 'Copy PIX Key',
+  'donation.registering_pix': 'Registering...',
+  'donation.already_sent_pix': 'I sent the PIX (Issue Receipt)',
+  'donation.make_first_donation': 'Make First Donation',
+  'donation.sync_blockchain_txs': 'Sync Blockchain transactions',
+  'donation.your_receipts': 'Your Receipts ({count})',
+  'donation.sync_btn': 'Sync',
+  'donation.confirmed_badge': 'Confirmed',
+  'donation.donated_in_name_of': 'Donated on behalf of: ',
+  'donation.raised_amount': 'Raised: R\$ {current}',
+  'donation.goal_amount': 'Goal: R\$ {target}',
+  'donation.tab_ong_extract': 'Statement & Management',
+  'donation.ong_kpi_total_raised': 'Total Raised',
+  'donation.ong_kpi_raised_today': 'Raised Today',
+  'donation.ong_kpi_donors': 'Donors',
+  'donation.ong_kpi_deadline': 'Deadline / Duration',
+  'donation.adjust_goal_btn': 'Adjust Goal',
+  'donation.adjust_goal_title': 'Adjust Campaign Goal',
+  'donation.adjust_goal_desc': 'Enter the new target amount for this campaign:',
+  'donation.adjust_goal_success': 'Goal updated successfully!',
+  'donation.add_external_donation_btn': 'Record In-Person Donation',
+  'donation.add_external_donation_title': 'Record Physical / External Donation',
+  'donation.add_external_donation_desc': 'Add amounts received in-person (cash, events, supplies) to compute campaign progress:',
+  'donation.add_external_donation_donor_name': 'Donor Name (optional):',
+  'donation.add_external_donation_note': 'Note / Purpose (optional):',
+  'donation.add_external_donation_success': 'In-person donation of R\$ {amount} recorded successfully!',
+  'donation.pause_campaign': 'Pause Campaign',
+  'donation.resume_campaign': 'Resume Campaign',
+  'donation.status_paused': 'Campaign Paused',
+  'donation.status_active': 'Campaign Active',
+  'donation.status_expired': 'Campaign Ended',
+  'donation.closed_banner_paused': '⏸️ Campaign Paused by Shelter',
+  'donation.closed_banner_paused_desc': 'New donations have been paused temporarily by shelter management.',
+  'donation.closed_banner_expired': '⏳ Campaign Ended',
+  'donation.closed_banner_expired_desc': 'The deadline for this campaign has passed. Thank you to all supporters!',
+  'donation.closed_banner_completed': '🎉 Goal Completed!',
+  'donation.closed_banner_completed_desc': 'This campaign reached 100% of its goal. Thank you to all supporters!',
+  'donation.closed_button_label': 'Fundraising Closed',
+  'donation.donations_received_title': 'All Received Donations ({count})',
+  'donation.no_ong_donations_title': 'No donations received yet',
+  'donation.no_ong_donations_desc': 'Share your campaign with the QR Code and PIX key to start fundraising.',
+  'donation.method_presencial': 'In-person / Offline',
+  'donation.view_extract_and_donors': 'View Statement & Donors',
+  'donation.filter_all_mural': 'View Public Wall',
+  'donation.switch_to_ong_view': 'Shelter Dashboard',
+  'donation.deadline_continuous': 'Continuous Campaign',
+  'donation.deadline_remaining_days': '{days} days remaining',
+  'donation.deadline_ended_on': 'Ended on {date}',
+  'donation.deadline_ends_on': 'Ends on {date}',
+  'donation.tab_ong_dashboard': 'Performance & Charts',
+  'donation.tab_ong_donors': 'Donors Statement',
+  'donation.chart_weekly_evolution': 'Last 7 Days Evolution',
+  'donation.chart_daily_avg': 'Daily average',
+  'donation.chart_payment_methods': 'Collection Channels',
+  'donation.chart_pix_label': 'Direct PIX',
+  'donation.chart_solana_label': 'Solana Pay (USDC)',
+  'donation.chart_presencial_label': 'In-Person / Cash',
+  'donation.kpi_remaining': 'Remaining Goal',
+  'donation.kpi_avg_ticket': 'Average Donation',
+  'donation.receiving_channels_title': 'Your Shelter Receiving Channels',
+  'donation.receiving_channels_desc': 'Donors send funds directly to these channels with zero intermediary fees:',
+  'donation.quick_actions_title': 'Campaign Management Actions',
+  'donation.share_campaign_btn': 'Share Campaign',
+  'donation.campaign_link_copied': 'Campaign link copied successfully!',
+
+  // Passaporte Digital cNFT & Solana (Trilha 8)
+  'passport.hero_title_minted': 'Immutable Solana Passport',
+  'passport.hero_title_unminted': 'Sovereign Digital Passport',
+  'passport.hero_desc_minted': 'Microchip: {chip} • Verified',
+  'passport.hero_desc_unminted':
+      'Create the official blockchain identity for {name}',
+  'passport.hero_action_open': 'Open',
+  'passport.hero_action_mint': 'Issue',
+  'passport.onboarding_minting_meta': 'Preparing metadata...',
+  'passport.onboarding_minting_query': 'Querying Solana Devnet node...',
+  'passport.onboarding_minting_bubblegum':
+      'Minting cNFT (Metaplex Bubblegum)...',
+  'passport.onboarding_minting_merkle': 'Record written to Merkle Tree!',
+  'passport.onboarding_owner_only_error':
+      'Only the pet owner can issue the cNFT passport.',
+  'passport.onboarding_error': 'Error issuing passport: {error}',
+  'passport.onboarding_tech_badge': 'SOLANA cNFT TECHNOLOGY',
+  'passport.onboarding_title': 'Pet Digital Passport',
+  'passport.onboarding_desc':
+      'Create the official digital certificate for {name}. A lifelong, tamper-proof document accepted at clinics and travel — at no cost to you:',
+  'passport.onboarding_pillar1_title': 'Microchip ISO 11784 (Digital ID)',
+  'passport.onboarding_pillar1_desc':
+      'International identifier generated for the pet, ready to link to the veterinary physical chip.',
+  'passport.onboarding_pillar2_title': 'Updatable Vaccine Record',
+  'passport.onboarding_pillar2_desc':
+      'Auditable history on Solana. New vaccines are added to the same identity forever.',
+  'passport.onboarding_pillar3_title': 'No Bureaucracy or Cost (Gasless)',
+  'passport.onboarding_pillar3_desc':
+      'You do not need cryptocurrency or financial knowledge. Patas takes care of everything.',
+  'passport.onboarding_faq_button': 'What is Blockchain and Passport? FAQs',
+  'passport.onboarding_mint_button': 'Issue Official On-Chain Passport',
+  'passport.onboarding_not_now': 'Not Now',
+  'passport.faq_title': 'Understand in 1 Minute',
+  'passport.faq_subtitle': 'No complicated jargon, straight to the point.',
+  'passport.faq_q1': 'What is this Blockchain thing?',
+  'passport.faq_a1':
+      'Imagine a global digital registry open 24/7 that belongs to no single company or government. By registering {name}\'s certificate there, the data is stamped forever and no one in the world can delete, alter or forge their identity.',
+  'passport.faq_q2': 'Is this Microchip the same one the vet applies?',
+  'passport.faq_a2':
+      'Yes, it follows the exact same international standard (ISO 11784). When issued on Patas, we generate a provisional Digital ID. When you take {name} to get the physical microchip (the tiny grain injected under the skin), you can register the definitive number here to link everything to the same passport!',
+  'passport.faq_q3': 'What about when {name} takes new vaccines in the future?',
+  'passport.faq_a3':
+      'The passport has a permanent unique key (like a social security number). Whenever you or the clinic register a new vaccine on Patas, the on-chain Solana record is updated with the new health stamp, adding to the history without creating another document.',
+  'passport.faq_q4': 'Do I need to pay or understand cryptocurrency?',
+  'passport.faq_a4':
+      'No! The process is 100% free for you. Patas covers all Solana network fees and handles everything automatically behind the scenes. You just enjoy the security.',
+  'passport.faq_back_btn': 'Understood! Back to Issuance',
+  'passport.sheet_header_system': 'PATAS SYSTEM • DIGITAL PASSPORT',
+  'passport.sheet_header_sovereign': '{name} — Sovereign cNFT',
+  'passport.tab_identity': 'Identity',
+  'passport.tab_vaccines': 'Vaccines',
+  'passport.tab_blockchain': 'Blockchain',
+  'passport.copied_to_clipboard': '{label} copied to clipboard!',
+  'passport.close_passport': 'Close Passport',
+  'passport.status_active': 'Status: Active',
+  'passport.chip_title': 'Microchip ISO 11784',
+  'passport.chip_physical_badge': 'PHYSICAL CHIP',
+  'passport.chip_provisional_badge': 'PROVISIONAL DIGITAL ID',
+  'passport.copy_microchip_tooltip': 'Copy Microchip',
+  'passport.chip_implanted_hint':
+      'RFID Chip verified and clinically implanted in the pet.',
+  'passport.chip_provisional_hint':
+      'Provisional international code. Tap to understand how to link physical chip.',
+  'passport.qr_title': 'Sanitary Inspection QR Code',
+  'passport.qr_hint':
+      'Scannable by animal transit officers, airports and vet clinics.',
+  'passport.custodian_tutor': 'Custodian Owner',
+  'passport.solana_wallet_label': 'Solana Wallet',
+  'passport.vaccines_status_compliant': 'Health Status: Compliant',
+  'passport.vaccines_status_desc':
+      'Integrated immunological history cryptographically auditable.',
+  'passport.vaccines_onchain_title': 'On-Chain Vaccination Record',
+  'passport.vaccines_none_title': 'No individual vaccine registered yet.',
+  'passport.vaccines_none_desc':
+      'Vaccines registered in the Patas Health module appear here automatically with an authenticity stamp.',
+  'passport.applied_at': 'Applied on: {date}',
+  'passport.onchain_badge': 'On-Chain',
+  'passport.vaccines_auto_sync_note':
+      'New vaccines registered in Patas Health are automatically stamped and added to this same on-chain passport, keeping the same lifelong key.',
+  'passport.protocol_bubblegum': 'Metaplex Bubblegum Standard (cNFT)',
+  'passport.auditable_badge': 'Auditable',
+  'passport.asset_id_label': 'Asset ID (cNFT)',
+  'passport.merkle_tree_label': 'Merkle Tree',
+  'passport.tx_sig_label': 'TX Signature (Mint)',
+  'passport.leaf_index_label': 'Leaf Index',
+  'passport.block_slot_label': 'Solana Network Slot',
+  'passport.audit_explorer_btn': 'Audit on Solana Explorer (Devnet)',
+  'passport.merkle_proof_valid':
+      'Valid Merkle Proof: Cryptographic root confirmed on Devnet node!',
+  'passport.verify_proof_btn': 'Verify Cryptographic Proof On-Chain',
+  'passport.burn_dialog_title': 'Burn / Revoke cNFT',
+  'passport.burn_dialog_content':
+      'Do you want to burn the cNFT and revoke {name}\'s passport? The asset will be marked as canceled on blockchain and the pet will return to "Unissued" state.',
+  'passport.burn_dialog_cancel': 'Cancel',
+  'passport.burn_dialog_confirm': 'Yes, Burn cNFT',
+  'passport.burn_success_snackbar': 'cNFT passport revoked successfully.',
+  'passport.burn_button_label': 'Burn cNFT / Revoke Record (Sovereign Mode)',
+  'passport.microchip_dialog_title': 'Provisional vs. Physical Microchip',
+  'passport.microchip_dialog_subtitle':
+      'International Standard ISO 11784/11785',
+  'passport.microchip_dialog_desc1':
+      'This 15-digit code was generated by Patas to give {name} a unique, immutable digital certificate on the decentralized network.',
+  'passport.microchip_dialog_warning':
+      'Warning: It does NOT yet replace the physical microchip that the vet injects under the animal\'s skin!',
+  'passport.microchip_dialog_steps':
+      '📌 How it works when applying the real chip:\n1. The vet applies the physical chip (size of a grain of rice).\n2. The clinic\'s RFID reader reads the definitive 15-digit number.\n3. You enter this number in Patas, and the on-chain passport is updated with the definitive official certificate, without altering vaccine history.',
+  'passport.microchip_dialog_understood': 'Understood!',
+
+  // Species, Genders & Breeds (i18n)
+  'species.feline': 'Feline',
+  'species.canine': 'Canine',
+  'species.other': 'Other',
+  'gender.female': 'Female',
+  'gender.male': 'Male',
+  'breed.srd': 'Mixed Breed (SRD)',
+
+  // Accessibility (Track 9)
+  'accessibility.section_view': 'Display',
+  'accessibility.section_motion': 'Motion & Interaction',
+  'accessibility.font_size_title': 'Font Size',
+  'accessibility.font_size_desc': 'Adjust text size across the entire application.',
+  'accessibility.reduce_motion_title': 'Reduce Motion',
+  'accessibility.reduce_motion_desc': 'Disables transitions, swipes, and elaborate visual effects.',
+  'accessibility.expanded_spacing_title': 'Expanded Spacing',
+  'accessibility.expanded_spacing_desc': 'Increases distance between elements for easier tapping.',
+  'accessibility.colorblind_title': 'Color Filter (Color Blindness)',
+  'accessibility.colorblind_desc': 'Applies visual correction to help distinguish colors.',
+  'accessibility.colorblind_none': 'None (Default)',
+  'accessibility.colorblind_protanopia': 'Protanopia (Red / Green)',
+  'accessibility.colorblind_deuteranopia': 'Deuteranopia (Green / Red)',
+  'accessibility.colorblind_tritanopia': 'Tritanopia (Blue / Yellow)',
+
+  // === Accounts & Profiles Management (accounts) ===
+  'accounts.title': 'Accounts & Profiles',
+  'accounts.subtitle':
+      'Manage the accounts and profiles linked to your user.',
+  'accounts.your_account': 'Your Account',
+  'accounts.primary_badge': 'Primary',
+  'accounts.my_pets': 'My Pets',
+  'accounts.add_btn': 'Add',
+  'accounts.no_pets': 'No pets registered',
+  'accounts.undefined_breed': 'Breed not defined',
+  'accounts.my_ongs': 'My Shelters & NGOs',
+  'accounts.create_btn': 'Create',
+  'accounts.no_ongs': 'No shelters registered',
+  'accounts.cnpj_not_provided': 'CNPJ / Tax ID not provided',
+  'accounts.my_corps': 'My Businesses & Brands',
+  'accounts.no_corps': 'No businesses registered',
+  'accounts.delete_title': 'Delete {type}',
+  'accounts.delete_confirm':
+      'Are you sure you want to delete the profile of "{name}"? This action cannot be undone.',
+  'accounts.delete_success': '{type} deleted successfully!',
+  'accounts.delete_error': 'Error deleting profile. Please try again.',
+  'accounts.my_profile': 'My Profile',
+
+  // === Change Password (password) ===
+  'password.title': 'Change Password',
+  'password.subtitle':
+      'Confirm your current password and choose a new strong password to keep your account secure.',
+  'password.current_password': 'Current Password',
+  'password.current_password_hint': 'Your current password',
+  'password.current_password_required': 'Enter your current password',
+  'password.new_password': 'New Password',
+  'password.min_characters': 'At least 6 characters',
+  'password.new_password_required': 'Enter your new password',
+  'password.min_length_error': 'Password must be at least 6 characters',
+  'password.confirm_password': 'Confirm New Password',
+  'password.repeat_password_hint': 'Repeat your password',
+  'password.confirm_password_required': 'Confirm your password',
+  'password.passwords_dont_match': 'Passwords do not match',
+  'password.update_button': 'Update Password',
+  'password.success_message': 'Password updated successfully!',
+
+  // === Blocked Users (blocked) ===
+  'blocked.title': 'Blocked Users',
+  'blocked.unblock_title': 'Unblock Pet Parent?',
+  'blocked.unblock_desc':
+      'Do you want to unblock {name}? They will be able to view your profile and send messages again.',
+  'blocked.unblock_btn': 'Unblock',
+  'blocked.unblock_success': '{name} was unblocked successfully.',
+  'blocked.unblock_error': 'Failed to unblock pet parent. Please try again.',
+  'blocked.empty_title': 'No blocked users',
+  'blocked.empty_desc':
+      'Pet parents you block will appear here and can be unblocked at any time.',
+  'blocked.user_badge': 'Blocked User',
+
+  // === Help & Support / FAQ (help) ===
+  'help.title': 'Help & Support',
+  'help.faq_section': 'Frequently Asked Questions (FAQ)',
+  'help.faq_q1': 'How do I add a new pet?',
+  'help.faq_a1':
+      'Go to the home screen, click the "+" or "Add Pet" button, and fill in basic information like name, species, and birth date.',
+  'help.faq_q2': 'How do vaccine reminders work?',
+  'help.faq_a2':
+      'When registering a vaccine for your pet, you can set the next dose date. The app sends an automatic notification so you don\'t forget.',
+  'help.faq_q3': 'Is my information secure?',
+  'help.faq_a3':
+      'Yes! Your data and your pets\' data are stored securely and never shared with third parties without your permission.',
+  'help.faq_q4': 'I forgot my password, what should I do?',
+  'help.faq_a4':
+      'On the sign-in screen, use the "Forgot password" option to receive a reset link at your registered email.',
+  'help.faq_q5': 'Can I manage more than one pet?',
+  'help.faq_a5':
+      'Absolutely! Patas allows unlimited individual profiles for all your companion animals.',
+  'help.need_more_help': 'Still need help?',
+  'help.support_card_title': 'Contact our Support',
+  'help.support_card_desc':
+      'We are available to answer specific questions via WhatsApp.',
+  'help.whatsapp_btn': 'Open WhatsApp',
+  'help.whatsapp_dev_notice':
+      'WhatsApp support is currently in development. You will be able to talk to us soon!',
+
+  // === Your Information and Permissions (info_perm) ===
+  'info_perm.title': 'Your Information',
+  'info_perm.data_management': 'DATA MANAGEMENT',
+  'info_perm.download_data_title': 'Download your information',
+  'info_perm.download_data_desc':
+      'Get a copy of all your data and pets.',
+  'info_perm.download_data_notice':
+      'Preparing data archive... you will receive a link in your email shortly.',
+  'info_perm.activity_history_title': 'Activity history',
+  'info_perm.activity_history_desc':
+      'See what you recently did on the app.',
+  'info_perm.device_permissions': 'DEVICE PERMISSIONS',
+  'info_perm.camera_title': 'Camera',
+  'info_perm.camera_desc': 'Used to take photos of your pets and post.',
+  'info_perm.gallery_title': 'Gallery',
+  'info_perm.gallery_desc': 'Used to select existing photos.',
+  'info_perm.notifications_title': 'Notifications',
+  'info_perm.notifications_desc':
+      'Alerts about vaccine reminders and appointments.',
+  'info_perm.open_system_settings': 'Open System Settings',
+  'info_perm.open_settings_error':
+      'Unable to open settings. Please navigate manually to Settings > Patas.',
+  'info_perm.account_management': 'ACCOUNT MANAGEMENT',
+  'info_perm.delete_account_title': 'Delete my account',
+  'info_perm.delete_account_desc':
+      'This action will permanently delete all your data.',
+  'info_perm.delete_dialog_title': 'Delete Account',
+  'info_perm.delete_dialog_content':
+      'Your account will be deactivated immediately and all data permanently deleted after 30 days.\n\nDuring this period, you can cancel deletion by signing in again.\n\nAre you sure you want to proceed?',
+  'info_perm.delete_request_sent':
+      'Deletion request submitted. You have 30 days to cancel by logging in again.',
+  'info_perm.delete_request_error': 'Error requesting deletion: {error}',
 };

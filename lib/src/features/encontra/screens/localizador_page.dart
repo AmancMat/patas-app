@@ -596,6 +596,10 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
   }
 
   Future<void> _sendRealLocation() async {
+    final gpsDisabledMsg = context.tr('encontra.gps_disabled_err');
+    final gpsDeniedMsg = context.tr('encontra.gps_denied_err');
+    final gpsDeniedForeverMsg = context.tr('encontra.gps_denied_forever_err');
+    final sightingSaveErrMsg = context.tr('encontra.sighting_save_err');
     setState(() {
       _isSendingLocation = true;
     });
@@ -606,7 +610,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       // 1. Verifica se o serviço de localização está habilitado
       bool serviceEnabled = await Geolocator.isLocationServiceEnabled();
       if (!serviceEnabled) {
-        throw context.tr('encontra.gps_disabled_err');
+        throw gpsDisabledMsg;
       }
 
       // 2. Verifica a permissão de localização
@@ -614,12 +618,12 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       if (permission == LocationPermission.denied) {
         permission = await Geolocator.requestPermission();
         if (permission == LocationPermission.denied) {
-          throw context.tr('encontra.gps_denied_err');
+          throw gpsDeniedMsg;
         }
       }
 
       if (permission == LocationPermission.deniedForever) {
-        throw context.tr('encontra.gps_denied_forever_err');
+        throw gpsDeniedForeverMsg;
       }
 
       // 3. Captura a localização atual
@@ -650,7 +654,7 @@ class _LocalizadorPageState extends State<LocalizadorPage> {
       debugPrint('📤 Resultado do saveSighting: $success');
 
       if (!success) {
-        throw context.tr('encontra.sighting_save_err');
+        throw sightingSaveErrMsg;
       }
 
       if (mounted) {

@@ -2,7 +2,7 @@ name: patas_web_app
 description: "A new Flutter project."
 publish_to: 'none'
 
-version: 1.2.54+87
+version: 1.2.55+88
 
 environment:
   sdk: ^3.9.0

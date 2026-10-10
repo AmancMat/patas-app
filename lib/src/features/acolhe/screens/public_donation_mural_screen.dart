@@ -5,9 +5,12 @@ import 'package:patas_web_app/src/constants/app_colors.dart';
 import 'package:patas_web_app/src/common_widgets/patas_essencial_app_bar.dart';
 import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 import 'package:patas_web_app/src/utils/responsive_layout.dart';
+import 'package:patas_web_app/src/providers/active_account_provider.dart';
+import 'package:patas_web_app/src/models/active_account_model.dart';
 import '../models/donation_campaign_model.dart';
 import '../services/shelter_service.dart';
 import 'campaign_donation_page.dart';
+import 'ong_donations_dashboard_screen.dart';
 
 class PublicDonationMuralScreen extends StatefulWidget {
   const PublicDonationMuralScreen({super.key});
@@ -86,26 +89,50 @@ class _PublicDonationMuralScreenState extends State<PublicDonationMuralScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final thmode = Provider.of<DarkMode>(context);
-    final isDark = thmode.darkMode;
-    final list = _filteredCampaigns;
+    return Consumer<ActiveAccountProvider>(
+      builder: (context, activeAccountProvider, child) {
+        final activeAccount = activeAccountProvider.activeAccount;
+        if (activeAccount != null && activeAccount.type == AccountType.ong) {
+          return const OngDonationsDashboardScreen();
+        }
 
-    return Scaffold(
-      backgroundColor:
-          isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
-      appBar: PatasEssencialAppBar(
-        title: 'Mural de Doações',
-        subtitle: 'Apoie ONGs parceiras e transforme a vida de resgatados',
-        leadingIcon: const Icon(
-          Icons.volunteer_activism_rounded,
-          color: Colors.pinkAccent,
-          size: 22,
-        ),
-      ),
-      body: SafeArea(
-        child: RefreshIndicator(
-          onRefresh: _loadCampaigns,
-          color: Colors.pinkAccent,
+        final thmode = Provider.of<DarkMode>(context);
+        final isDark = thmode.darkMode;
+        final list = _filteredCampaigns;
+
+        return Scaffold(
+          backgroundColor:
+              isDark ? AppColors.bodygray : const Color(0xFFF5F7FA),
+          appBar: PatasEssencialAppBar(
+            title: 'Mural de Doações',
+            subtitle: 'Apoie ONGs parceiras e transforme a vida de resgatados',
+            leadingIcon: const Icon(
+              Icons.volunteer_activism_rounded,
+              color: Colors.pinkAccent,
+              size: 22,
+            ),
+            actions: [
+              IconButton(
+                tooltip: 'Painel da ONG',
+                icon: const Icon(Icons.dashboard_customize_rounded,
+                    color: Colors.pinkAccent),
+                onPressed: () {
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) => const OngDonationsDashboardScreen(),
+                    ),
+                  ).then((_) {
+                    if (mounted) _loadCampaigns();
+                  });
+                },
+              ),
+            ],
+          ),
+          body: SafeArea(
+            child: RefreshIndicator(
+              onRefresh: _loadCampaigns,
+              color: Colors.pinkAccent,
           child: Align(
             alignment: Alignment.topCenter,
             child: ConstrainedBox(
@@ -320,6 +347,8 @@ class _PublicDonationMuralScreenState extends State<PublicDonationMuralScreen> {
         ),
       ),
     );
+  },
+);
   }
 
   Widget _buildCampaignCard(DonationCampaign campaign, bool isDark,
@@ -437,6 +466,84 @@ class _PublicDonationMuralScreenState extends State<PublicDonationMuralScreen> {
                     ),
                   ),
                 ),
+
+              // Badge Pausada / Encerrada
+              if (!campaign.isAcceptingDonations)
+                Positioned(
+                  top: campaign.isGoalReached ? 42 : 12,
+                  right: 12,
+                  child: Container(
+                    padding:
+                        const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: campaign.isExpired
+                          ? Colors.red.shade700
+                          : Colors.orange.shade800,
+                      borderRadius: BorderRadius.circular(8),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.3),
+                          blurRadius: 4,
+                          offset: const Offset(0, 1),
+                        ),
+                      ],
+                    ),
+                    child: Text(
+                      campaign.isExpired ? 'ENCERRADA' : 'PAUSADA',
+                      style: const TextStyle(
+                        fontFamily: 'Fredoka',
+                        fontSize: 10,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.white,
+                      ),
+                    ),
+                  ),
+                ),
+
+              // Badge Prazo / Vigência
+              Positioned(
+                bottom: 10,
+                left: 12,
+                child: Container(
+                  padding:
+                      const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                  decoration: BoxDecoration(
+                    color: Colors.black.withValues(alpha: 0.72),
+                    borderRadius: BorderRadius.circular(8),
+                    border: Border.all(
+                      color: campaign.isExpired
+                          ? Colors.redAccent.withValues(alpha: 0.5)
+                          : Colors.white12,
+                    ),
+                  ),
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    children: [
+                      Icon(
+                        campaign.hasDeadline
+                            ? Icons.schedule_rounded
+                            : Icons.all_inclusive_rounded,
+                        size: 11,
+                        color: campaign.isExpired
+                            ? Colors.redAccent
+                            : Colors.white70,
+                      ),
+                      const SizedBox(width: 4),
+                      Text(
+                        campaign.deadlineText,
+                        style: TextStyle(
+                          fontFamily: 'Fredoka',
+                          fontSize: 10.5,
+                          fontWeight: FontWeight.bold,
+                          color: campaign.isExpired
+                              ? Colors.redAccent
+                              : Colors.white,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
             ],
           ),
 
@@ -630,12 +737,21 @@ class _PublicDonationMuralScreenState extends State<PublicDonationMuralScreen> {
                       if (mounted) _loadCampaigns();
                     });
                   },
-                  icon: const Icon(Icons.volunteer_activism_rounded, size: 18),
-                  label: const FittedBox(
+                  icon: Icon(
+                    campaign.isAcceptingDonations
+                        ? Icons.volunteer_activism_rounded
+                        : Icons.visibility_rounded,
+                    size: 18,
+                  ),
+                  label: FittedBox(
                     fit: BoxFit.scaleDown,
                     child: Text(
-                      'Apoiar Campanha (PIX & Cripto)',
-                      style: TextStyle(
+                      campaign.isAcceptingDonations
+                          ? 'Apoiar Campanha (PIX & Cripto)'
+                          : (campaign.isExpired
+                              ? 'Campanha Encerrada (Ver Detalhes)'
+                              : 'Campanha Pausada (Ver Detalhes)'),
+                      style: const TextStyle(
                         fontFamily: 'Fredoka',
                         fontSize: 13.5,
                         fontWeight: FontWeight.bold,
@@ -643,9 +759,13 @@ class _PublicDonationMuralScreenState extends State<PublicDonationMuralScreen> {
                     ),
                   ),
                   style: ElevatedButton.styleFrom(
-                    backgroundColor: Colors.teal,
+                    backgroundColor: campaign.isAcceptingDonations
+                        ? Colors.teal
+                        : (isDark
+                            ? const Color(0xFF334155)
+                            : Colors.grey.shade400),
                     foregroundColor: Colors.white,
-                    elevation: 2,
+                    elevation: campaign.isAcceptingDonations ? 2 : 0,
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(12),
                     ),

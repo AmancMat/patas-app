@@ -128,12 +128,14 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
     final clean = number.replaceAll(RegExp(r'\s+'), '');
     if (clean.startsWith('4')) return 'Visa';
     if (clean.startsWith(RegExp(r'^5[1-5]')) ||
-        clean.startsWith(RegExp(r'^222[1-9]')))
+        clean.startsWith(RegExp(r'^222[1-9]'))) {
       return 'Mastercard';
+    }
     if (clean.startsWith(RegExp(r'^3[47]'))) return 'Amex';
     if (clean.startsWith(RegExp(r'^6(?:011|5)')) ||
-        clean.startsWith(RegExp(r'^5067')))
+        clean.startsWith(RegExp(r'^5067'))) {
       return 'Elo';
+    }
     return 'Generic';
   }
 
@@ -170,8 +172,9 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
         '',
       );
       final expiryParts = _cardExpiryController.text.split('/');
-      if (expiryParts.length != 2)
+      if (expiryParts.length != 2) {
         throw Exception('Data de validade inválida.');
+      }
 
       final month = expiryParts[0].trim();
       final year = '20${expiryParts[1].trim()}'; // Ex: "28" -> "2028"
@@ -523,7 +526,7 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
           const SizedBox(width: 16),
           Switch(
             value: _autoRenew,
-            activeColor: AppColors.patasColor,
+            activeThumbColor: AppColors.patasColor,
             onChanged: (val) {
               setState(() {
                 _autoRenew = val;
@@ -563,10 +566,12 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
               ],
               onChanged: (v) => setState(() {}),
               validator: (v) {
-                if (v == null || v.trim().isEmpty)
+                if (v == null || v.trim().isEmpty) {
                   return 'Informe o número do cartão';
-                if (!_validateCardNumberLuhn(v))
+                }
+                if (!_validateCardNumberLuhn(v)) {
                   return 'Número de cartão inválido';
+                }
                 return null;
               },
             ),
@@ -582,8 +587,9 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
               ),
               onChanged: (v) => setState(() {}),
               validator: (v) {
-                if (v == null || v.trim().isEmpty)
+                if (v == null || v.trim().isEmpty) {
                   return 'Informe o nome do titular';
+                }
                 return null;
               },
             ),
@@ -607,9 +613,12 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                     ],
                     onChanged: (v) => setState(() {}),
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty)
+                      if (v == null || v.trim().isEmpty) {
                         return 'Informe a validade';
-                      if (v.length != 5) return 'Data inválida';
+                      }
+                      if (v.length != 5) {
+                        return 'Data inválida';
+                      }
 
                       final parts = v.split('/');
                       final m = int.tryParse(parts[0]) ?? 0;
@@ -690,10 +699,13 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                 CpfInputFormatter(),
               ],
               validator: (v) {
-                if (v == null || v.trim().isEmpty)
+                if (v == null || v.trim().isEmpty) {
                   return 'Informe o CPF do titular';
+                }
                 final clean = v.replaceAll(RegExp(r'[^0-9]'), '');
-                if (clean.length != 11) return 'CPF deve conter 11 dígitos';
+                if (clean.length != 11) {
+                  return 'CPF deve conter 11 dígitos';
+                }
                 return null;
               },
             ),
@@ -731,10 +743,13 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                 PhoneInputFormatter(),
               ],
               validator: (v) {
-                if (v == null || v.trim().isEmpty) return 'Informe o celular';
+                if (v == null || v.trim().isEmpty) {
+                  return 'Informe o celular';
+                }
                 final clean = v.replaceAll(RegExp(r'[^0-9]'), '');
-                if (clean.length < 10 || clean.length > 11)
+                if (clean.length < 10 || clean.length > 11) {
                   return 'Número incompleto';
+                }
                 return null;
               },
             ),
@@ -796,9 +811,12 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                       }
                     },
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty) return 'Informe o CEP';
-                      if (v.replaceAll(RegExp(r'[^0-9]'), '').length != 8)
+                      if (v == null || v.trim().isEmpty) {
+                        return 'Informe o CEP';
+                      }
+                      if (v.replaceAll(RegExp(r'[^0-9]'), '').length != 8) {
                         return 'CEP inválido';
+                      }
                       return null;
                     },
                   ),
@@ -847,8 +865,9 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                       hintText: 'Centro',
                     ),
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty)
+                      if (v == null || v.trim().isEmpty) {
                         return 'Informe o bairro';
+                      }
                       return null;
                     },
                   ),
@@ -879,8 +898,9 @@ class _CreditCardCheckoutPageState extends State<CreditCardCheckoutPage> {
                       hintText: 'São Paulo',
                     ),
                     validator: (v) {
-                      if (v == null || v.trim().isEmpty)
+                      if (v == null || v.trim().isEmpty) {
                         return 'Informe a cidade';
+                      }
                       return null;
                     },
                   ),

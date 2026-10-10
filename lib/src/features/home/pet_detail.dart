@@ -85,9 +85,10 @@ class PetDetail extends StatelessWidget {
         const SizedBox(height: 4),
         ValueListenableBuilder<int>(
           valueListenable: PetPassportService.passportChangeNotifier,
-          builder: (context, _, __) {
+          builder: (context, changeCount, __) {
             return FutureBuilder<PetPassport?>(
-              future: PetPassportService.getExistingPassport(activePet.id),
+              key: ValueKey('pet_passport_${activePet.id}_$changeCount'),
+              future: PetPassportService.getExistingPassport(activePet.id, petName: activePet.name),
               builder: (context, snapshot) {
                 final passport = snapshot.data;
                 final isMinted = passport != null;

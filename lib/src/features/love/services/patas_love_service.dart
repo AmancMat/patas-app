@@ -84,7 +84,7 @@ class PatasLoveService {
 
       return filteredPets;
     } catch (e) {
-      print('Erro ao buscar pets no Patas Love: $e');
+      debugPrint('Erro ao buscar pets no Patas Love: $e');
       return [];
     }
   }
@@ -152,7 +152,7 @@ class PatasLoveService {
 
       return chatId;
     } catch (e) {
-      print('Erro ao obter/criar chat no Patas Love: $e');
+      debugPrint('Erro ao obter/criar chat no Patas Love: $e');
       return null;
     }
   }
@@ -194,7 +194,7 @@ class PatasLoveService {
         },
       );
     } catch (e) {
-      print('Erro ao enviar notificação do Patas Love: $e');
+      debugPrint('Erro ao enviar notificação do Patas Love: $e');
     }
   }
 
@@ -215,7 +215,7 @@ class PatasLoveService {
       }
       return ids;
     } catch (e) {
-      print('Erro ao buscar IDs de bloqueio: $e');
+      debugPrint('Erro ao buscar IDs de bloqueio: $e');
       return {};
     }
   }
@@ -397,7 +397,7 @@ class PatasLoveService {
               (petBUser != null &&
                   blockedUserIds.contains(petBUser) &&
                   petBUser != senderUserId)) {
-            print('Envio de mensagem bloqueado devido a restrição de usuário.');
+            debugPrint('Envio de mensagem bloqueado devido a restrição de usuário.');
             return false;
           }
         }
@@ -425,7 +425,7 @@ class PatasLoveService {
 
       return true;
     } catch (e) {
-      print('Erro ao enviar mensagem: $e');
+      debugPrint('Erro ao enviar mensagem: $e');
       return false;
     }
   }
@@ -477,7 +477,7 @@ class PatasLoveService {
         },
       );
     } catch (e) {
-      print('Erro ao enviar notificação de mensagem do Patas Love: $e');
+      debugPrint('Erro ao enviar notificação de mensagem do Patas Love: $e');
     }
   }
 
@@ -490,7 +490,7 @@ class PatasLoveService {
       });
       return true;
     } catch (e) {
-      print('Erro ao bloquear usuário: $e');
+      debugPrint('Erro ao bloquear usuário: $e');
       return false;
     }
   }
@@ -514,7 +514,7 @@ class PatasLoveService {
       });
       return true;
     } catch (e) {
-      print('Erro ao registrar denúncia: $e');
+      debugPrint('Erro ao registrar denúncia: $e');
       return true;
     }
   }
@@ -529,7 +529,7 @@ class PatasLoveService {
           .eq('blocked_id', blockedId);
       return true;
     } catch (e) {
-      print('Erro ao desbloquear usuário: $e');
+      debugPrint('Erro ao desbloquear usuário: $e');
       return false;
     }
   }
@@ -570,7 +570,7 @@ class PatasLoveService {
 
       return result;
     } catch (e) {
-      print('Erro ao obter usuários bloqueados: $e');
+      debugPrint('Erro ao obter usuários bloqueados: $e');
       return [];
     }
   }

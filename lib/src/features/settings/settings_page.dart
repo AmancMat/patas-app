@@ -23,6 +23,7 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../../../app.dart';
 import 'package:patas_web_app/src/providers/locale_provider.dart';
 import 'package:patas_web_app/src/localization/localizations_ext.dart';
+import 'package:patas_web_app/src/common_widgets/mobile_scroll_padding.dart';
 
 import 'package:package_info_plus/package_info_plus.dart';
 
@@ -137,8 +138,7 @@ class _SettingsPageState extends State<SettingsPage> {
             children: [
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 30, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.fromLTRB(16, 12, 16, 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -175,17 +175,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Controle de Tema',
+                    context.tr('settings.theme_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
-                    Icons.light,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                  subtitle: Text(
+                    context.tr('settings.theme_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
+                    Icons.palette_outlined,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     Padding(
@@ -200,7 +208,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                 margin:
                                     const EdgeInsets.only(bottom: 8, left: 16),
                                 child: Text(
-                                  'Escolha o tema que melhor se adapta ao seu gosto pessoal e estilo. ',
+                                  context.tr('settings.theme_desc'),
                                   style: TextStyle(
                                       color: thmode.darkMode
                                           ? Colors.white
@@ -224,7 +232,7 @@ class _SettingsPageState extends State<SettingsPage> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               children: [
                                 Text(
-                                  'Som de Notificação',
+                                  context.tr('settings.notification_sound_title'),
                                   style: TextStyle(
                                     color: thmode.darkMode
                                         ? Colors.white
@@ -310,7 +318,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                             .showLocalNotificationTest(
                                                 channelId, _selectedSound);
                                       },
-                                      child: const Text('Testar'),
+                                      child: Text(context.tr('settings.notification_sound_test')),
                                     ),
                                   ],
                                 ),
@@ -326,8 +334,7 @@ class _SettingsPageState extends State<SettingsPage> {
               // ─── Seção 1.5: Idioma e Região (i18n) ──────────────────────────
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -368,7 +375,7 @@ class _SettingsPageState extends State<SettingsPage> {
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16,
+                        fontSize: 15.5,
                         fontWeight: FontWeight.w600),
                   ),
                   subtitle: Text(
@@ -377,8 +384,10 @@ class _SettingsPageState extends State<SettingsPage> {
                         : '🇺🇸 ${context.tr('settings.english_label')} (${context.tr('settings.active_badge')})',
                     style: TextStyle(
                       fontSize: 12,
-                      color: thmode.darkMode ? Colors.white54 : Colors.grey.shade600,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
                     ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   leading: const Icon(
                     Icons.language_rounded,
@@ -467,8 +476,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -505,14 +513,24 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Acessibilidade',
+                    context.tr('settings.accessibility_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    context.tr('settings.accessibility_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   leading: const Icon(
-                    Icons.accessibility_new,
+                    Icons.accessibility_new_rounded,
                     color: AppColors.patasColor,
                   ),
                   children: [
@@ -534,8 +552,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -572,17 +589,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Configurações de Privacidade',
+                    context.tr('settings.privacy_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
+                  subtitle: Text(
+                    context.tr('settings.privacy_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
                     Icons.privacy_tip_outlined,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     Padding(
@@ -607,7 +632,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Contas e perfils',
+                                      context.tr('settings.privacy_accounts'),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: thmode.darkMode
@@ -639,7 +664,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Dados pessoais',
+                                      context.tr('settings.privacy_personal_data'),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: thmode.darkMode
@@ -671,7 +696,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Suas informações e permissões',
+                                      context.tr('settings.privacy_info_permissions'),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: thmode.darkMode
@@ -703,7 +728,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                       MainAxisAlignment.spaceBetween,
                                   children: [
                                     Text(
-                                      'Usuários bloqueados',
+                                      context.tr('settings.privacy_blocked_users'),
                                       style: TextStyle(
                                           fontWeight: FontWeight.bold,
                                           color: thmode.darkMode
@@ -730,8 +755,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -768,17 +792,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Segurança',
+                    context.tr('settings.security_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
+                  subtitle: Text(
+                    context.tr('settings.security_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
                     Icons.security_outlined,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     Padding(
@@ -807,7 +839,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Senha',
+                                          context.tr('settings.security_password_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -816,7 +848,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permite que você altere a senha da sua conta e escolha uma que seja forte e segura.',
+                                          context.tr('settings.security_password_desc'),
                                           style: TextStyle(
                                               color: thmode.darkMode
                                                   ? Colors.white
@@ -852,7 +884,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Alertas de login',
+                                          context.tr('settings.security_alerts_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -861,7 +893,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permite que você receba notificações quando alguém tentar acessar sua conta de um dispositivo ou navegador desconhecido.',
+                                          context.tr('settings.security_alerts_desc'),
                                           style: TextStyle(
                                               color: thmode.darkMode
                                                   ? Colors.white
@@ -885,10 +917,10 @@ class _SettingsPageState extends State<SettingsPage> {
                             TextButton(
                               onPressed: () {
                                 ScaffoldMessenger.of(context).showSnackBar(
-                                  const SnackBar(
+                                  SnackBar(
                                     content: Text(
-                                        'Funcionalidade em desenvolvimento. Em breve você poderá adicionar contatos de confiança!'),
-                                    duration: Duration(seconds: 2),
+                                        context.tr('settings.security_trusted_snackbar')),
+                                    duration: const Duration(seconds: 2),
                                   ),
                                 );
                               },
@@ -903,7 +935,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Contatos confiáveis',
+                                          context.tr('settings.security_trusted_contacts_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -912,7 +944,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permitem que você escolha amigos que possam te ajudar a recuperar o acesso à sua conta se você esquecer a senha ou for bloqueado.',
+                                          context.tr('settings.security_trusted_contacts_desc'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -944,8 +976,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -982,17 +1013,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Notificações',
+                    context.tr('settings.notifications_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
+                  subtitle: Text(
+                    context.tr('settings.notifications_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
                     Icons.notifications_none_outlined,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     Padding(
@@ -1017,7 +1056,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Publicações, stories e comentários',
+                                          context.tr('settings.notifications_posts_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -1026,7 +1065,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permitem que você escolha se quer receber notificações quando alguém publicar algo, compartilhar um story ou comentar em suas publicações ou stories',
+                                          context.tr('settings.notifications_posts_desc'),
                                           style: TextStyle(
                                               color: thmode.darkMode
                                                   ? Colors.white
@@ -1062,7 +1101,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'Seguindo e seguidores',
+                                          context.tr('settings.notifications_followers_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -1071,7 +1110,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permitem que você escolha se quer receber notificações quando alguém começar a te seguir, deixar de te seguir ou seguir outras pessoas',
+                                          context.tr('settings.notifications_followers_desc'),
                                           style: TextStyle(
                                               color: thmode.darkMode
                                                   ? Colors.white
@@ -1107,7 +1146,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                           CrossAxisAlignment.start,
                                       children: [
                                         Text(
-                                          'E-mail e SMS',
+                                          context.tr('settings.notifications_email_sms_label'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -1116,7 +1155,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                               fontSize: 18),
                                         ),
                                         Text(
-                                          'Permitem que você escolha se quer receber notificações por e-mail ou SMS sobre as novidades do Patas, dicas para melhorar seu perfil ou lembretes de atividades',
+                                          context.tr('settings.notifications_email_sms_desc'),
                                           style: TextStyle(
                                               fontWeight: FontWeight.bold,
                                               color: thmode.darkMode
@@ -1147,8 +1186,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -1174,9 +1212,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   trailing: AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: _isExpanded5 ? 0.25 : 0,
-                    child: const Icon(
+                    child: Icon(
                       Icons.play_arrow_rounded,
-                      color: Colors.white,
+                      color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                     ),
                   ),
                   onExpansionChanged: (value) {
@@ -1185,17 +1223,25 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Ajuda e Suporte',
+                    context.tr('settings.help_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
-                    Icons.help,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                  subtitle: Text(
+                    context.tr('settings.help_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
+                    Icons.help_outline_rounded,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     InkWell(
@@ -1219,7 +1265,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     margin: const EdgeInsets.only(
                                         bottom: 8, left: 16),
                                     child: Text(
-                                      'Acesse nossos canais de suporte e ajuda.',
+                                      context.tr('settings.help_support_banner_title'),
                                       style: TextStyle(
                                           color: thmode.darkMode
                                               ? Colors.white
@@ -1232,7 +1278,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                     margin: const EdgeInsets.only(
                                         bottom: 8, left: 16),
                                     child: Text(
-                                      'Suas dúvidas a respeito de funcionalidades você encontra na seção (Ajuda). Mas se precisar esclarecer algo específico, acesse a seção (Suporte).',
+                                      context.tr('settings.help_support_banner_desc'),
                                       style: TextStyle(
                                         color: thmode.darkMode
                                             ? Colors.white
@@ -1262,8 +1308,7 @@ class _SettingsPageState extends State<SettingsPage> {
               // ─── Legal e Privacidade ─────────────────────────────────
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -1300,11 +1345,21 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Legal e Privacidade',
+                    context.tr('settings.legal_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    context.tr('settings.legal_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   leading: const Icon(
                     Icons.shield_outlined,
@@ -1333,7 +1388,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         color: AppColors.patasColor, size: 20),
                                     const SizedBox(width: 12),
                                     Text(
-                                      'Termos de Uso',
+                                      context.tr('settings.terms_of_use'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: thmode.darkMode
@@ -1372,7 +1427,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         color: AppColors.patasColor, size: 20),
                                     const SizedBox(width: 12),
                                     Text(
-                                      'Política de Privacidade',
+                                      context.tr('settings.privacy_policy'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: thmode.darkMode
@@ -1404,7 +1459,7 @@ class _SettingsPageState extends State<SettingsPage> {
                                         color: Colors.redAccent, size: 20),
                                     const SizedBox(width: 12),
                                     Text(
-                                      'Solicitar Exclusão de Conta (LGPD)',
+                                      context.tr('settings.request_account_deletion'),
                                       style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color: Colors.redAccent,
@@ -1428,8 +1483,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -1455,9 +1509,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   trailing: AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: _isExpanded6 ? 0.25 : 0,
-                    child: const Icon(
+                    child: Icon(
                       Icons.play_arrow_rounded,
-                      color: Colors.white,
+                      color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                     ),
                   ),
                   onExpansionChanged: (value) {
@@ -1466,17 +1520,29 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Sobre o Aplicativo',
+                    context.tr('settings.about_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
                   ),
-                  leading: Icon(
-                    Icons.ac_unit,
-                    color: thmode.darkMode
-                        ? AppColors.patasColor
-                        : AppColors.patasColor,
+                  subtitle: Text(
+                    context.t('settings.about_subtitle', args: {
+                      'version': _appVersion.isNotEmpty
+                          ? _appVersion.split(' ').first
+                          : '1.0.0'
+                    }),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                  leading: const Icon(
+                    Icons.info_outline_rounded,
+                    color: AppColors.patasColor,
                   ),
                   children: [
                     Padding(
@@ -1530,7 +1596,8 @@ class _SettingsPageState extends State<SettingsPage> {
                             width: 210,
                             margin: const EdgeInsets.only(bottom: 40),
                             child: Text(
-                              'Versão: $_appVersion',
+                              context.t('settings.version_label',
+                                  args: {'version': _appVersion}),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: thmode.darkMode
@@ -1542,7 +1609,7 @@ class _SettingsPageState extends State<SettingsPage> {
                           SizedBox(
                             width: 210,
                             child: Text(
-                              'Desenvolvido por:',
+                              context.tr('settings.developed_by'),
                               textAlign: TextAlign.center,
                               style: TextStyle(
                                 color: thmode.darkMode
@@ -1576,8 +1643,7 @@ class _SettingsPageState extends State<SettingsPage> {
               ),
               Container(
                 clipBehavior: Clip.antiAlias,
-                margin: const EdgeInsets.only(
-                    top: 16, bottom: 16, left: 16, right: 32),
+                margin: const EdgeInsets.symmetric(horizontal: 16, vertical: 7),
                 decoration: BoxDecoration(
                     color: thmode.darkMode
                         ? AppColors.darkBG
@@ -1603,9 +1669,9 @@ class _SettingsPageState extends State<SettingsPage> {
                   trailing: AnimatedRotation(
                     duration: const Duration(milliseconds: 200),
                     turns: _isExpanded7 ? 0.25 : 0,
-                    child: const Icon(
+                    child: Icon(
                       Icons.play_arrow_rounded,
-                      color: Colors.white,
+                      color: thmode.darkMode ? Colors.white : AppColors.darkBG,
                     ),
                   ),
                   onExpansionChanged: (value) {
@@ -1614,11 +1680,21 @@ class _SettingsPageState extends State<SettingsPage> {
                     });
                   },
                   title: Text(
-                    'Sair',
+                    context.tr('settings.logout_title'),
                     style: TextStyle(
                         color:
                             thmode.darkMode ? Colors.white : AppColors.darkBG,
-                        fontSize: 16),
+                        fontSize: 15.5,
+                        fontWeight: FontWeight.w600),
+                  ),
+                  subtitle: Text(
+                    context.tr('settings.logout_subtitle'),
+                    style: TextStyle(
+                      fontSize: 12,
+                      color: thmode.darkMode ? Colors.white60 : Colors.black54,
+                    ),
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
                   ),
                   leading: const Icon(
                     Icons.logout_rounded,
@@ -1634,7 +1710,7 @@ class _SettingsPageState extends State<SettingsPage> {
                             width: 200,
                             margin: const EdgeInsets.only(bottom: 8, left: 16),
                             child: Text(
-                              'Sair da sua conta?',
+                              context.tr('settings.logout_prompt'),
                               style: TextStyle(
                                   color: thmode.darkMode
                                       ? Colors.white
@@ -1683,8 +1759,8 @@ class _SettingsPageState extends State<SettingsPage> {
                               style: ElevatedButton.styleFrom(
                                 backgroundColor: AppColors.lightBG,
                               ),
-                              child: const Text(
-                                'Sair',
+                              child: Text(
+                                context.tr('settings.logout_action'),
                                 style: TextStyle(
                                     color: AppColors.patasColor, fontSize: 16),
                               ))
@@ -1694,8 +1770,7 @@ class _SettingsPageState extends State<SettingsPage> {
                   ],
                 ),
               ),
-              const SizedBox(
-                  height: 100), // Espaço extra para o BottomNavigationBar
+              const MobileScrollPadding(),
             ],
           ),
         ),
@@ -1712,12 +1787,12 @@ class _SettingsPageState extends State<SettingsPage> {
         backgroundColor: thmode.darkMode ? AppColors.darkBG : Colors.white,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
         title: Row(
-          children: const [
-            Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
-            SizedBox(width: 8),
+          children: [
+            const Icon(Icons.warning_amber_rounded, color: Colors.redAccent),
+            const SizedBox(width: 8),
             Text(
-              'Exclusão de Conta',
-              style: TextStyle(
+              context.tr('settings.deletion_dialog_title'),
+              style: const TextStyle(
                 fontFamily: 'Fredoka',
                 fontSize: 18,
                 fontWeight: FontWeight.bold,
@@ -1726,7 +1801,7 @@ class _SettingsPageState extends State<SettingsPage> {
           ],
         ),
         content: Text(
-          'Em conformidade com a LGPD, ao solicitar a exclusão de sua conta, seus dados pessoais, fotos e perfis de pets serão desativados permanentemente de nossa plataforma ativa.\n\nTem certeza de que deseja prosseguir com a solicitação?',
+          context.tr('settings.deletion_dialog_content'),
           style: TextStyle(
             color: thmode.darkMode ? Colors.white70 : Colors.black87,
             fontSize: 13.5,
@@ -1735,7 +1810,7 @@ class _SettingsPageState extends State<SettingsPage> {
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: const Text('Cancelar'),
+            child: Text(context.tr('common.cancel')),
           ),
           ElevatedButton(
             style: ElevatedButton.styleFrom(
@@ -1748,15 +1823,15 @@ class _SettingsPageState extends State<SettingsPage> {
             onPressed: () {
               Navigator.pop(context);
               ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
+                SnackBar(
                   content: Text(
-                    'Solicitação enviada. Nossa equipe processará a exclusão de seus dados em até 48h conforme a LGPD.',
+                    context.tr('settings.deletion_dialog_snackbar'),
                   ),
                   backgroundColor: Colors.redAccent,
                 ),
               );
             },
-            child: const Text('Confirmar Exclusão'),
+            child: Text(context.tr('settings.deletion_dialog_confirm')),
           ),
         ],
       ),

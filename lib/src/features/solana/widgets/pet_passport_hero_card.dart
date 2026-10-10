@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:patas_web_app/app.dart';
+import 'package:patas_web_app/src/localization/localizations_ext.dart';
 import '../../pets/models/pet_model.dart';
 import '../models/pet_passport_model.dart';
 import '../services/pet_passport_service.dart';
@@ -28,7 +29,20 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
   @override
   void initState() {
     super.initState();
+    PetPassportService.passportChangeNotifier.addListener(_onPassportChanged);
     _loadPassport();
+  }
+
+  @override
+  void dispose() {
+    PetPassportService.passportChangeNotifier.removeListener(_onPassportChanged);
+    super.dispose();
+  }
+
+  void _onPassportChanged() {
+    if (mounted) {
+      _loadPassport();
+    }
   }
 
   @override
@@ -40,7 +54,7 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
   }
 
   void _loadPassport() async {
-    final existing = await PetPassportService.getExistingPassport(widget.pet.id);
+    final existing = await PetPassportService.getExistingPassport(widget.pet.id, petName: widget.pet.name);
     if (mounted) {
       setState(() => _passport = existing);
     }
@@ -49,10 +63,11 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
   void _handleTap() async {
     if (_passport != null) {
       // Já emitido: abre o passaporte oficial com as 3 abas
-      PetPassportDetailSheet.show(context, passport: _passport!);
+      await PetPassportDetailSheet.show(context, passport: _passport!);
+      if (mounted) _loadPassport();
     } else {
       // Ainda não emitido: abre o onboarding explicativo para adesão
-      PetPassportOnboardingDialog.show(
+      await PetPassportOnboardingDialog.show(
         context,
         pet: widget.pet,
         onMintCompleted: (newPassport) {
@@ -61,6 +76,7 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
           }
         },
       );
+      if (mounted) _loadPassport();
     }
   }
 
@@ -143,8 +159,8 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
                         Flexible(
                           child: Text(
                             _passport != null
-                                ? 'Passaporte Imutável Solana'
-                                : 'Passaporte Digital Soberano',
+                                ? context.t('passport.hero_title_minted')
+                                : context.t('passport.hero_title_unminted'),
                             style: TextStyle(
                               fontFamily: 'Fredoka',
                               fontSize: widget.isDesktop ? 16 : 14.5,
@@ -177,8 +193,8 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
                     const SizedBox(height: 2),
                     Text(
                       _passport != null
-                          ? 'Microchip: ${_passport!.microchipNumber} • Verificado'
-                          : 'Crie a identidade oficial de ${widget.pet.name} na blockchain',
+                          ? context.t('passport.hero_desc_minted', args: {'chip': _passport!.microchipNumber})
+                          : context.t('passport.hero_desc_unminted', args: {'name': widget.pet.name}),
                       style: TextStyle(
                         fontSize: widget.isDesktop ? 12 : 11,
                         color: Colors.white.withValues(alpha: 0.78),
@@ -205,7 +221,7 @@ class _PetPassportHeroCardState extends State<PetPassportHeroCard> {
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       Text(
-                        _passport != null ? 'Abrir' : 'Emitir',
+                        _passport != null ? context.t('passport.hero_action_open') : context.t('passport.hero_action_mint'),
                         style: TextStyle(
                           fontFamily: 'Fredoka',
                           fontSize: widget.isDesktop ? 12 : 11,

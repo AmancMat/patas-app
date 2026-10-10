@@ -18,16 +18,31 @@ class PetPassportService {
   }
 
   /// Verifica se o pet já possui um Passaporte emitido na blockchain
-  static Future<PetPassport?> getExistingPassport(String petId) async {
+  static Future<PetPassport?> getExistingPassport(String petId, {String? petName}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
-      final savedData = prefs.getString('$_passportKeyPrefix$petId');
+
+      // 1. Tenta pela chave canônica com petId
+      String? savedData = prefs.getString('$_passportKeyPrefix$petId');
+
+      // 2. Fallback: chave legada v1 com petId
+      savedData ??= prefs.getString('solana_cnft_passport_$petId');
+
+      // Se não encontrou por petId, significa que o passaporte NÃO existe ou foi QUEIMADO.
+      // Expurgamos qualquer chave nominal zumbi remanescente para garantir que passaportes
+      // queimados nunca ressuscitem como zumbis na interface.
+      if (savedData == null && petName != null && petName.trim().isNotEmpty) {
+        final legacyNameKey = 'solana_cnft_passport_name_${petName.toLowerCase().trim()}';
+        if (prefs.containsKey(legacyNameKey)) {
+          await prefs.remove(legacyNameKey);
+        }
+      }
 
       if (savedData != null) {
         final map = jsonDecode(savedData) as Map<String, dynamic>;
         return PetPassport(
           petId: petId,
-          petName: map['petName'] ?? 'Pet',
+          petName: map['petName'] ?? (petName ?? 'Pet'),
           species: map['species'] ?? 'Canino',
           breed: map['breed'] ?? 'SRD',
           gender: map['gender'],
@@ -177,19 +192,48 @@ class PetPassportService {
         'issuedAt': passport.issuedAt.toIso8601String(),
         'isPhysicalMicrochip': passport.isPhysicalMicrochip,
       };
-      await prefs.setString('$_passportKeyPrefix${passport.petId}', jsonEncode(data));
+      final encoded = jsonEncode(data);
+      // Salva na chave canônica v2
+      await prefs.setString('$_passportKeyPrefix${passport.petId}', encoded);
+      // Salva na chave v1 para compatibilidade
+      await prefs.setString('solana_cnft_passport_${passport.petId}', encoded);
+
       notifyPassportChanged();
     } catch (e) {
       debugPrint('[PetPassportService] Erro ao salvar passaporte: $e');
     }
   }
 
-  /// Remove / Queima o passaporte do pet (usado para testes ou revogação)
-  static Future<void> deletePassport(String petId) async {
+  static Future<void> deletePassport(String petId, {String? petName}) async {
     try {
       final prefs = await SharedPreferences.getInstance();
+
+      // 1. Remove chaves primárias
       await prefs.remove('$_passportKeyPrefix$petId');
       await prefs.remove('solana_cnft_passport_$petId');
+
+      if (petName != null && petName.trim().isNotEmpty) {
+        await prefs.remove('solana_cnft_passport_name_${petName.toLowerCase().trim()}');
+      }
+
+      // 2. Limpeza profunda: varre o armazenamento e remove qualquer chave residual desse pet
+      final cleanId = petId.replaceAll('-', '').toLowerCase();
+      final keysToRemove = <String>[];
+      for (final key in prefs.getKeys()) {
+        final lower = key.toLowerCase();
+        if (lower.contains('passport') || lower.contains('solana_cnft')) {
+          if (lower.contains(petId.toLowerCase()) || lower.contains(cleanId)) {
+            keysToRemove.add(key);
+          }
+          if (petName != null && petName.trim().isNotEmpty && lower.contains(petName.toLowerCase().trim())) {
+            keysToRemove.add(key);
+          }
+        }
+      }
+      for (final k in keysToRemove) {
+        await prefs.remove(k);
+      }
+
       notifyPassportChanged();
     } catch (e) {
       debugPrint('[PetPassportService] Erro ao remover passaporte: $e');
@@ -197,5 +241,5 @@ class PetPassportService {
   }
 
   /// Queima (Burn) do cNFT na rede Solana e revogação do passaporte
-  static Future<void> burnPassport(String petId) => deletePassport(petId);
+  static Future<void> burnPassport(String petId, {String? petName}) => deletePassport(petId, petName: petName);
 }
